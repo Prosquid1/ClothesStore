@@ -8,6 +8,8 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 
 android {
+    final  JAVA_VERSION = JavaVersion.VERSION_1_8
+
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.oyelekeokiki"
@@ -16,6 +18,13 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    compileOptions {
+        sourceCompatibility JAVA_VERSION
+        targetCompatibility JAVA_VERSION
+    }
+    kotlinOptions {
+        jvmTarget = JAVA_VERSION.toString()
     }
     buildTypes {
         release {
@@ -80,6 +89,4 @@ dependencies {
     implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:$RETROFIT_SERIALIZER_VERSION"
     implementation "com.squareup.okhttp3:okhttp:$OK_HTTP_VERSION"
     implementation "com.squareup.okhttp3:logging-interceptor:$OK_HTTP_VERSION"
-
-
 }
