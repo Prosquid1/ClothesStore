@@ -1,13 +1,21 @@
 package com.oyelekeokiki.ui.cart
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.oyelekeokiki.networking.RemoteApi
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CartViewModel : ViewModel() {
-
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is cart Fragment"
+class CartViewModel @Inject constructor(private val remoteApi: RemoteApi): ViewModel() {
+    init {
+        viewModelScope.launch {
+            try {
+                val cartItems = remoteApi.getProducts()
+                Log.e("Cart Items", cartItems.toString());
+            } catch (e: Exception) {
+                Log.e("Cart Error", e.localizedMessage);
+            }
+        }
     }
-    val text: LiveData<String> = _text
 }
