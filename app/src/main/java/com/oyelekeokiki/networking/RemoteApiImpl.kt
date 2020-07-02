@@ -1,10 +1,6 @@
 package com.oyelekeokiki.networking
 
-import com.oyelekeokiki.model.CartItem
-import com.oyelekeokiki.model.Failure
-import com.oyelekeokiki.model.Product
-import com.oyelekeokiki.model.Result
-import com.oyelekeokiki.model.Success
+import com.oyelekeokiki.model.*
 import com.oyelekeokiki.model.response.AddToCartResponse
 import com.oyelekeokiki.model.response.DeleteFromCartResponse
 import javax.inject.Inject
@@ -18,7 +14,7 @@ class RemoteApiImpl @Inject constructor(
 ) : RemoteApi {
 
   override suspend fun getProducts(): Result<List<Product>> = try {
-    val data = apiService.getProducts().products
+    val data = apiService.getProducts()
 
     Success(data)
   } catch (error: Throwable) {
@@ -26,7 +22,7 @@ class RemoteApiImpl @Inject constructor(
   }
 
   override suspend fun getCart(): Result<List<CartItem>> = try {
-    val data = apiService.getCart().cartItems
+    val data = apiService.getCart()
 
     Success(data)
   } catch (error: Throwable) {
