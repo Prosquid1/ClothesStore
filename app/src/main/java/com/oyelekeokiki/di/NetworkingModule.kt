@@ -1,6 +1,7 @@
 package com.oyelekeokiki.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.oyelekeokiki.BuildConfig
 import com.oyelekeokiki.networking.RemoteApiService
 import dagger.Module
 import dagger.Provides
@@ -20,8 +21,7 @@ import retrofit2.Retrofit
 object NetworkingModule {
 
   private const val HEADER_AUTHORIZATION = "Authorization"
-  private const val BASE_URL = "https://taskie-rw.herokuapp.com"
-  private const val AUTH_KEY = "https://taskie-rw.herokuapp.com"
+  private const val BASE_URL = "https://2klqdzs603.execute-api.eu-west-2.amazonaws.com/cloths/"
 
   @Provides
   fun provideFactory(): Converter.Factory {
@@ -35,7 +35,7 @@ object NetworkingModule {
     override fun intercept(chain: Interceptor.Chain): Response {
       val originalRequest = chain.request()
       val new = originalRequest.newBuilder()
-        .addHeader(HEADER_AUTHORIZATION, AUTH_KEY)
+        .addHeader(HEADER_AUTHORIZATION, BuildConfig.API_KEY)
         .build()
 
       return chain.proceed(new)
