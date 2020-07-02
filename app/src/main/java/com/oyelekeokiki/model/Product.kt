@@ -12,7 +12,7 @@ data class Product(
   @PrimaryKey val id: Int,
   val name: String,
   val category: String,
-  val price: String,
+  val price: String?,
   val oldPrice: String,
   val stock: Int
 )
