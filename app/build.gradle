@@ -62,7 +62,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$KTX_CORE_VERSION"
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    // for testing
+    //Testing
     androidTestImplementation "com.android.support.test:runner:$TEST_RUNNER_VERSION"
     androidTestImplementation "androidx.arch.core:core-testing:$CORE_TESTING_VERSION"
 
