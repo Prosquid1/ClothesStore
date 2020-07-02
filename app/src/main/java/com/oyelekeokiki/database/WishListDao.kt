@@ -22,4 +22,13 @@ interface WishListDao {
   @Query("SELECT * FROM Product")
   fun getWishList(): LiveData<List<Product>>
 
+  @Query("SELECT * FROM Product WHERE id= :productId")
+  fun getWishListItemWith(productId: Int): LiveData<Product>
+
+  @Query("DELETE FROM Product")
+  fun deleteAll()
+
+  @Query("SELECT count(*) FROM Product")
+  fun getProductsCount(): Int
+
 }
