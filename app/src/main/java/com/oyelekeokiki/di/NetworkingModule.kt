@@ -15,19 +15,18 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
 @InstallIn(ApplicationComponent::class)
 object NetworkingModule {
 
-  private const val HEADER_AUTHORIZATION = "Authorization"
+  private const val HEADER_AUTHORIZATION_KEY = "X-API-KEY"
   private const val BASE_URL = "https://2klqdzs603.execute-api.eu-west-2.amazonaws.com/cloths/"
 
   @Provides
   fun provideFactory(): Converter.Factory {
-    val contentType = "application/json".toMediaType()
-
-    return Json.nonstrict.asConverterFactory(contentType)
+    return GsonConverterFactory.create()
   }
 
   @Provides
@@ -35,7 +34,7 @@ object NetworkingModule {
     override fun intercept(chain: Interceptor.Chain): Response {
       val originalRequest = chain.request()
       val new = originalRequest.newBuilder()
-        .addHeader(HEADER_AUTHORIZATION, BuildConfig.API_KEY)
+        .addHeader(HEADER_AUTHORIZATION_KEY, BuildConfig.API_KEY)
         .build()
 
       return chain.proceed(new)
@@ -64,4 +63,5 @@ object NetworkingModule {
   @Provides
   fun buildApiService(retrofit: Retrofit): RemoteApiService =
     retrofit.create(RemoteApiService::class.java)
+
 }

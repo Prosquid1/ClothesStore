@@ -1,26 +1,29 @@
 package com.oyelekeokiki.networking
 
+import com.oyelekeokiki.model.CartItem
+import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.model.response.AddToCartResponse
 import com.oyelekeokiki.model.response.DeleteFromCartResponse
-import com.oyelekeokiki.model.response.GetCartResponse
-import com.oyelekeokiki.model.response.GetProductsResponse
-import retrofit2.http.*
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Query
 
 /**
  * Holds the API calls for the app.
  */
 interface RemoteApiService {
 
-  @GET("/products")
-  suspend fun getProducts(): GetProductsResponse
+  @GET("products")
+  suspend fun getProducts(): List<Product>
 
-  @GET("/cart")
-  suspend fun getCart(): GetCartResponse
+  @GET("cart")
+  suspend fun getCart(): List<CartItem>
 
-  @POST("/cart")
+  @POST("cart")
   suspend fun addCartItem(@Query("productId") productId: String): AddToCartResponse
 
-  @DELETE("/cart")
+  @DELETE("cart")
   suspend fun deleteCartItem(@Query("id") productId: String): DeleteFromCartResponse
 
 }

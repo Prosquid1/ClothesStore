@@ -5,7 +5,7 @@ import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.model.Result
 import com.oyelekeokiki.model.response.AddToCartResponse
 import com.oyelekeokiki.model.response.DeleteFromCartResponse
-
+import javax.inject.Singleton
 
 interface RemoteApi {
   suspend fun getProducts(): Result<List<Product>>
