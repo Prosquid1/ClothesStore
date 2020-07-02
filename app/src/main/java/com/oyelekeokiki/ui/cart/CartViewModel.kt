@@ -11,7 +11,7 @@ class CartViewModel @Inject constructor(private val remoteApi: RemoteApi): ViewM
     init {
         viewModelScope.launch {
             try {
-                val cartItems = remoteApi.getProducts()
+                val cartItems = remoteApi.getCart()
                 Log.e("Cart Items", cartItems.toString());
             } catch (e: Exception) {
                 Log.e("Cart Error", e.localizedMessage);
