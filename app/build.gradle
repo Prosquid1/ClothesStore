@@ -4,15 +4,32 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+
+def apikeyPropertiesFile = rootProject.file("apikey.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
 android {
-    compileSdkVersion 29
+    final  JAVA_VERSION = JavaVersion.VERSION_1_8
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.oyelekeokiki"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        buildConfigField("String", "API_KEY", apikeyProperties['API_KEY'])
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    compileOptions {
+        sourceCompatibility JAVA_VERSION
+        targetCompatibility JAVA_VERSION
+    }
+    kotlinOptions {
+        jvmTarget = JAVA_VERSION.toString()
     }
     buildTypes {
         release {
@@ -22,43 +39,64 @@ android {
     }
 }
 
-final LIFECYCLE_VERSION = '2.2.0'
 final APP_COMPAT_VERSION = '1.1.0'
-final ESPRESSO_VERSION = '3.2.0'
-final NAVIGATION_VERSION = '2.3.0'
-final JUNIT_VERSION = '1.1.1'
-final KTX_CORE_VERSION = '1.3.0'
-final MATERIAL_DESIGN_VERSION = '1.1.0'
 final CONSTRAINT_LAYOUT_VERSION = '1.1.3'
+final COROUTINES_VERSION = '1.3.5'
+final CORE_TESTING_VERSION = '2.1.0'
+final KTX_CORE_VERSION = '1.3.0'
+final LIFECYCLE_VERSION = '2.2.0'
+final MATERIAL_DESIGN_VERSION = '1.1.0'
+final NAVIGATION_VERSION = '2.3.0'
+final OK_HTTP_VERSION = '4.5.0'
+final RETROFIT_SERIALIZER_VERSION = '0.4.0'
+final RETROFIT_VERSION = '2.8.1'
+final ROOM_VERSION = '2.2.5'
+final TEST_RUNNER_VERSION = '1.0.2'
 final VECTOR_DRAWABLE_VERSION = '1.1.0'
 
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    //Kotlin
+    // Kotlin
     implementation "androidx.core:core-ktx:$KTX_CORE_VERSION"
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //Testing
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation "androidx.test.ext:junit:$JUNIT_VERSION"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$ESPRESSO_VERSION"
+    androidTestImplementation "com.android.support.test:runner:$TEST_RUNNER_VERSION"
+    androidTestImplementation "androidx.arch.core:core-testing:$CORE_TESTING_VERSION"
 
-    //Android Architecture
+    // Android Architecture
     implementation "android.arch.lifecycle:extensions:$LIFECYCLE_VERSION"
     implementation "android.arch.lifecycle:livedata:$LIFECYCLE_VERSION"
 
-    //Android UI
-    implementation "androidx.appcompat:appcompat:$APP_COMPAT_VERSION"
-    implementation "com.google.android.material:material:$MATERIAL_DESIGN_VERSION"
-    implementation "androidx.constraintlayout:constraintlayout:$CONSTRAINT_LAYOUT_VERSION"
-    implementation "androidx.vectordrawable:vectordrawable:$VECTOR_DRAWABLE_VERSION"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$COROUTINES_VERSION"
 
-    //Android Navigation
+    // Android Navigation
     implementation "androidx.navigation:navigation-fragment:$NAVIGATION_VERSION"
     implementation "androidx.navigation:navigation-ui:$NAVIGATION_VERSION"
     implementation "androidx.navigation:navigation-fragment-ktx:$NAVIGATION_VERSION"
     implementation "androidx.navigation:navigation-ui-ktx:$NAVIGATION_VERSION"
 
+    // Android UI
+    implementation "androidx.appcompat:appcompat:$APP_COMPAT_VERSION"
+    implementation "com.google.android.material:material:$MATERIAL_DESIGN_VERSION"
+    implementation "androidx.constraintlayout:constraintlayout:$CONSTRAINT_LAYOUT_VERSION"
+    implementation "androidx.vectordrawable:vectordrawable:$VECTOR_DRAWABLE_VERSION"
+
+    // Database
+    implementation "androidx.room:room-runtime:$ROOM_VERSION"
+    kapt "androidx.room:room-compiler:$ROOM_VERSION"
+    implementation "androidx.room:room-ktx:$ROOM_VERSION"
+
+    // Hilt dependencies
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    //Networking
+    implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
+    implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:$RETROFIT_SERIALIZER_VERSION"
+    implementation "com.squareup.okhttp3:okhttp:$OK_HTTP_VERSION"
+    implementation "com.squareup.okhttp3:logging-interceptor:$OK_HTTP_VERSION"
 }
