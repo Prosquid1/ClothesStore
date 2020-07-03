@@ -26,12 +26,12 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
   private lateinit var addToWishListImageButton: AppCompatImageButton
 
   private fun bindRequiredViews() {
-    productNameTextView = TextView(containerView.findViewById(R.id.product_name))
-    productCategoryTextView = TextView(containerView.findViewById(R.id.product_category))
-    stockCountTextView = TextView(containerView.findViewById(R.id.stock_count))
-    productPriceTextView = TextView(containerView.findViewById(R.id.product_price))
-    productPreviousPriceTextView = TextView(containerView.findViewById(R.id.product_old_price))
-    addToWishListImageButton = AppCompatImageButton(containerView.findViewById(R.id.add_to_wishlist_image))
+    productNameTextView = containerView.findViewById(R.id.product_name)
+    productCategoryTextView = containerView.findViewById(R.id.product_category)
+    stockCountTextView = containerView.findViewById(R.id.stock_count)
+    productPriceTextView = containerView.findViewById(R.id.product_price)
+    productPreviousPriceTextView = containerView.findViewById(R.id.product_old_price)
+    addToWishListImageButton = containerView.findViewById(R.id.add_to_wishlist_image)
   }
 
 
