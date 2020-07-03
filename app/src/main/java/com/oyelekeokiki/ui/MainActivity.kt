@@ -3,7 +3,6 @@ package com.oyelekeokiki.ui
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,6 +15,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    private var shouldHideCartMenu = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,22 +33,32 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_cart
             )
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        navView.setOnNavigationItemSelectedListener { item ->
+            //shouldHideCartMenu = item.title == getString(R.string.title_shopping_cart)
+            //invalidateOptionsMenu()
+            return@setOnNavigationItemSelectedListener true
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top_menu, menu);
+        val item = menu?.findItem(R.id.open_cart_action)
+        if (item != null ) {
+            item.isVisible = !shouldHideCartMenu
+        }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         val id: Int = item.itemId
-        if (id == R.id.action_favorite) {
-            Toast.makeText(this@MainActivity, "Action clicked", Toast.LENGTH_LONG).show()
+        if (id == R.id.open_cart_action) {
+            findNavController(R.id.nav_host_fragment).navigate(R.id.navigation_cart)
+            shouldHideCartMenu = true;
+            invalidateOptionsMenu()
             return true
         }
         return super.onOptionsItemSelected(item)

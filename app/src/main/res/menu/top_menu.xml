@@ -5,10 +5,9 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/action_favorite"
+        android:id="@+id/open_cart_action"
         android:orderInCategory="300"
-        android:title="User"
         android:icon="@drawable/thumb_on"
-        app:showAsAction="ifRoom"></item>
+        app:showAsAction="ifRoom" />
 
 </menu>
