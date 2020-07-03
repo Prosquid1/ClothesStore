@@ -56,6 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lines="1"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/secondaryTextSize"
             tools:text="Product category" />
 
@@ -68,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lines="1"
-                android:textColor="@color/dimgray"
+                android:textColor="@color/money_blue"
                 android:textSize="@dimen/tertiaryTextSize"
                 tools:text="$500" />
 
