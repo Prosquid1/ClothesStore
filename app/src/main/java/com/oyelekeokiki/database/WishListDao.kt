@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.oyelekeokiki.model.Product
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
@@ -20,7 +21,7 @@ interface WishListDao {
   suspend fun removeFromWishList(productId: Int)
 
   @Query("SELECT * FROM Product")
-  suspend fun getWishList(): List<Product>
+  fun getWishList(): Flow<List<Product>>
 
   @Query("SELECT id FROM Product")
   suspend fun getWishListIds(): List<Int>

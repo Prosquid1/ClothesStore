@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.database.WishListDatabaseSource
 import com.oyelekeokiki.model.Product
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,10 +33,12 @@ class WishlistViewModel @Inject constructor(private val wishListDatabaseSource: 
     private fun fetchWishList() {
         viewModelScope.launch {
             try {
-                val dbWishList = wishListDatabaseSource.getWishList()
-                wishlist.postValue(dbWishList)
-                wishListProductIds.postValue(dbWishList.map { it.id })
-                wishListIsEmpty.postValue(dbWishList.isEmpty())
+                wishListDatabaseSource.getWishList().collect {
+                    items ->
+                    wishlist.postValue(items)
+                    wishListProductIds.postValue(items.map { it.id })
+                    wishListIsEmpty.postValue(items.isEmpty())
+                }
 
             } catch (e: Exception) {
                 wishListProductIds.postValue(arrayListOf())
