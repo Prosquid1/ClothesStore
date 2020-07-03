@@ -11,9 +11,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(private val remoteApi: RemoteApi): ViewModel() {
-    var products: MutableLiveData<List<Product>>? = null
-    var errorMessage: MutableLiveData<String>? = null
-    var isFetching: MutableLiveData<Boolean>? = null
+    var products: MutableLiveData<List<Product>> = MutableLiveData()
+    var errorMessage: MutableLiveData<String> = MutableLiveData()
+    var isFetching: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
         fetchProducts()
@@ -21,18 +21,18 @@ class HomeViewModel @Inject constructor(private val remoteApi: RemoteApi): ViewM
 
     fun fetchProducts() {
         viewModelScope.launch {
-            isFetching?.postValue(true);
+            isFetching.postValue(true);
             try {
                 val result = remoteApi.getProducts()
                 if (result is Success) {
-                    products?.postValue(result.data)
+                    products.postValue(result.data)
                 } else if (result is Failure){
-                    errorMessage?.postValue(result.error?.localizedMessage)
+                    errorMessage.postValue(result.error?.localizedMessage)
                 }
-                isFetching?.postValue(false);
+                isFetching.postValue(false);
             } catch (e: Exception) {
-                errorMessage?.postValue(e.localizedMessage)
-                isFetching?.postValue(false);
+                errorMessage.postValue(e.localizedMessage)
+                isFetching.postValue(false);
             }
         }
     }

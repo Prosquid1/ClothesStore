@@ -6,13 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.oyelekeokiki.R
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.shared.ProductAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     @Inject
@@ -43,13 +47,19 @@ class HomeFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
+        recycler_home.addItemDecoration(
+            DividerItemDecoration(
+                activity,
+                DividerItemDecoration.VERTICAL
+            )
+        )
         recycler_home.layoutManager = LinearLayoutManager(context)
         productAdapter = ProductAdapter()
         recycler_home.adapter = productAdapter
     }
 
     private fun observeData() {
-        homeViewModel.products?.observe(
+        homeViewModel.products.observe(
             viewLifecycleOwner,
             Observer { products ->
                 setActiveDataWith(products)
@@ -57,7 +67,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeError() {
-        homeViewModel.errorMessage?.observe(
+        homeViewModel.errorMessage.observe(
             viewLifecycleOwner,
             Observer { message ->
                 setEmptyStateWith(message)
@@ -65,11 +75,18 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeSwipeRefresh() {
-        homeViewModel.isFetching?.observe(
+        homeViewModel.isFetching.observe(
             viewLifecycleOwner,
             Observer { fetching ->
-                swipe_refresh_layout.isRefreshing = fetching
+                setRefreshStateWith(fetching)
             })
+    }
+
+    private fun setRefreshStateWith(isRefreshing: Boolean) {
+        if (isRefreshing) {
+            text_error_message.visibility = View.GONE
+        }
+        swipe_refresh_layout.isRefreshing = isRefreshing
     }
 
     private fun setActiveDataWith(products: List<Product>) {
