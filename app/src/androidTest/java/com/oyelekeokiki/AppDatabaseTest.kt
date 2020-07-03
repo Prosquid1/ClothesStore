@@ -87,6 +87,16 @@ class AppDatabaseTest {
     }
 
     @Test
+    fun selectIdsFromDatabase() {
+        val anotherProduct = Product(2, "Test Product 2", "Test Description 2", oldPrice = "3.00", price = "4.89", stock = 3);
+        val listOfNewProducts = listOf(product, anotherProduct)
+        wishListDao?.insertWishListProducts(listOfNewProducts)
+
+        val allNewlyAddedProducts = wishListDao?.getWishListIds()?.getOrAwaitValue()
+        assertEquals(allNewlyAddedProducts, listOfNewProducts.map { it.id } )
+    }
+
+    @Test
     fun databaseIsAtomic() {
         val listOfNewProducts = listOf(product, product, product, product)
         wishListDao?.deleteAll()

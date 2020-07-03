@@ -22,6 +22,9 @@ interface WishListDao {
   @Query("SELECT * FROM Product")
   fun getWishList(): LiveData<List<Product>>
 
+  @Query("SELECT id FROM Product")
+  fun getWishListIds(): LiveData<List<Int>>
+
   @Query("SELECT * FROM Product WHERE id= :productId")
   fun getWishListItemWith(productId: Int): LiveData<Product>
 
