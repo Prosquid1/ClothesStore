@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="@dimen/mini_vertical_padding">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/product.image"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/product.image.layout"
         android:layout_width="@dimen/imageListCardSize"
         android:layout_height="@dimen/imageListCardSize"
-        android:scaleType="centerCrop"
-        tools:layout_editor_absoluteX="15dp"
-        tools:layout_editor_absoluteY="22dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        android:background="@drawable/round_corner_image_layout"
+        android:scaleType="centerCrop">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/product.image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:background="@color/colorAccent"
+            tools:srcCompat="@tools:sample/backgrounds/scenic">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:layout_toEndOf="@id/product.image"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_toStartOf="@id/add.to.wishlist.image"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin">
+        android:layout_toEndOf="@id/product.image.layout"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/product.name"
@@ -28,32 +38,44 @@
             android:layout_height="wrap_content"
             android:lines="1"
             android:textSize="@dimen/primaryTextSize"
-            tools:text="Product name"/>
+            tools:text="Product name" />
+
         <TextView
             android:id="@+id/product.category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/secondaryTextSize"
             android:lines="1"
-            tools:text="Product category"/>
+            android:textSize="@dimen/secondaryTextSize"
+            tools:text="Product category" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/product.price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/tertiaryTextSize"
-            android:lines="1"
-            tools:text="$500"/>
+
             <TextView
-                android:id="@+id/stock.count"
-                android:layout_marginHorizontal="@dimen/mini_horizontal_padding"
+                android:id="@+id/product.price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/tertiaryTextSize"
                 android:lines="1"
-                tools:text="(4 left)"/>
+                android:textSize="@dimen/tertiaryTextSize"
+                tools:text="$500" />
+
+            <TextView
+                android:id="@+id/product.old.price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:textSize="@dimen/tertiaryTextSize"
+                tools:text="$500" />
+
+            <TextView
+                android:id="@+id/stock.count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/mini_horizontal_padding"
+                android:lines="1"
+                android:textSize="@dimen/tertiaryTextSize"
+                tools:text="(4 left)" />
         </LinearLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -62,11 +84,11 @@
         android:id="@+id/add.to.wishlist.image"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:background="@null"
-        android:tint="@color/colorAccent"
-        android:scaleType="centerCrop"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:background="@null"
+        android:scaleType="centerCrop"
+        android:tint="@color/colorAccent"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 </RelativeLayout>
