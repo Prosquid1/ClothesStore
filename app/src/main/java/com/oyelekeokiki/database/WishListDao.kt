@@ -11,27 +11,27 @@ import com.oyelekeokiki.model.Product
 @Dao
 interface WishListDao {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun addToWishList(it: Product)
+  suspend fun addToWishList(it: Product)
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun insertWishListProducts(it: List<Product>)
+  suspend fun insertWishListProducts(it: List<Product>)
 
   @Query("DELETE FROM Product WHERE id = :productId")
-  fun removeFromWishList(productId: Int)
+  suspend fun removeFromWishList(productId: Int)
 
   @Query("SELECT * FROM Product")
-  fun getWishList(): LiveData<List<Product>>
+  suspend fun getWishList(): List<Product>
 
   @Query("SELECT id FROM Product")
-  fun getWishListIds(): LiveData<List<Int>>
+  suspend fun getWishListIds(): List<Int>
 
   @Query("SELECT * FROM Product WHERE id= :productId")
-  fun getWishListItemWith(productId: Int): LiveData<Product>
+  suspend fun getWishListItemWith(productId: Int): Product
 
   @Query("DELETE FROM Product")
-  fun deleteAll()
+  suspend fun deleteAll()
 
   @Query("SELECT count(*) FROM Product")
-  fun getProductsCount(): Int
+  suspend fun getProductsCount(): Int
 
 }
