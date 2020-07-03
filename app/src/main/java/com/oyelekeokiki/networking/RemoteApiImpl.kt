@@ -3,6 +3,7 @@ package com.oyelekeokiki.networking
 import com.oyelekeokiki.model.*
 import com.oyelekeokiki.model.response.AddToCartResponse
 import com.oyelekeokiki.model.response.DeleteFromCartResponse
+import java.lang.NullPointerException
 import javax.inject.Inject
 
 /**
@@ -15,8 +16,11 @@ class RemoteApiImpl @Inject constructor(
 
   override suspend fun getProducts(): Result<List<Product>> = try {
     val data = apiService.getProducts()
-
-    Success(data)
+    if (data.isNotEmpty()) {
+      Success(data)
+    } else {
+      Failure(NullPointerException("No products available"))
+    }
   } catch (error: Throwable) {
     Failure(error)
   }

@@ -4,16 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.oyelekeokiki.R
+import com.oyelekeokiki.model.Product
+import com.oyelekeokiki.ui.shared.ProductAdapter
+import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
+
 class HomeFragment : Fragment() {
+
     @Inject
     lateinit var homeViewModel: HomeViewModel
+    lateinit var productAdapter: ProductAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,4 +27,46 @@ class HomeFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observeData()
+        observeError()
+        initRecyclerView()
+    }
+
+    private fun observeData() {
+        homeViewModel.products?.observe(
+            viewLifecycleOwner,
+            Observer { products ->
+                setActiveDataWith(products)
+            })
+    }
+
+    private fun observeError() {
+        homeViewModel.errorMessage?.observe(
+            viewLifecycleOwner,
+            Observer { message ->
+                setEmptyStateWith(message)
+            })
+    }
+
+    private fun initRecyclerView() {
+        recycler_home.layoutManager = LinearLayoutManager(context)
+        productAdapter = ProductAdapter()
+        recycler_home.adapter = productAdapter
+    }
+
+    private fun setActiveDataWith(products: List<Product>) {
+        productAdapter.setData(products)
+        recycler_home.visibility = View.VISIBLE
+        text_error_message.visibility = View.GONE
+    }
+
+    private fun setEmptyStateWith(message: String) {
+        recycler_home.visibility = View.GONE
+        text_error_message.visibility = View.VISIBLE
+        text_error_message.text = message
+    }
+
 }
