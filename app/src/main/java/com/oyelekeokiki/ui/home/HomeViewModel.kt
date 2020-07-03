@@ -13,9 +13,15 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(private val remoteApi: RemoteApi): ViewModel() {
     var products: MutableLiveData<List<Product>>? = null
     var errorMessage: MutableLiveData<String>? = null
+    var isFetching: MutableLiveData<Boolean>? = null
 
     init {
+        fetchProducts()
+    }
+
+    fun fetchProducts() {
         viewModelScope.launch {
+            isFetching?.postValue(true);
             try {
                 val result = remoteApi.getProducts()
                 if (result is Success) {
@@ -23,8 +29,10 @@ class HomeViewModel @Inject constructor(private val remoteApi: RemoteApi): ViewM
                 } else if (result is Failure){
                     errorMessage?.postValue(result.error?.localizedMessage)
                 }
+                isFetching?.postValue(false);
             } catch (e: Exception) {
                 errorMessage?.postValue(e.localizedMessage)
+                isFetching?.postValue(false);
             }
         }
     }

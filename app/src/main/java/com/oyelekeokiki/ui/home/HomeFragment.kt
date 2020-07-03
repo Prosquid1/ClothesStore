@@ -13,7 +13,6 @@ import com.oyelekeokiki.ui.shared.ProductAdapter
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
-
 class HomeFragment : Fragment() {
 
     @Inject
@@ -32,7 +31,21 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeData()
         observeError()
+        observeSwipeRefresh()
+        setSwipeRefreshListener()
         initRecyclerView()
+    }
+
+    private fun setSwipeRefreshListener() {
+        swipe_refresh_layout.setOnRefreshListener {
+            homeViewModel.fetchProducts()
+        }
+    }
+
+    private fun initRecyclerView() {
+        recycler_home.layoutManager = LinearLayoutManager(context)
+        productAdapter = ProductAdapter()
+        recycler_home.adapter = productAdapter
     }
 
     private fun observeData() {
@@ -51,10 +64,12 @@ class HomeFragment : Fragment() {
             })
     }
 
-    private fun initRecyclerView() {
-        recycler_home.layoutManager = LinearLayoutManager(context)
-        productAdapter = ProductAdapter()
-        recycler_home.adapter = productAdapter
+    private fun observeSwipeRefresh() {
+        homeViewModel.isFetching?.observe(
+            viewLifecycleOwner,
+            Observer { fetching ->
+                swipe_refresh_layout.isRefreshing = fetching
+            })
     }
 
     private fun setActiveDataWith(products: List<Product>) {
