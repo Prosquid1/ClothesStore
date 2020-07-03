@@ -15,12 +15,11 @@ import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(private val remoteApi: RemoteApi, private val wishListDatabaseSource: WishListDatabaseSource ) : ViewModel() {
     var products: MutableLiveData<List<Product>> = MutableLiveData()
-    var wishListProductIds: MutableLiveData<List<Int>> = MutableLiveData()
+    var wishListProductIds: LiveData<List<Int>> = wishListDatabaseSource.getWishListIds()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
     var isFetching: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
-        fetchWishList()
         fetchProducts()
     }
 
@@ -39,16 +38,6 @@ class HomeViewModel @Inject constructor(private val remoteApi: RemoteApi, privat
             } catch (e: Exception) {
                 errorMessage.postValue(e.localizedMessage)
                 isFetching.postValue(false);
-            }
-        }
-    }
-
-    private fun fetchWishList() {
-        viewModelScope.launch {
-            try {
-                wishListProductIds.postValue(wishListDatabaseSource.getWishListIds())
-            } catch (e: Exception) {
-                wishListProductIds.postValue(arrayListOf())
             }
         }
     }

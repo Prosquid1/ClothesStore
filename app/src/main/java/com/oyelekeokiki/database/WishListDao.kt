@@ -21,10 +21,10 @@ interface WishListDao {
   suspend fun removeFromWishList(productId: Int)
 
   @Query("SELECT * FROM Product")
-  fun getWishList(): Flow<List<Product>>
+  fun getWishList(): LiveData<List<Product>>
 
   @Query("SELECT id FROM Product")
-  suspend fun getWishListIds(): List<Int>
+  fun getWishListIds(): LiveData<List<Int>>
 
   @Query("SELECT * FROM Product WHERE id= :productId")
   suspend fun getWishListItemWith(productId: Int): Product
@@ -33,6 +33,6 @@ interface WishListDao {
   suspend fun deleteAll()
 
   @Query("SELECT count(*) FROM Product")
-  suspend fun getProductsCount(): Int
+  fun getWishListCount(): LiveData<Int>
 
 }

@@ -10,8 +10,10 @@ class WishListDatabaseSource @Inject constructor(private val wishListDao: WishLi
 
     suspend fun removeFromWishList(productId: Int) = wishListDao.removeFromWishList(productId)
 
-    fun getWishList(): Flow<List<Product>> = wishListDao.getWishList()
+    fun getWishList(): LiveData<List<Product>> = wishListDao.getWishList()
 
-    suspend fun getWishListIds(): List<Int> = wishListDao.getWishListIds()
+    fun getWishListIds(): LiveData<List<Int>> = wishListDao.getWishListIds()
+
+    fun getWishListCount(): LiveData<Int> = wishListDao.getWishListCount()
 
 }

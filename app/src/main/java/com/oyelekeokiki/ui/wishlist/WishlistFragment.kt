@@ -33,7 +33,6 @@ class WishlistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeError()
         observeWishList()
         observeWishListIds()
         setupSwipeRefreshView()
@@ -63,7 +62,8 @@ class WishlistFragment : Fragment() {
         wishlistViewModel.wishlist.observe(
             viewLifecycleOwner,
             Observer { wishlist ->
-                setActiveDataWith(wishlist)
+                if (wishlist.isEmpty())setEmptyState() else setActiveDataWith(wishlist)
+
             })
     }
 
@@ -72,14 +72,6 @@ class WishlistFragment : Fragment() {
             viewLifecycleOwner,
             Observer { ids ->
                 productAdapter.setWishListIds(ids)
-            })
-    }
-
-    private fun observeError() {
-        wishlistViewModel.wishListIsEmpty.observe(
-            viewLifecycleOwner,
-            Observer { isEmpty ->
-                if (isEmpty)setEmptyState()
             })
     }
 

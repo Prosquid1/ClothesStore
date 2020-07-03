@@ -37,6 +37,10 @@ class AppDatabaseTest {
     private var wishListDao: WishListDao? = null
     private var appDataBase: AppDataBase? = null
 
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+
     private val product = Product(1, "Test Product", "Test Description", oldPrice = "2.00", price = "1.89", stock = 2);
     private val anotherProduct = Product(2, "Test Product 2", "Test Description 2", oldPrice = "3.00", price = "4.89", stock = 3);
 
@@ -58,9 +62,9 @@ class AppDatabaseTest {
     }
 
     @Test
-    fun shouldDeleteAll() = runBlocking {
-        wishListDao?.deleteAll()
-        assertEquals(wishListDao?.getProductsCount(), 0)
+    fun shouldDeleteAll() {
+        runBlocking { wishListDao?.deleteAll() }
+        assertEquals(wishListDao?.getWishListCount()?.getOrAwaitValue(), 0)
     }
 
     @Test
@@ -77,47 +81,58 @@ class AppDatabaseTest {
         assertNull(productTest)
     }
 
-//    @Test
-//    fun shouldInsertAll() {
-//        val listOfNewProducts = listOf(product, anotherProduct)
-//        runBlocking {
-//            wishListDao?.insertWishListProducts(listOfNewProducts)
-//
-//            val allNewlyAddedProducts = wishListDao?.getWishList()
-//
-//            allNewlyAddedProducts?.collect {
-//                assertEquals(it.size, listOfNewProducts.size)
-//            }
-//        }
-//
-//    }
+    @Test
+    fun shouldInsertAll() = runBlocking  {
+        val listOfNewProducts = listOf(product, anotherProduct)
+        wishListDao?.insertWishListProducts(listOfNewProducts)
+
+        val allNewlyAddedProducts = wishListDao?.getWishList()?.getOrAwaitValue()
+
+        assertEquals(allNewlyAddedProducts?.size, listOfNewProducts.size )
+    }
 
     @Test
     fun selectIdsFromDatabase() = runBlocking {
         val listOfNewProducts = listOf(product, anotherProduct)
         wishListDao?.insertWishListProducts(listOfNewProducts)
 
-        val allNewlyAddedProducts = wishListDao?.getWishListIds()
+        val allNewlyAddedProducts = wishListDao?.getWishListIds()?.getOrAwaitValue()
         assertEquals(allNewlyAddedProducts, listOfNewProducts.map { it.id } )
     }
 
     @Test
-    fun databaseIsAtomic() {
+    fun databaseIsAtomic() = runBlocking {
         val listOfNewProducts = listOf(product, product, product, product)
-        runBlocking {
-            wishListDao?.deleteAll()
-        }
-        runBlocking {
-            wishListDao?.insertWishListProducts(listOfNewProducts)
-        }
+        wishListDao?.deleteAll()
+        wishListDao?.insertWishListProducts(listOfNewProducts)
 
-        val allNewlyAddedProducts = wishListDao?.getWishList()
-
-        runBlocking {
-            allNewlyAddedProducts?.collect {
-                assertEquals(it.size, 1)
-            }
-        }
-
+        val allNewlyAddedProducts = wishListDao?.getWishList()?.getOrAwaitValue()
+        assertEquals(allNewlyAddedProducts?.size, 1 )
     }
+}
+
+// Extension functions
+private fun <T> LiveData<T>.getOrAwaitValue(
+    time: Long = 2,
+    timeUnit: TimeUnit = TimeUnit.SECONDS
+): T {
+    var data: T? = null
+    val latch = CountDownLatch(1)
+    val observer = object : Observer<T> {
+        override fun onChanged(o: T?) {
+            data = o
+            latch.countDown()
+            this@getOrAwaitValue.removeObserver(this)
+        }
+    }
+
+    this.observeForever(observer)
+
+    // Don't wait indefinitely if the LiveData is not set.
+    if (!latch.await(time, timeUnit)) {
+        throw TimeoutException("LiveData value was never set.")
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    return data as T
 }

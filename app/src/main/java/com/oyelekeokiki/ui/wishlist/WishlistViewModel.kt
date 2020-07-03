@@ -1,5 +1,6 @@
 package com.oyelekeokiki.ui.wishlist
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,13 +12,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class WishlistViewModel @Inject constructor(private val wishListDatabaseSource: WishListDatabaseSource ) : ViewModel() {
-    var wishlist: MutableLiveData<List<Product>> =  MutableLiveData()
-    var wishListProductIds: MutableLiveData<List<Int>> = MutableLiveData()
-    var wishListIsEmpty: MutableLiveData<Boolean> = MutableLiveData()
-
-    init {
-        fetchWishList()
-    }
+    var wishlist: LiveData<List<Product>> =  wishListDatabaseSource.getWishList()
+    var wishListProductIds: LiveData<List<Int>> = wishListDatabaseSource.getWishListIds()
 
     fun updateWishListWithProduct(product: Product, isLiked: Boolean) {
         //TODO: Implement
@@ -26,22 +22,6 @@ class WishlistViewModel @Inject constructor(private val wishListDatabaseSource: 
                 wishListDatabaseSource.addToWishList(product)
             } else {
                 wishListDatabaseSource.removeFromWishList(product.id)
-            }
-        }
-    }
-
-    private fun fetchWishList() {
-        viewModelScope.launch {
-            try {
-                wishListDatabaseSource.getWishList().collect {
-                    items ->
-                    wishlist.postValue(items)
-                    wishListProductIds.postValue(items.map { it.id })
-                    wishListIsEmpty.postValue(items.isEmpty())
-                }
-
-            } catch (e: Exception) {
-                wishListProductIds.postValue(arrayListOf())
             }
         }
     }
