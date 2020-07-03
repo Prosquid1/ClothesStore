@@ -16,6 +16,6 @@ enum class StockCountPriority {
 
     fun getColor() = when (this) {
         LOW -> R.color.colorAccent
-        MEDIUM -> R.color.colorPrimary
+        MEDIUM -> R.color.colorPrimaryDark
     }
 }

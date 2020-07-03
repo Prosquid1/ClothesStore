@@ -53,7 +53,7 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
     }
     containerView.product_old_price.visibility =  View.VISIBLE
     containerView.product_old_price.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-    containerView.product_price.text = "£${oldPrice}"
+    containerView.product_old_price.text = "£${oldPrice}"
   }
 
   private fun setupLikeButton(soldOut: Boolean) {
