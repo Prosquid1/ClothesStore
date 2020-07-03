@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.oyelekeokiki.R
 import com.oyelekeokiki.model.Product
+import com.oyelekeokiki.ui.shared.CSItemAnimator
 import com.oyelekeokiki.ui.shared.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -63,6 +66,7 @@ class HomeFragment : Fragment() {
                 DividerItemDecoration.VERTICAL
             )
         )
+        recycler_home.itemAnimator = CSItemAnimator()
         recycler_home.layoutManager = LinearLayoutManager(context)
         productAdapter = ProductAdapter { product, isLiked ->
             homeViewModel.updateWishListWithProduct(product, isLiked)

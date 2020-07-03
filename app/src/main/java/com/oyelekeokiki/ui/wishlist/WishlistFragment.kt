@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.oyelekeokiki.R
 import com.oyelekeokiki.model.Product
+import com.oyelekeokiki.ui.shared.CSItemAnimator
 import com.oyelekeokiki.ui.shared.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -22,6 +24,8 @@ class WishlistFragment : Fragment() {
     @Inject
     lateinit var wishlistViewModel: WishlistViewModel
     lateinit var productAdapter: ProductAdapter
+
+    private var hasAnimationRun = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +55,7 @@ class WishlistFragment : Fragment() {
                 DividerItemDecoration.VERTICAL
             )
         )
+        recycler_home.itemAnimator = CSItemAnimator()
         recycler_home.layoutManager = LinearLayoutManager(context)
         productAdapter = ProductAdapter { product, isLiked ->
             wishlistViewModel.updateWishListWithProduct(product, isLiked)
@@ -61,9 +66,8 @@ class WishlistFragment : Fragment() {
     private fun observeWishList() {
         wishlistViewModel.wishlist.observe(
             viewLifecycleOwner,
-            Observer { wishlist ->
-                if (wishlist.isEmpty())setEmptyState() else setActiveDataWith(wishlist)
-
+            Observer { wishList ->
+                if (wishList.isEmpty())setEmptyState() else setActiveDataWith(wishList)
             })
     }
 
@@ -77,8 +81,14 @@ class WishlistFragment : Fragment() {
 
     private fun setActiveDataWith(products: List<Product>) {
         productAdapter.setData(products)
-        recycler_home.visibility = View.VISIBLE
         text_error_message.visibility = View.GONE
+        recycler_home.visibility = View.VISIBLE
+
+        if (!hasAnimationRun) {
+            // To prevent recurring animations since this adapter can easily change
+            recycler_home.scheduleLayoutAnimation()
+            hasAnimationRun = true
+        }
     }
 
     private fun setEmptyState() {
