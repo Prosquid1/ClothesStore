@@ -9,11 +9,6 @@ object ColorHelper {
         val rnd = Random()
         return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
     }
-
-    fun getStockLowColor() {
-
-    }
-
 }
 
 enum class StockCountPriority {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -36,11 +37,18 @@ class HomeFragment : Fragment() {
         observeData()
         observeError()
         observeSwipeRefresh()
-        setSwipeRefreshListener()
+        setupSwipeRefreshView()
         initRecyclerView()
     }
 
-    private fun setSwipeRefreshListener() {
+    private fun setupSwipeRefreshView() {
+        context?.let {
+            swipe_refresh_layout.setColorSchemeColors(
+                ContextCompat.getColor(it, R.color.colorPrimary),
+                ContextCompat.getColor(it, R.color.colorAccent),
+                ContextCompat.getColor(it, R.color.colorPrimaryDark)
+            )
+        }
         swipe_refresh_layout.setOnRefreshListener {
             homeViewModel.fetchProducts()
         }

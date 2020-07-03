@@ -10,17 +10,12 @@
         android:id="@+id/product.image.layout"
         android:layout_width="@dimen/imageListCardSize"
         android:layout_height="@dimen/imageListCardSize"
-        android:layout_centerVertical="true"
-        android:background="@drawable/round_corner_image_layout"
-        android:scaleType="centerCrop">
+        android:layout_centerVertical="true">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/product.image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:background="@color/colorAccent"
-            tools:srcCompat="@tools:sample/backgrounds/scenic"/>
+            android:layout_height="match_parent"/>
 
             <TextView
                 android:id="@+id/sold.out.text"

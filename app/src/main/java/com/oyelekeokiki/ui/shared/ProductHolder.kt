@@ -2,11 +2,13 @@ package com.oyelekeokiki.ui.shared
 
 import android.annotation.SuppressLint
 import android.graphics.Paint
+import android.graphics.drawable.GradientDrawable
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.like.LikeButton
 import com.like.OnLikeListener
+import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.ColorHelper
 import com.oyelekeokiki.helpers.StockCountPriority
 import com.oyelekeokiki.model.Product
@@ -35,7 +37,9 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
   }
 
   private fun setupProductImageView() {
-    containerView.product_image.setBackgroundColor(ColorHelper.getRandomColor())
+    containerView.product_image.setBackgroundResource(R.drawable.round_corner_image_layout)
+    val drawable = containerView.product_image.background as GradientDrawable
+    drawable.setColor(ColorHelper.getRandomColor())
   }
 
   private fun setupSoldOutView(soldOut: Boolean) {
