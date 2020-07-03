@@ -1,6 +1,5 @@
 package com.oyelekeokiki.ui.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +12,10 @@ import com.oyelekeokiki.networking.RemoteApi
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class HomeViewModel @Inject constructor(private val remoteApi: RemoteApi, private val wishListDatabaseSource: WishListDatabaseSource ) : ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val remoteApi: RemoteApi,
+    private val wishListDatabaseSource: WishListDatabaseSource
+) : ViewModel() {
     var products: MutableLiveData<List<Product>> = MutableLiveData()
     var wishListProductIds: LiveData<List<Int>> = wishListDatabaseSource.getWishListIds()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
@@ -43,9 +45,6 @@ class HomeViewModel @Inject constructor(private val remoteApi: RemoteApi, privat
     }
 
     fun updateWishListWithProduct(product: Product, isLiked: Boolean) {
-        //TODO: Implement
-        Log.e("Product","${product.name} is liked? ${isLiked}")
-
         viewModelScope.launch {
             if (isLiked) {
                 wishListDatabaseSource.addToWishList(product)

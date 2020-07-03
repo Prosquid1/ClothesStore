@@ -111,8 +111,9 @@ class HomeFragment : Fragment() {
 
     private fun setActiveDataWith(products: List<Product>) {
         productAdapter.setData(products)
-        recycler_home.visibility = View.VISIBLE
         text_error_message.visibility = View.GONE
+        recycler_home.visibility = View.VISIBLE
+        recycler_home.scheduleLayoutAnimation()
     }
 
     private fun setEmptyStateWith(message: String) {
