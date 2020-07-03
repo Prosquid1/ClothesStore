@@ -28,7 +28,8 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
 
     fun bindData(
         product: Product,
-        onWishListModified: WishListModified
+        onWishListModified: WishListModified,
+        productIsLiked: Boolean = true //Since this adapter will be reused by WishListFragment
     ) {
         containerView.product_name.text = product.name
         containerView.product_price.text = "£${product.price}"
@@ -37,13 +38,15 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
         containerView.product_category.text = product.category
         setupStockView(product.stock)
         setupProductImageView()
-        setupLikeListener(product, onWishListModified)
+        setupLikeView(product, productIsLiked, onWishListModified)
     }
 
-    private fun setupLikeListener(
+    private fun setupLikeView(
         product: Product,
+        productIsLiked: Boolean,
         onWishListModified: WishListModified
     ) {
+        containerView.add_to_wishlist_button.isLiked = productIsLiked
         containerView.add_to_wishlist_button.setOnLikeListener(object : OnLikeListener {
             override fun liked(likeButton: LikeButton) {
                 onWishListModified(product, true)

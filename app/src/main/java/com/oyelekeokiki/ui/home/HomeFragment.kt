@@ -34,7 +34,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeData()
+        observeProducts()
+        observeWishList()
         observeError()
         observeSwipeRefresh()
         setupSwipeRefreshView()
@@ -64,16 +65,24 @@ class HomeFragment : Fragment() {
         )
         recycler_home.layoutManager = LinearLayoutManager(context)
         productAdapter = ProductAdapter { product, isLiked ->
-            homeViewModel.modifyWishListWithProduct(product, isLiked)
+            homeViewModel.updateWishListWithProduct(product, isLiked)
         }
         recycler_home.adapter = productAdapter
     }
 
-    private fun observeData() {
+    private fun observeProducts() {
         homeViewModel.products.observe(
             viewLifecycleOwner,
             Observer { products ->
                 setActiveDataWith(products)
+            })
+    }
+
+    private fun observeWishList() {
+        homeViewModel.wishListProductIds.observe(
+            viewLifecycleOwner,
+            Observer { ids ->
+                productAdapter.setWishListIds(ids)
             })
     }
 

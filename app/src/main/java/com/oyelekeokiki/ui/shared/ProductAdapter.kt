@@ -16,6 +16,7 @@ class ProductAdapter(private val onWishListModified: WishListModified) :
     RecyclerView.Adapter<ProductHolder>() {
 
     private val data: MutableList<Product> = mutableListOf()
+    private var likedProductIds: List<Int> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductHolder {
         val view = LayoutInflater.from(parent.context)
@@ -26,7 +27,9 @@ class ProductAdapter(private val onWishListModified: WishListModified) :
     override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: ProductHolder, position: Int) {
-        holder.bindData(data[position], onWishListModified)
+        val product = data[position]
+        val productIsInWishList = likedProductIds.contains(product.id)
+        holder.bindData(product, onWishListModified, productIsInWishList)
     }
 
     fun addData(item: Product) {
@@ -38,6 +41,10 @@ class ProductAdapter(private val onWishListModified: WishListModified) :
         this.data.clear()
         this.data.addAll(data)
         notifyDataSetChanged()
+    }
+
+    fun setWishListIds(likedIds: List<Int>) {
+        likedProductIds = likedIds
     }
 
     fun removeProduct(productId: Int) {
