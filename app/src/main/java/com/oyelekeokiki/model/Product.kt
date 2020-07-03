@@ -1,5 +1,6 @@
 package com.oyelekeokiki.model
 
+import androidx.annotation.Nullable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -13,6 +14,6 @@ data class Product(
   val name: String,
   val category: String,
   val price: String?,
-  val oldPrice: String,
+  val oldPrice: String?,
   val stock: Int
 )
