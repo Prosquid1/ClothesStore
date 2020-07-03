@@ -6,7 +6,7 @@
     <dimen name="primaryTextSize">13.6sp</dimen>
     <dimen name="secondaryTextSize">12sp</dimen>
     <dimen name="tertiaryTextSize">10.8sp</dimen>
-    <dimen name="imageListCardSize">50dp</dimen>
+    <dimen name="imageListCardSize">60dp</dimen>
 
     <dimen name="mini_horizontal_padding">4dp</dimen>
     <dimen name="mini_vertical_padding">4dp</dimen>

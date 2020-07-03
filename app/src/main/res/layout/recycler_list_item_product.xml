@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="@dimen/mini_vertical_padding">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginHorizontal="@dimen/activity_horizontal_margin">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <FrameLayout
         android:id="@+id/product.image.layout"
         android:layout_width="@dimen/imageListCardSize"
         android:layout_height="@dimen/imageListCardSize"
+        android:layout_centerVertical="true"
         android:background="@drawable/round_corner_image_layout"
         android:scaleType="centerCrop">
 
@@ -18,17 +20,29 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:background="@color/colorAccent"
-            tools:srcCompat="@tools:sample/backgrounds/scenic">
+            tools:srcCompat="@tools:sample/backgrounds/scenic"/>
 
-        </androidx.appcompat.widget.AppCompatImageView>
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <TextView
+                android:id="@+id/sold.out.text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:rotation="315"
+                android:textSize="@dimen/secondaryTextSize"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:text="@string/sold_out_text"
+                />
+
+    </FrameLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:layout_toStartOf="@id/add.to.wishlist.image"
+        android:layout_toStartOf="@id/add.to.wishlist.button"
         android:layout_toEndOf="@id/product.image.layout"
         android:orientation="vertical">
 
@@ -80,15 +94,12 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/add.to.wishlist.image"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+    <com.like.LikeButton
+        android:id="@+id/add.to.wishlist.button"
+        app:icon_type="star"
+        app:icon_size="@dimen/secondaryTextSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:background="@null"
-        android:scaleType="centerCrop"
-        android:tint="@color/colorAccent"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        android:layout_centerVertical="true" />
 </RelativeLayout>

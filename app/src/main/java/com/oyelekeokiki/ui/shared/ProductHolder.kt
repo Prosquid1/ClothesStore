@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.graphics.Paint
 import android.view.View
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.recyclerview.widget.RecyclerView
+import com.like.LikeButton
+import com.like.OnLikeListener
 import com.oyelekeokiki.R
 import com.oyelekeokiki.model.Product
 import kotlinx.android.extensions.LayoutContainer
+
 
 /**
  * Holder to display the Product item in a grid or list.
@@ -18,22 +20,23 @@ import kotlinx.android.extensions.LayoutContainer
 class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
   LayoutContainer {
 
-  private lateinit var productNameTextView: TextView
+  private lateinit var addToWishListImageButton: LikeButton
   private lateinit var productCategoryTextView: TextView
-  private lateinit var stockCountTextView: TextView
-  private lateinit var productPriceTextView: TextView
+  private lateinit var productNameTextView: TextView
   private lateinit var productPreviousPriceTextView: TextView
-  private lateinit var addToWishListImageButton: AppCompatImageButton
+  private lateinit var productPriceTextView: TextView
+  private lateinit var soldOutTextView: TextView
+  private lateinit var stockCountTextView: TextView
 
   private fun bindRequiredViews() {
-    productNameTextView = containerView.findViewById(R.id.product_name)
+    addToWishListImageButton = containerView.findViewById(R.id.add_to_wishlist_button)
     productCategoryTextView = containerView.findViewById(R.id.product_category)
-    stockCountTextView = containerView.findViewById(R.id.stock_count)
-    productPriceTextView = containerView.findViewById(R.id.product_price)
+    productNameTextView = containerView.findViewById(R.id.product_name)
     productPreviousPriceTextView = containerView.findViewById(R.id.product_old_price)
-    addToWishListImageButton = containerView.findViewById(R.id.add_to_wishlist_image)
+    productPriceTextView = containerView.findViewById(R.id.product_price)
+    soldOutTextView = containerView.findViewById(R.id.sold_out_text)
+    stockCountTextView = containerView.findViewById(R.id.stock_count)
   }
-
 
   fun bindData(product: Product) {
     bindRequiredViews()
@@ -43,8 +46,16 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
 
     productCategoryTextView.text = product.category
     setupStockCount(product.stock)
-    addToWishListImageButton.setOnClickListener {  }
 
+    addToWishListImageButton.setOnLikeListener(object : OnLikeListener {
+      override fun liked(likeButton: LikeButton) {}
+      override fun unLiked(likeButton: LikeButton) {}
+    })
+
+  }
+
+  private fun setupSoldOutView(soldOut: Boolean) {
+    soldOutTextView.visibility =  if (soldOut) View.VISIBLE else View.GONE
   }
 
   private fun setupOldPriceView(oldPrice: String?) {
@@ -58,14 +69,10 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
   }
 
   private fun setupStockCount(count: Int) {
-    if (count == 0) {
-      stockCountTextView.text =  "(Out of stock)"
-      containerView.alpha = 0.6f;
-      return
-    }
-
-    containerView.alpha = 1f;
-    stockCountTextView.text = "(${count} left)"
+    val itemIsSoldOut = count == 0;
+    stockCountTextView.text = if (itemIsSoldOut) "(Out of stock)" else "(${count} left)"
+    containerView.alpha = if (itemIsSoldOut) 0.6f else 1.0f
+    setupSoldOutView(itemIsSoldOut)
   }
 
 }

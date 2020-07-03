@@ -87,6 +87,8 @@ dependencies {
     implementation "androidx.vectordrawable:vectordrawable:$VECTOR_DRAWABLE_VERSION"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
+    implementation 'com.github.jd-alexander:LikeButton:0.2.3'
+
     // Database
     implementation "androidx.room:room-runtime:$ROOM_VERSION"
     kapt "androidx.room:room-compiler:$ROOM_VERSION"
