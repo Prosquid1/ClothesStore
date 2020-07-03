@@ -9,5 +9,5 @@
     <dimen name="imageListCardSize">60dp</dimen>
 
     <dimen name="mini_horizontal_padding">4dp</dimen>
-    <dimen name="mini_vertical_padding">4dp</dimen>
+    <dimen name="mini_vertical_padding">6dp</dimen>
 </resources>

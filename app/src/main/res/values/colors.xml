@@ -5,4 +5,6 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="white">#FFF</color>
+    <color name="black">#000</color>
+    <color name="dimgray">#696969</color>
 </resources>
