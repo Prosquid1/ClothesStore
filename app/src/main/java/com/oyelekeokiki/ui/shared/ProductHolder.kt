@@ -24,59 +24,80 @@ const val MINIMUM_STOCK_THRESHOLD = 3
 
 @SuppressLint("SetTextI18n")
 class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
-  LayoutContainer {
+    LayoutContainer {
 
-  fun bindData(product: Product) {
-    containerView.product_name.text = product.name
-    containerView.product_price.text = "£${product.price}"
-    setupOldPriceView(product.oldPrice)
+    fun bindData(
+        product: Product,
+        onWishListModified: WishListModified
+    ) {
+        containerView.product_name.text = product.name
+        containerView.product_price.text = "£${product.price}"
+        setupOldPriceView(product.oldPrice)
 
-    containerView.product_category.text = product.category
-    setupStockView(product.stock)
-    setupProductImageView()
-  }
-
-  private fun setupProductImageView() {
-    containerView.product_image.setBackgroundResource(R.drawable.round_corner_image_layout)
-    val drawable = containerView.product_image.background as GradientDrawable
-    drawable.setColor(ColorHelper.getRandomColor())
-  }
-
-  private fun setupSoldOutView(soldOut: Boolean) {
-    containerView.sold_out_text.visibility =  if (soldOut) View.VISIBLE else View.GONE
-  }
-
-  private fun setupOldPriceView(oldPrice: String?) {
-    if (oldPrice == null) {
-      containerView.product_old_price.visibility =  View.GONE
-      return
+        containerView.product_category.text = product.category
+        setupStockView(product.stock)
+        setupProductImageView()
+        setupLikeListener(product, onWishListModified)
     }
-    containerView.product_old_price.visibility =  View.VISIBLE
-    containerView.product_old_price.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-    containerView.product_old_price.text = "£${oldPrice}"
-  }
 
-  private fun setupLikeButton(soldOut: Boolean) {
-    containerView.add_to_wishlist_button.isEnabled = !soldOut
-    containerView.add_to_wishlist_button.setOnLikeListener(object : OnLikeListener {
-      override fun liked(likeButton: LikeButton) {}
-      override fun unLiked(likeButton: LikeButton) {}
-    })
-  }
+    private fun setupLikeListener(
+        product: Product,
+        onWishListModified: WishListModified
+    ) {
+        containerView.add_to_wishlist_button.setOnLikeListener(object : OnLikeListener {
+            override fun liked(likeButton: LikeButton) {
+                onWishListModified(product, true)
+            }
 
-  private fun setupStockView(count: Int) {
-    val itemIsSoldOut = count == 0
-    containerView.stock_count.text = if (itemIsSoldOut) "(Out of stock)" else "(${count} left)"
-    containerView.alpha = if (itemIsSoldOut) 0.6f else 1.0f
-    setupSoldOutView(itemIsSoldOut)
-    setupLikeButton(itemIsSoldOut)
+            override fun unLiked(likeButton: LikeButton) {
+                onWishListModified(product, false)
+            }
+        })
+    }
 
-    val stockPriority = if (count >= MINIMUM_STOCK_THRESHOLD) StockCountPriority.MEDIUM else StockCountPriority.LOW
-    setupStockTextColor(stockPriority)
-  }
+    private fun setupProductImageView() {
+        containerView.product_image.setBackgroundResource(R.drawable.round_corner_image_layout)
+        val drawable = containerView.product_image.background as GradientDrawable
+        drawable.setColor(ColorHelper.getRandomColor())
+    }
 
-  private fun setupStockTextColor(priority: StockCountPriority) {
-    containerView.stock_count.setTextColor(ContextCompat.getColor(containerView.context, priority.getColor()))
-  }
+    private fun setupSoldOutView(soldOut: Boolean) {
+        containerView.sold_out_text.visibility = if (soldOut) View.VISIBLE else View.GONE
+    }
+
+    private fun setupOldPriceView(oldPrice: String?) {
+        if (oldPrice == null) {
+            containerView.product_old_price.visibility = View.GONE
+            return
+        }
+        containerView.product_old_price.visibility = View.VISIBLE
+        containerView.product_old_price.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+        containerView.product_old_price.text = "£${oldPrice}"
+    }
+
+    private fun setupLikeButton(soldOut: Boolean) {
+        containerView.add_to_wishlist_button.isEnabled = !soldOut
+    }
+
+    private fun setupStockView(count: Int) {
+        val itemIsSoldOut = count == 0
+        containerView.stock_count.text = if (itemIsSoldOut) "(Out of stock)" else "(${count} left)"
+        containerView.alpha = if (itemIsSoldOut) 0.6f else 1.0f
+        setupSoldOutView(itemIsSoldOut)
+        setupLikeButton(itemIsSoldOut)
+
+        val stockPriority =
+            if (count >= MINIMUM_STOCK_THRESHOLD) StockCountPriority.MEDIUM else StockCountPriority.LOW
+        setupStockTextColor(stockPriority)
+    }
+
+    private fun setupStockTextColor(priority: StockCountPriority) {
+        containerView.stock_count.setTextColor(
+            ContextCompat.getColor(
+                containerView.context,
+                priority.getColor()
+            )
+        )
+    }
 
 }

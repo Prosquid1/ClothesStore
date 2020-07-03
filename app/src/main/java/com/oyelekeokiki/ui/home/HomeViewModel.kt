@@ -1,5 +1,6 @@
 package com.oyelekeokiki.ui.home
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +11,7 @@ import com.oyelekeokiki.networking.RemoteApi
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class HomeViewModel @Inject constructor(private val remoteApi: RemoteApi): ViewModel() {
+class HomeViewModel @Inject constructor(private val remoteApi: RemoteApi) : ViewModel() {
     var products: MutableLiveData<List<Product>> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
     var isFetching: MutableLiveData<Boolean> = MutableLiveData()
@@ -25,8 +26,9 @@ class HomeViewModel @Inject constructor(private val remoteApi: RemoteApi): ViewM
             try {
                 val result = remoteApi.getProducts()
                 if (result is Success) {
-                    products.postValue(result.data)
-                } else if (result is Failure){
+                    filterProductsFromWishList(result.data)
+
+                } else if (result is Failure) {
                     errorMessage.postValue(result.error?.localizedMessage)
                 }
                 isFetching.postValue(false);
@@ -35,5 +37,18 @@ class HomeViewModel @Inject constructor(private val remoteApi: RemoteApi): ViewM
                 isFetching.postValue(false);
             }
         }
+    }
+
+    /**
+     * Check which products are on wish list and filter this list to mark as added
+     * Do this in adapter??
+     * **/
+    private fun filterProductsFromWishList(productsFromServer: List<Product>) {
+        products.postValue(productsFromServer)
+    }
+
+    fun modifyWishListWithProduct(product: Product, isLiked: Boolean) {
+        //TODO: Implement
+        Log.e("Product","${product.name} is liked? ${isLiked}")
     }
 }

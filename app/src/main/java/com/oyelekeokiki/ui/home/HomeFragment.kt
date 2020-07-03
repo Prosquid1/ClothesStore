@@ -54,6 +54,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+
     private fun initRecyclerView() {
         recycler_home.addItemDecoration(
             DividerItemDecoration(
@@ -62,7 +63,9 @@ class HomeFragment : Fragment() {
             )
         )
         recycler_home.layoutManager = LinearLayoutManager(context)
-        productAdapter = ProductAdapter()
+        productAdapter = ProductAdapter { product, isLiked ->
+            homeViewModel.modifyWishListWithProduct(product, isLiked)
+        }
         recycler_home.adapter = productAdapter
     }
 
