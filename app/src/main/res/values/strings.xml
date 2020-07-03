@@ -4,4 +4,5 @@
     <string name="title_home">Home</string>
     <string name="title_wish_list">My Wishlist</string>
     <string name="title_shopping_cart">My Cart</string>
+    <string name="wishlist_empty">Your wishlist is empty!</string>
 </resources>

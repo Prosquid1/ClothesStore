@@ -15,11 +15,12 @@ import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(private val remoteApi: RemoteApi, private val wishListDatabaseSource: WishListDatabaseSource ) : ViewModel() {
     var products: MutableLiveData<List<Product>> = MutableLiveData()
-    var wishListProductIds: LiveData<List<Int>> = wishListDatabaseSource.getWishListIds()
+    var wishListProductIds: MutableLiveData<List<Int>> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
     var isFetching: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
+        fetchWishList()
         fetchProducts()
     }
 
@@ -42,24 +43,26 @@ class HomeViewModel @Inject constructor(private val remoteApi: RemoteApi, privat
         }
     }
 
-    private fun observeWishList() {
-
-    }
-    /**
-     * Check which products are on wish list and filter this list to mark as added
-     * Do this in adapter??
-     * **/
-    private fun filterProductsFromWishList(productsFromServer: List<Product>) {
-
+    private fun fetchWishList() {
+        viewModelScope.launch {
+            try {
+                wishListProductIds.postValue(wishListDatabaseSource.getWishListIds())
+            } catch (e: Exception) {
+                wishListProductIds.postValue(arrayListOf())
+            }
+        }
     }
 
     fun updateWishListWithProduct(product: Product, isLiked: Boolean) {
         //TODO: Implement
         Log.e("Product","${product.name} is liked? ${isLiked}")
-        if (isLiked) {
-            wishListDatabaseSource.addToWishList(product)
-        } else {
-            wishListDatabaseSource.removeFromWishList(product.id)
+
+        viewModelScope.launch {
+            if (isLiked) {
+                wishListDatabaseSource.addToWishList(product)
+            } else {
+                wishListDatabaseSource.removeFromWishList(product.id)
+            }
         }
     }
 }
