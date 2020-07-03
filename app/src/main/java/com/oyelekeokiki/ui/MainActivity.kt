@@ -38,10 +38,13 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         navView.setOnNavigationItemSelectedListener { item ->
-            //shouldHideCartMenu = item.title == getString(R.string.title_shopping_cart)
-            //invalidateOptionsMenu()
+            shouldHideCartMenu = item.title == getString(R.string.title_shopping_cart)
+            invalidateOptionsMenu()
+            supportActionBar?.title= item.title
             return@setOnNavigationItemSelectedListener true
         }
+
+        title = "HELL"
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
