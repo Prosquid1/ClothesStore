@@ -17,7 +17,7 @@ class HomeViewModel @Inject constructor(
     private val remoteApi: RemoteApi,
     private val wishListDatabaseSource: WishListDatabaseSource,
     application: Application
-) : BaseCartImplModel(remoteApi, application) {
+) : BaseCartImplModel(remoteApi,wishListDatabaseSource,  application) {
     var products: MutableLiveData<List<Product>> = MutableLiveData()
     var wishListProductIds: LiveData<List<Int>> = wishListDatabaseSource.getWishListIds()
     var errorMessage: MutableLiveData<String> = MutableLiveData()

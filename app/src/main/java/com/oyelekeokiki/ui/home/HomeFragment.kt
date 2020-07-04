@@ -109,7 +109,7 @@ class HomeFragment : Fragment() {
         homeViewModel.addToCartSuccess.observe(
             viewLifecycleOwner,
             Observer { (productId, successMessage, type) ->
-                homeViewModel.fetchProducts() // This is not a good approach but since products cannot be queried by ID or stored in the devide
+                homeViewModel.fetchProducts() // This is not a good approach, implemented because products cannot be queried by ID (on API) or stored on the device
                 showSnackBarWithAction(successMessage, type) {
                     homeViewModel.deleteFromCart(productId)
                 }
