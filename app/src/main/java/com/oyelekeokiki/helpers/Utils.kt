@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.oyelekeokiki.R
+import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.shared.CSItemAnimator
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.util.*
@@ -59,6 +60,10 @@ fun RecyclerView.configureCSRecycler() {
     )
     itemAnimator = CSItemAnimator()
     layoutManager = LinearLayoutManager(context)
+}
+
+fun List<Product>.getProductsInIDsList(productIds: List<Int>): List<Product> {
+    return productIds.flatMap { mappedId -> this.filter { mappedId == it.id }}
 }
 
 enum class StockCountPriority {
