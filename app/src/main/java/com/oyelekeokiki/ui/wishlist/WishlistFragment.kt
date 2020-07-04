@@ -59,7 +59,7 @@ class WishlistFragment : Fragment() {
         recycler_home.layoutManager = LinearLayoutManager(context)
         productAdapter = ProductAdapter ({ product, isLiked ->
             wishlistViewModel.updateWishListWithProduct(product, isLiked)
-        }, null)
+        }, {})
         recycler_home.adapter = productAdapter
     }
 

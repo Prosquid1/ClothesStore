@@ -11,4 +11,8 @@
 
     <dimen name="mini_horizontal_padding">4dp</dimen>
     <dimen name="mini_vertical_padding">6dp</dimen>
+
+    <dimen name="star_icon_size">23.8dp</dimen>
+    <dimen name="add_to_cart_icon_size">18dp</dimen>
+    <dimen name="side_icon_vertical_padding">4.8dp</dimen>
 </resources>

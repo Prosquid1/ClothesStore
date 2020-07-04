@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginEnd="@dimen/mini_horizontal_padding"
     android:padding="@dimen/mini_vertical_padding">
 
     <FrameLayout
@@ -16,7 +17,6 @@
             android:id="@+id/product.image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-
             <TextView
                 android:id="@+id/sold.out.text"
                 android:layout_width="wrap_content"
@@ -28,8 +28,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:text="@string/sold_out_text"
-                />
+                android:text="@string/sold_out_text"/>
 
     </FrameLayout>
 
@@ -38,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:layout_toStartOf="@id/add.to.wishlist.button"
+        android:layout_toStartOf="@id/cart.with.wishlist.layout"
         android:layout_toEndOf="@id/product.image.layout"
         android:orientation="vertical">
 
@@ -68,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lines="1"
-                android:textColor="@color/money_blue"
+                android:textColor="@color/black"
                 android:textSize="@dimen/tertiaryTextSize"
                 tools:text="$500" />
 
@@ -94,12 +93,31 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <com.like.LikeButton
-        android:id="@+id/add.to.wishlist.button"
-        app:icon_type="star"
-        app:icon_size="@dimen/primaryTextSize"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/cart.with.wishlist.layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <com.like.LikeButton
+            android:id="@+id/add.to.wishlist.button"
+            app:icon_type="star"
+            app:icon_size="@dimen/primaryTextSize"
+            android:layout_width="@dimen/star_icon_size"
+            android:layout_height="@dimen/star_icon_size"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/add.to.cart.button"
+            android:layout_width="@dimen/add_to_cart_icon_size"
+            android:layout_height="@dimen/add_to_cart_icon_size"
+            android:layout_marginTop="@dimen/side_icon_vertical_padding"
+            android:background="@drawable/ic_checkout"
+            />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
 </RelativeLayout>

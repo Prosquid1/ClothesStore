@@ -37,6 +37,6 @@ enum class StockCountPriority {
 
     fun getColor() = when (this) {
         LOW -> R.color.red
-        MEDIUM -> R.color.green
+        MEDIUM -> R.color.money_blue
     }
 }

@@ -8,7 +8,8 @@
     <color name="dim_gray">#696969</color>
     <color name="green">#009688</color>
     <color name="grey">#808080</color>
-    <color name="money_blue">#4C33FF</color>
+    <color name="tertiary_spinner_color">#ff9770</color>
+    <color name="money_blue">#2e85f6</color>
     <color name="red">#F44336</color>
     <color name="white">#FFF</color>
 </resources>

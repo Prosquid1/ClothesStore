@@ -67,7 +67,7 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
         if (onAddedToCart == null) {
             return
         }
-        containerView.add_to_wishlist_button.setOnClickListener { onAddedToCart(productId.toString()) }
+        containerView.add_to_cart_button.setOnClickListener { onAddedToCart(productId.toString()) }
     }
 
     // Product URL is not available so colors will be generated based on product name

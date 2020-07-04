@@ -14,7 +14,7 @@ typealias WishListModified = (product: Product, isLiked: Boolean) -> Unit
 typealias AddedToCart = (productId: String) -> Unit
 
 class ProductAdapter(private val onWishListModified: WishListModified,
-                     private val onAddedToCart: AddedToCart?) :
+                     private val onAddedToCart: AddedToCart) :
     RecyclerView.Adapter<ProductHolder>() {
 
     private val data: MutableList<Product> = mutableListOf()

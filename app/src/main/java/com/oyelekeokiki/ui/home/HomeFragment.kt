@@ -47,7 +47,9 @@ class HomeFragment : Fragment() {
 
     private fun setupSwipeRefreshView() {
         context?.let {
+            //In order of softness
             swipe_refresh_layout.setColorSchemeColors(
+                ContextCompat.getColor(it, R.color.tertiary_spinner_color),
                 ContextCompat.getColor(it, R.color.colorPrimary),
                 ContextCompat.getColor(it, R.color.colorPrimaryDark)
             )
