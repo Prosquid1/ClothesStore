@@ -57,9 +57,9 @@ class WishlistFragment : Fragment() {
         )
         recycler_home.itemAnimator = CSItemAnimator()
         recycler_home.layoutManager = LinearLayoutManager(context)
-        productAdapter = ProductAdapter { product, isLiked ->
+        productAdapter = ProductAdapter ({ product, isLiked ->
             wishlistViewModel.updateWishListWithProduct(product, isLiked)
-        }
+        }, null)
         recycler_home.adapter = productAdapter
     }
 

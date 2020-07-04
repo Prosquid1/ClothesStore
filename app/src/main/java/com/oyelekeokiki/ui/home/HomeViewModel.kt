@@ -44,6 +44,18 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun addToCart(productId: String) {
+        viewModelScope.launch {
+            try {
+                val result = remoteApi.addProductToCart(productId)
+                if (result is Success) {
+                } else if (result is Failure) {
+                }
+            } catch (e: Exception) {
+            }
+        }
+    }
+
     fun updateWishListWithProduct(product: Product, isLiked: Boolean) {
         viewModelScope.launch {
             if (isLiked) {

@@ -11,8 +11,10 @@ import com.oyelekeokiki.model.Product
  */
 
 typealias WishListModified = (product: Product, isLiked: Boolean) -> Unit
+typealias AddedToCart = (productId: String) -> Unit
 
-class ProductAdapter(private val onWishListModified: WishListModified) :
+class ProductAdapter(private val onWishListModified: WishListModified,
+                     private val onAddedToCart: AddedToCart?) :
     RecyclerView.Adapter<ProductHolder>() {
 
     private val data: MutableList<Product> = mutableListOf()
@@ -29,7 +31,7 @@ class ProductAdapter(private val onWishListModified: WishListModified) :
     override fun onBindViewHolder(holder: ProductHolder, position: Int) {
         val product = data[position]
         val productIsInWishList = likedProductIds.contains(product.id)
-        holder.bindData(product, onWishListModified, productIsInWishList)
+        holder.bindData(product, onWishListModified, onAddedToCart, productIsInWishList)
     }
 
     fun addData(item: Product) {

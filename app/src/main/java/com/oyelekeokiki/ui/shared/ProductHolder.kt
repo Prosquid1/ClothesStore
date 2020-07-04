@@ -29,6 +29,7 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
     fun bindData(
         product: Product,
         onWishListModified: WishListModified,
+        onAddedToCart: AddedToCart?,
         productIsLiked: Boolean = true //Since this adapter will be reused by WishListFragment
     ) {
         containerView.product_name.text = product.name
@@ -39,6 +40,7 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
         setupStockView(product.stock)
         setupProductImageView(product.name)
         setupLikeView(product, productIsLiked, onWishListModified)
+        setupAddToCartView(product.id, onAddedToCart)
     }
 
     private fun setupLikeView(
@@ -56,6 +58,16 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
                 onWishListModified(product, false)
             }
         })
+    }
+
+    private fun setupAddToCartView(
+        productId: Int,
+        onAddedToCart: AddedToCart?
+    ) {
+        if (onAddedToCart == null) {
+            return
+        }
+        containerView.add_to_wishlist_button.setOnClickListener { onAddedToCart(productId.toString()) }
     }
 
     // Product URL is not available so colors will be generated based on product name

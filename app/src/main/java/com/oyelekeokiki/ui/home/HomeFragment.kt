@@ -67,9 +67,11 @@ class HomeFragment : Fragment() {
         )
         recycler_home.itemAnimator = CSItemAnimator()
         recycler_home.layoutManager = LinearLayoutManager(context)
-        productAdapter = ProductAdapter { product, isLiked ->
+        productAdapter = ProductAdapter ({ product, isLiked ->
             homeViewModel.updateWishListWithProduct(product, isLiked)
-        }
+        }, {
+            homeViewModel.addToCart(it)
+        })
         recycler_home.adapter = productAdapter
     }
 
