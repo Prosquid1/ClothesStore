@@ -37,7 +37,7 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
 
         containerView.product_category.text = product.category
         setupStockView(product.stock)
-        setupProductImageView()
+        setupProductImageView(product.name)
         setupLikeView(product, productIsLiked, onWishListModified)
     }
 
@@ -58,10 +58,11 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
         })
     }
 
-    private fun setupProductImageView() {
+    // Product URL is not available so colors will be generated based on product name
+    private fun setupProductImageView(productName: String) {
         containerView.product_image.setBackgroundResource(R.drawable.round_corner_image_layout)
         val drawable = containerView.product_image.background as GradientDrawable
-        drawable.setColor(ColorHelper.getRandomColor())
+        drawable.setColor(ColorHelper.generateColorFromText(productName))
     }
 
     private fun setupSoldOutView(soldOut: Boolean) {
