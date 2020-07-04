@@ -49,7 +49,6 @@ class HomeFragment : Fragment() {
         context?.let {
             swipe_refresh_layout.setColorSchemeColors(
                 ContextCompat.getColor(it, R.color.colorPrimary),
-                ContextCompat.getColor(it, R.color.colorAccent),
                 ContextCompat.getColor(it, R.color.colorPrimaryDark)
             )
         }
