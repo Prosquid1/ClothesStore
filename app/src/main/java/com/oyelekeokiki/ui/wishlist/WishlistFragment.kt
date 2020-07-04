@@ -1,20 +1,14 @@
 package com.oyelekeokiki.ui.wishlist
 
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.configureCSRecycler
 import com.oyelekeokiki.model.Product
-import com.oyelekeokiki.ui.shared.CSItemAnimator
 import com.oyelekeokiki.ui.shared.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -39,10 +33,11 @@ class WishlistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeWishList()
-        observeWishListIds()
         setupSwipeRefreshView()
         initRecyclerView()
+
+        observeWishList()
+        observeWishListIds()
     }
 
     private fun setupSwipeRefreshView() {

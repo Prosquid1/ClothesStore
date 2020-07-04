@@ -7,14 +7,9 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.configureCSRecycler
 import com.oyelekeokiki.model.Product
-import com.oyelekeokiki.ui.shared.CSItemAnimator
 import com.oyelekeokiki.ui.shared.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -38,12 +33,13 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupSwipeRefreshView()
+        initRecyclerView()
+
         observeProducts()
         observeWishList()
         observeError()
         observeSwipeRefresh()
-        setupSwipeRefreshView()
-        initRecyclerView()
     }
 
     private fun setupSwipeRefreshView() {
