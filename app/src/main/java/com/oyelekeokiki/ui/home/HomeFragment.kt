@@ -11,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.ActionResponseType
 import com.oyelekeokiki.helpers.configureCSRecycler
+import com.oyelekeokiki.helpers.showSnackBarWithAction
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.shared.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -110,7 +111,7 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner,
             Observer { (productId, successMessage, type) ->
                 homeViewModel.fetchProducts() // This is not a good approach, implemented because products cannot be queried by ID (on API) or stored on the device
-                showSnackBarWithAction(successMessage, type) {
+                swipe_refresh_layout.showSnackBarWithAction(successMessage, type) {
                     homeViewModel.deleteFromCart(productId)
                 }
             })
@@ -121,34 +122,10 @@ class HomeFragment : Fragment() {
         homeViewModel.addToCartFailed.observe(
             viewLifecycleOwner,
             Observer { (productId, failureReason, type) ->
-                showSnackBarWithAction(failureReason, type) {
+                swipe_refresh_layout.showSnackBarWithAction(failureReason, type) {
                     homeViewModel.addToCart(productId)
                 }
             })
-    }
-
-    private fun showSnackBarWithAction(
-        message: String,
-        responseWithType: ActionResponseType,
-        action: (View) -> Unit
-    ) {
-        val snackBarLength =
-            if (responseWithType == ActionResponseType.SUCCESS) Snackbar.LENGTH_SHORT else Snackbar.LENGTH_LONG
-        val snackbarActionMessage =
-            if (responseWithType == ActionResponseType.SUCCESS) getString(R.string.undo) else getString(
-                R.string.retry
-            )
-        val snackbarActionColorId =
-            if (responseWithType == ActionResponseType.SUCCESS) R.color.green else R.color.red
-
-        val snackBar = Snackbar
-            .make(swipe_refresh_layout, message, snackBarLength)
-        snackBar.setAction(snackbarActionMessage, action)
-        context?.let {
-            snackBar.setActionTextColor(ContextCompat.getColor(it, snackbarActionColorId))
-        }
-
-        snackBar.show()
     }
 
     private fun setRefreshStateWith(isRefreshing: Boolean) {

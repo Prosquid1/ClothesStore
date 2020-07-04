@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.configureCSRecycler
+import com.oyelekeokiki.helpers.showSnackBarWithAction
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.shared.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,6 +39,8 @@ class WishlistFragment : Fragment() {
 
         observeWishList()
         observeWishListIds()
+        observeAddToCartSuccess()
+        observeAddToCartError()
     }
 
     private fun setupSwipeRefreshView() {
@@ -49,7 +52,7 @@ class WishlistFragment : Fragment() {
         recycler_home.configureCSRecycler()
         productAdapter = ProductAdapter ({ product, isLiked ->
             wishlistViewModel.updateWishListWithProductChanged(product, isLiked)
-        }, {})
+        }, {wishlistViewModel.addToCart(it)})
         recycler_home.adapter = productAdapter
     }
 
@@ -66,6 +69,28 @@ class WishlistFragment : Fragment() {
             viewLifecycleOwner,
             Observer { ids ->
                 productAdapter.setWishListIds(ids)
+            })
+    }
+
+    /** Observe and Show Snackbar with Undo action **/
+    private fun observeAddToCartSuccess() {
+        wishlistViewModel.addToCartSuccess.observe(
+            viewLifecycleOwner,
+            Observer { (productId, successMessage, type) ->
+                swipe_refresh_layout.showSnackBarWithAction(successMessage, type) {
+                    wishlistViewModel.deleteFromCart(productId)
+                }
+            })
+    }
+
+    /** Observe and Show Snackbar with Retry **/
+    private fun observeAddToCartError() {
+        wishlistViewModel.addToCartFailed.observe(
+            viewLifecycleOwner,
+            Observer { (productId, failureReason, type) ->
+                swipe_refresh_layout.showSnackBarWithAction(failureReason, type) {
+                    wishlistViewModel.addToCart(productId)
+                }
             })
     }
 

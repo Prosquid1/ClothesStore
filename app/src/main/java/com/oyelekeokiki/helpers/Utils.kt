@@ -2,10 +2,14 @@ package com.oyelekeokiki.helpers
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.snackbar.Snackbar
 import com.oyelekeokiki.R
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.shared.CSItemAnimator
@@ -64,6 +68,30 @@ fun RecyclerView.configureCSRecycler() {
 
 fun List<Product>.getProductsInIDsList(productIds: List<Int>): List<Product> {
     return productIds.flatMap { mappedId -> this.filter { mappedId == it.id }}
+}
+
+fun ViewGroup.showSnackBarWithAction(
+    message: String,
+    responseWithType: ActionResponseType,
+    action: (View) -> Unit
+) {
+    val snackBarLength =
+        if (responseWithType == ActionResponseType.SUCCESS) Snackbar.LENGTH_SHORT else Snackbar.LENGTH_LONG
+    val snackbarActionMessage =
+        if (responseWithType == ActionResponseType.SUCCESS) this.context.getString(R.string.undo) else this.context.getString(
+            R.string.retry
+        )
+    val snackbarActionColorId =
+        if (responseWithType == ActionResponseType.SUCCESS) R.color.green else R.color.red
+
+    val snackBar = Snackbar
+        .make(this, message, snackBarLength)
+    snackBar.setAction(snackbarActionMessage, action)
+    context?.let {
+        snackBar.setActionTextColor(ContextCompat.getColor(it, snackbarActionColorId))
+    }
+
+    snackBar.show()
 }
 
 enum class StockCountPriority {
