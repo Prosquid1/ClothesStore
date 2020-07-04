@@ -6,19 +6,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.database.WishListDatabaseSource
 import com.oyelekeokiki.helpers.ActionResponseType
+import com.oyelekeokiki.helpers.NO_INTERNET_CONNECTION
 import com.oyelekeokiki.model.Failure
 import com.oyelekeokiki.model.Success
+import com.oyelekeokiki.networking.NetworkStatusChecker
 import com.oyelekeokiki.networking.RemoteApi
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * All views in this project have the same add and delete from cart model and observable variables
  * **/
 
-open class BaseCartImplModel @Inject constructor(
+open class BaseCartImplModel constructor(
     private val remoteApi: RemoteApi,
     private val wishListDatabaseSource: WishListDatabaseSource,
+    private val networkStatusChecker: NetworkStatusChecker,
     application: Application
 ) : AndroidViewModel(application) {
     var addToCartSuccess: MutableLiveData<Triple<String, String, ActionResponseType>> =
@@ -26,7 +28,22 @@ open class BaseCartImplModel @Inject constructor(
     var addToCartFailed: MutableLiveData<Triple<String, String, ActionResponseType>> =
         MutableLiveData()
 
+    private fun showCartInternetErrorWithRetry(retryingProductId: String) {
+        addToCartFailed.postValue(
+            Triple(
+                retryingProductId,
+                NO_INTERNET_CONNECTION,
+                ActionResponseType.ERROR
+            )
+        )
+    }
+
     fun addToCart(productId: String) {
+        if (!networkStatusChecker.hasInternetConnection()) {
+            showCartInternetErrorWithRetry(productId)
+            return
+        }
+
         viewModelScope.launch {
             try {
                 val result = remoteApi.addProductToCart(productId)
@@ -61,6 +78,10 @@ open class BaseCartImplModel @Inject constructor(
     }
 
     fun deleteFromCart(productId: String) {
+        if (!networkStatusChecker.hasInternetConnection()) {
+            showCartInternetErrorWithRetry(productId)
+            return
+        }
         viewModelScope.launch {
             try {
                 val result = remoteApi.deleteProductFromCart(productId)
