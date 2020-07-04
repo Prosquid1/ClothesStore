@@ -108,13 +108,10 @@ class HomeFragment : Fragment() {
     private fun observeAddToCartSuccess() {
         homeViewModel.addToCartSuccess.observe(
             viewLifecycleOwner,
-            Observer { (successMessage, productId, type) ->
-                //Show Snackbar with Undo
-                showSnackBarWithAction(successMessage, type) { _ ->
-                    productId?.let {
-                        homeViewModel.deleteFromCart(it)
-                    }
-
+            Observer { (productId, successMessage, type) ->
+                homeViewModel.fetchProducts() // This is not a good approach but since products cannot be queried by ID or stored in the devide
+                showSnackBarWithAction(successMessage, type) {
+                    homeViewModel.deleteFromCart(productId)
                 }
             })
     }
@@ -123,12 +120,9 @@ class HomeFragment : Fragment() {
     private fun observeAddToCartError() {
         homeViewModel.addToCartFailed.observe(
             viewLifecycleOwner,
-            Observer { (failureReason, productId, type) ->
-                showSnackBarWithAction(failureReason, type) { _ ->
-                    productId?.let {
-                        homeViewModel.addToCart(it)
-                    }
-
+            Observer { (productId, failureReason, type) ->
+                showSnackBarWithAction(failureReason, type) {
+                    homeViewModel.addToCart(productId)
                 }
             })
     }
@@ -138,7 +132,6 @@ class HomeFragment : Fragment() {
         responseWithType: ActionResponseType,
         action: (View) -> Unit
     ) {
-        val rootView = view?.rootView ?: return
         val snackBarLength =
             if (responseWithType == ActionResponseType.SUCCESS) Snackbar.LENGTH_SHORT else Snackbar.LENGTH_LONG
         val snackbarActionMessage =
@@ -149,7 +142,7 @@ class HomeFragment : Fragment() {
             if (responseWithType == ActionResponseType.SUCCESS) R.color.green else R.color.red
 
         val snackBar = Snackbar
-            .make(rootView, message, snackBarLength)
+            .make(swipe_refresh_layout, message, snackBarLength)
         snackBar.setAction(snackbarActionMessage, action)
         context?.let {
             snackBar.setActionTextColor(ContextCompat.getColor(it, snackbarActionColorId))

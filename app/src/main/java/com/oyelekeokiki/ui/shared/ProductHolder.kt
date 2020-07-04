@@ -98,7 +98,7 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
     private fun setupStockView(count: Int) {
         val itemIsSoldOut = count == 0
         containerView.stock_count.text = if (itemIsSoldOut) "(Out of stock)" else "(${count} left)"
-        containerView.alpha = if (itemIsSoldOut) 0.34f else 1.0f
+        containerView.add_to_cart_button.alpha = if (itemIsSoldOut) 0.34f else 1.0f
         setupSoldOutView(itemIsSoldOut)
         setupLikeButton(itemIsSoldOut)
 
