@@ -48,7 +48,7 @@ class WishlistFragment : Fragment() {
     private fun initRecyclerView() {
         recycler_home.configureCSRecycler()
         productAdapter = ProductAdapter ({ product, isLiked ->
-            wishlistViewModel.updateWishListWithProduct(product, isLiked)
+            wishlistViewModel.updateWishListWithProductChanged(product, isLiked)
         }, {})
         recycler_home.adapter = productAdapter
     }

@@ -96,7 +96,7 @@ open class BaseCartImplModel @Inject constructor(
 
     /**
      * This is an instantaneous function to reflect an item has been updated
-     * In the rare case the WishList repository cannot be refreshed and has to rely on offline data
+     * In the rare case the WishList items cannot be updated from server and has to rely on offline data
      * */
 
     private fun updateProductCountInWishList(productId: String, count: Int) {
