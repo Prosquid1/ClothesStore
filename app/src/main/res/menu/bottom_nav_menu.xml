@@ -9,13 +9,13 @@
 
     <item
         android:id="@+id/navigation_wish_list"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/ic_wish_list"
         android:title="@string/title_wish_list"
         android:enabled="true"/>
 
     <item
         android:id="@+id/navigation_cart"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/ic_shopping_cart"
         android:title="@string/title_shopping_cart"
         android:enabled="true"/>
 
