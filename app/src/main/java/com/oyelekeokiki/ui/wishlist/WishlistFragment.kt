@@ -100,7 +100,7 @@ class WishlistFragment : Fragment() {
         recycler_home.visibility = View.VISIBLE
 
         if (!hasAnimationRun) {
-            // To prevent recurring animations since this adapter can easily change
+            // To prevent recurring animations since this data can easily change
             recycler_home.scheduleLayoutAnimation()
             hasAnimationRun = true
         }
