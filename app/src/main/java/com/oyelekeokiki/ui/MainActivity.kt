@@ -24,6 +24,11 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
         val navController = findNavController(R.id.nav_host_fragment)
+        navController.addOnDestinationChangedListener { _, destination,_ ->
+            shouldHideCartMenu = destination.label == getString(R.string.title_shopping_cart)
+            invalidateOptionsMenu()
+            supportActionBar?.title = destination.label
+        }
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
@@ -36,15 +41,6 @@ class MainActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-        navView.setOnNavigationItemSelectedListener { item ->
-            shouldHideCartMenu = item.title == getString(R.string.title_shopping_cart)
-            invalidateOptionsMenu()
-            supportActionBar?.title= item.title
-            return@setOnNavigationItemSelectedListener true
-        }
-
-        title = "HELL"
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
