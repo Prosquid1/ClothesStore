@@ -1,5 +1,6 @@
 package com.oyelekeokiki.ui.wishlist
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -49,11 +50,22 @@ class WishlistFragment : Fragment() {
 
 
     private fun initRecyclerView() {
-        recycler_home.addItemDecoration(
-            DividerItemDecoration(
-                activity,
-                DividerItemDecoration.VERTICAL
+        val itemDecoration = DividerItemDecoration(
+            activity,
+            DividerItemDecoration.VERTICAL
+        )
+        context?.let {
+            itemDecoration.setDrawable(
+                ColorDrawable(
+                    ContextCompat.getColor(
+                        it,
+                        R.color.lightcolorPrimary
+                    )
+                )
             )
+        }
+        recycler_home.addItemDecoration(
+            itemDecoration
         )
         recycler_home.itemAnimator = CSItemAnimator()
         recycler_home.layoutManager = LinearLayoutManager(context)

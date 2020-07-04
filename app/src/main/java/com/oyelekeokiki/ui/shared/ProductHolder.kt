@@ -92,7 +92,7 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
     }
 
     private fun setupLikeButton(soldOut: Boolean) {
-        containerView.add_to_wishlist_button.isEnabled = !soldOut
+        containerView.add_to_cart_button.isEnabled = !soldOut
     }
 
     private fun setupStockView(count: Int) {
