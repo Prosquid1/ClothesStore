@@ -69,3 +69,7 @@ enum class StockCountPriority {
         MEDIUM -> R.color.money_blue
     }
 }
+
+enum class ActionResponseType {
+    SUCCESS, ERROR;
+}

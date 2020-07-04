@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">ClothesStore</string>
     <string name="sold_out_text">SOLD\nOUT</string>
+    <string name="retry">Retry</string>
     <string name="title_home">Home</string>
     <string name="title_wish_list">My Wishlist</string>
     <string name="title_shopping_cart">My Cart</string>
+    <string name="undo">Undo</string>
     <string name="wishlist_empty">Your wishlist is empty!</string>
 </resources>

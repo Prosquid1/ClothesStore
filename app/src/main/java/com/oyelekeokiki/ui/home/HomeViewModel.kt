@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.database.WishListDatabaseSource
+import com.oyelekeokiki.helpers.ActionResponseType
 import com.oyelekeokiki.model.Failure
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.model.Success
@@ -20,6 +21,11 @@ class HomeViewModel @Inject constructor(
     var wishListProductIds: LiveData<List<Int>> = wishListDatabaseSource.getWishListIds()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
     var isFetching: MutableLiveData<Boolean> = MutableLiveData()
+
+    var addToCartSuccess: MutableLiveData<Triple<String, String?, ActionResponseType>> =
+        MutableLiveData()
+    var addToCartFailed: MutableLiveData<Triple<String, String?, ActionResponseType>> =
+        MutableLiveData()
 
     init {
         fetchProducts()
@@ -49,9 +55,63 @@ class HomeViewModel @Inject constructor(
             try {
                 val result = remoteApi.addProductToCart(productId)
                 if (result is Success) {
+                    addToCartSuccess.postValue(
+                        Triple(
+                            productId,
+                            result.data.message,
+                            ActionResponseType.SUCCESS
+                        )
+                    )
                 } else if (result is Failure) {
+                    addToCartFailed.postValue(
+                        Triple(
+                            productId,
+                            result.error?.message,
+                            ActionResponseType.ERROR
+                        )
+                    )
                 }
             } catch (e: Exception) {
+                addToCartFailed.postValue(
+                    Triple(
+                        productId,
+                        e.localizedMessage,
+                        ActionResponseType.ERROR
+                    )
+                )
+            }
+        }
+    }
+
+    fun deleteFromCart(productId: String) {
+        viewModelScope.launch {
+            try {
+                val result = remoteApi.deleteProductFromCart(productId)
+                if (result is Success) {
+                    addToCartSuccess.postValue(
+                        Triple(
+                            productId,
+                            result.data.message,
+                            ActionResponseType.SUCCESS
+                        )
+                    )
+                } else if (result is Failure) {
+                    addToCartFailed.postValue(
+                        Triple(
+                            productId,
+                            result.error?.message,
+                            ActionResponseType.ERROR
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                addToCartFailed.postValue(
+                    Triple(
+                        productId,
+                        e.localizedMessage,
+                        ActionResponseType.ERROR
+                    )
+                )
             }
         }
     }

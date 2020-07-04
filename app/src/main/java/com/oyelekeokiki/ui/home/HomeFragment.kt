@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import com.oyelekeokiki.R
+import com.oyelekeokiki.helpers.ActionResponseType
 import com.oyelekeokiki.helpers.configureCSRecycler
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.shared.ProductAdapter
@@ -37,9 +39,12 @@ class HomeFragment : Fragment() {
         initRecyclerView()
 
         observeProducts()
+        observeProductsFetchError()
         observeWishList()
-        observeError()
         observeSwipeRefresh()
+
+        observeAddToCartSuccess()
+        observeAddToCartError()
     }
 
     private fun setupSwipeRefreshView() {
@@ -59,7 +64,7 @@ class HomeFragment : Fragment() {
 
     private fun initRecyclerView() {
         recycler_home.configureCSRecycler()
-        productAdapter = ProductAdapter ({ product, isLiked ->
+        productAdapter = ProductAdapter({ product, isLiked ->
             homeViewModel.updateWishListWithProduct(product, isLiked)
         }, {
             homeViewModel.addToCart(it)
@@ -83,7 +88,7 @@ class HomeFragment : Fragment() {
             })
     }
 
-    private fun observeError() {
+    private fun observeProductsFetchError() {
         homeViewModel.errorMessage.observe(
             viewLifecycleOwner,
             Observer { message ->
@@ -97,6 +102,60 @@ class HomeFragment : Fragment() {
             Observer { fetching ->
                 setRefreshStateWith(fetching)
             })
+    }
+
+    /** Observe and Show Snackbar with Undo action **/
+    private fun observeAddToCartSuccess() {
+        homeViewModel.addToCartSuccess.observe(
+            viewLifecycleOwner,
+            Observer { (successMessage, productId, type) ->
+                //Show Snackbar with Undo
+                showSnackBarWithAction(successMessage, type) { _ ->
+                    productId?.let {
+                        homeViewModel.deleteFromCart(it)
+                    }
+
+                }
+            })
+    }
+
+    /** Observe and Show Snackbar with Retry **/
+    private fun observeAddToCartError() {
+        homeViewModel.addToCartFailed.observe(
+            viewLifecycleOwner,
+            Observer { (failureReason, productId, type) ->
+                showSnackBarWithAction(failureReason, type) { _ ->
+                    productId?.let {
+                        homeViewModel.addToCart(it)
+                    }
+
+                }
+            })
+    }
+
+    private fun showSnackBarWithAction(
+        message: String,
+        responseWithType: ActionResponseType,
+        action: (View) -> Unit
+    ) {
+        val rootView = view?.rootView ?: return
+        val snackBarLength =
+            if (responseWithType == ActionResponseType.SUCCESS) Snackbar.LENGTH_SHORT else Snackbar.LENGTH_LONG
+        val snackbarActionMessage =
+            if (responseWithType == ActionResponseType.SUCCESS) getString(R.string.undo) else getString(
+                R.string.retry
+            )
+        val snackbarActionColorId =
+            if (responseWithType == ActionResponseType.SUCCESS) R.color.green else R.color.red
+
+        val snackBar = Snackbar
+            .make(rootView, message, snackBarLength)
+        snackBar.setAction(snackbarActionMessage, action)
+        context?.let {
+            snackBar.setActionTextColor(ContextCompat.getColor(it, snackbarActionColorId))
+        }
+
+        snackBar.show()
     }
 
     private fun setRefreshStateWith(isRefreshing: Boolean) {
