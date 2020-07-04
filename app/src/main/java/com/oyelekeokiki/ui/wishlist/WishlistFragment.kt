@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.oyelekeokiki.R
+import com.oyelekeokiki.helpers.configureCSRecycler
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.shared.CSItemAnimator
 import com.oyelekeokiki.ui.shared.ProductAdapter
@@ -50,25 +51,7 @@ class WishlistFragment : Fragment() {
 
 
     private fun initRecyclerView() {
-        val itemDecoration = DividerItemDecoration(
-            activity,
-            DividerItemDecoration.VERTICAL
-        )
-        context?.let {
-            itemDecoration.setDrawable(
-                ColorDrawable(
-                    ContextCompat.getColor(
-                        it,
-                        R.color.lightcolorPrimary
-                    )
-                )
-            )
-        }
-        recycler_home.addItemDecoration(
-            itemDecoration
-        )
-        recycler_home.itemAnimator = CSItemAnimator()
-        recycler_home.layoutManager = LinearLayoutManager(context)
+        recycler_home.configureCSRecycler()
         productAdapter = ProductAdapter ({ product, isLiked ->
             wishlistViewModel.updateWishListWithProduct(product, isLiked)
         }, {})

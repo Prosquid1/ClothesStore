@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.oyelekeokiki.R
+import com.oyelekeokiki.helpers.configureCSRecycler
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.shared.CSItemAnimator
 import com.oyelekeokiki.ui.shared.ProductAdapter
@@ -61,14 +62,7 @@ class HomeFragment : Fragment() {
 
 
     private fun initRecyclerView() {
-        recycler_home.addItemDecoration(
-            DividerItemDecoration(
-                activity,
-                DividerItemDecoration.VERTICAL
-            )
-        )
-        recycler_home.itemAnimator = CSItemAnimator()
-        recycler_home.layoutManager = LinearLayoutManager(context)
+        recycler_home.configureCSRecycler()
         productAdapter = ProductAdapter ({ product, isLiked ->
             homeViewModel.updateWishListWithProduct(product, isLiked)
         }, {

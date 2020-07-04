@@ -1,7 +1,14 @@
 package com.oyelekeokiki.helpers
 
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.oyelekeokiki.R
+import com.oyelekeokiki.ui.shared.CSItemAnimator
+import kotlinx.android.synthetic.main.fragment_home.*
 import java.util.*
 
 object ColorHelper {
@@ -30,6 +37,28 @@ fun String.convertToNCharacters(n: Int, padChar: Char = '.'): String {
         return this.take(n)
     }
     return this.padEnd(n - this.length, padChar)
+}
+
+fun RecyclerView.configureCSRecycler() {
+    val itemDecoration = DividerItemDecoration(
+        context,
+        DividerItemDecoration.VERTICAL
+    )
+    context?.let {
+        itemDecoration.setDrawable(
+            ColorDrawable(
+                ContextCompat.getColor(
+                    it,
+                    R.color.lightcolorPrimary
+                )
+            )
+        )
+    }
+    addItemDecoration(
+        itemDecoration
+    )
+    itemAnimator = CSItemAnimator()
+    layoutManager = LinearLayoutManager(context)
 }
 
 enum class StockCountPriority {
