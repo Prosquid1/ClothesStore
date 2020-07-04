@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class WishListDatabaseSource @Inject constructor(private val wishListDao: WishListDao) {
+
+    suspend fun addToWishList(products: List<Product>) = wishListDao.insertWishListProducts(products)
+
     suspend fun addToWishList(product: Product) = wishListDao.addToWishList(product)
 
     suspend fun removeFromWishList(productId: Int) = wishListDao.removeFromWishList(productId)
@@ -13,6 +16,8 @@ class WishListDatabaseSource @Inject constructor(private val wishListDao: WishLi
     fun getWishList(): LiveData<List<Product>> = wishListDao.getWishList()
 
     fun getWishListIds(): LiveData<List<Int>> = wishListDao.getWishListIds()
+
+    suspend fun getWishListIdsSync(): List<Int> = wishListDao.getWishListIdsSync()
 
     suspend fun updateProductStockCount(productId: Int, by: Int) = wishListDao.updateProductStockCount(productId, by)
 
