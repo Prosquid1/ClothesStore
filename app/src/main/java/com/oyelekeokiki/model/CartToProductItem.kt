@@ -1,11 +1,10 @@
 package com.oyelekeokiki.model
 
 /**
- * Represents a cart to pr from the API.
+ * Represents a cart to product mapping fulfilled by @see Utils.kt
  */
 
 data class CartToProductItem(
-  val cartId: Int,
   val product: Product,
-  val count: Int
+  val cartItemIds: List<Int>
 )

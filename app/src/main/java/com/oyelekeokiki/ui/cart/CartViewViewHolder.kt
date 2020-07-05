@@ -23,7 +23,7 @@ class CartViewViewHolder(override val containerView: View) : ProductViewHolder(c
 
         containerView.remove_from_cart_button.setOnClickListener {
             onCartModified?.let {
-                it(cartToProductItem.cartId.toString())
+                it(cartToProductItem.cartItemIds[0].toString())
             }
         }
 

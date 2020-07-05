@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.oyelekeokiki.R
+import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.CartToProductItem
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.shared.CSItemAnimator
@@ -51,11 +52,19 @@ fun List<Product>.getProductsInIDsList(productIds: List<Int>): List<Product> {
     return productIds.flatMap { mappedId -> this.filter { mappedId == it.id } }
 }
 
-fun List<Product>.convertToCartProduct(productIds: List<Int>): List<CartToProductItem> {
-    return productIds.flatMap { mappedId ->
-        this.filter { mappedId == it.id }
-    }.groupBy { it.id }
-    .map { CartToProductItem(it.key, it.value[0], it.value.count()) } // Cannot be an empty list
+fun List<Product>.convertToCartProduct(cartItemIds: List<CartItem>): List<CartToProductItem> {
+    val cartItemsGroupedByProduct = cartItemIds.groupBy { it.productId }.values
+
+    val productIdToProductMap = this.map { Pair(it.id, it) }.toMap()
+    val productIdToCartItemsMap =
+        cartItemsGroupedByProduct.map { array -> Pair(array[0].productId, array.map { it.id }) }.toMap()
+
+    return productIdToCartItemsMap.map {
+        CartToProductItem(
+            productIdToProductMap[it.key] as Product,
+            productIdToCartItemsMap[it.key] as List<Int>
+        )
+    }
 }
 
 fun ViewGroup.showCSSnackBar(

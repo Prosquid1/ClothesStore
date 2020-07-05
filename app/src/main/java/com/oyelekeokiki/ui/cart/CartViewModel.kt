@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.database.WishListDatabaseSource
 import com.oyelekeokiki.helpers.NO_INTERNET_CONNECTION
 import com.oyelekeokiki.helpers.convertToCartProduct
-import com.oyelekeokiki.helpers.convertToCartProductGroup
+import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.CartToProductItem
 import com.oyelekeokiki.model.Failure
 import com.oyelekeokiki.model.Success
@@ -42,7 +42,7 @@ class CartViewModel @Inject constructor(
             try {
                 val cartResult = remoteApi.getCart()
                 if (cartResult is Success) {
-                    queryCartItemsForProducts(cartResult.data.map { it.productId })
+                    queryCartItemsForProducts(cartResult.data)
                 } else if (cartResult is Failure) {
                     isFetching.postValue(false);
                     errorMessage.postValue(cartResult.error?.localizedMessage)
@@ -56,7 +56,7 @@ class CartViewModel @Inject constructor(
     }
 
     //Supposed to be a server call with an array of product Ids
-    private fun queryCartItemsForProducts(productsInCartIds: List<Int>) {
+    private fun queryCartItemsForProducts(productsInCartIds: List<CartItem>) {
         viewModelScope.launch {
             try {
                 val productsResult = remoteApi.getProducts()
