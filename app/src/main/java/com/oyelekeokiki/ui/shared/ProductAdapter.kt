@@ -10,11 +10,13 @@ import com.oyelekeokiki.model.Product
  * Displays the products from the API, into a list of items.
  */
 
-typealias onWishListModified = (product: Product, isLiked: Boolean) -> Unit
-typealias onCartModified = (productId: String, wasAdded: Boolean ) -> Unit
+typealias OnWishListModified = (product: Product, isLiked: Boolean) -> Unit
+typealias OnCartModified = (productId: String) -> Unit
 
-class ProductAdapter(private val onWishListModified: onWishListModified?,
-                     private val onOnCartModified: onCartModified) :
+class ProductAdapter(
+    private val onWishListModified: OnWishListModified?,
+    private val onCartModified: OnCartModified
+) :
     RecyclerView.Adapter<ProductViewHolder>() {
 
     private val data: MutableList<Product> = mutableListOf()
@@ -31,13 +33,10 @@ class ProductAdapter(private val onWishListModified: onWishListModified?,
     override fun onBindViewHolder(viewHolder: ProductViewHolder, position: Int) {
         val product = data[position]
         val productIsInWishList = likedProductIds.contains(product.id)
-        viewHolder.bindData(product,
-            onWishListModified, onOnCartModified, productIsInWishList)
-    }
-
-    fun addData(item: Product) {
-        data.add(item)
-        notifyItemInserted(data.size)
+        viewHolder.bindData(
+            product,
+            onWishListModified, onCartModified, productIsInWishList
+        )
     }
 
     fun setData(data: List<Product>) {
@@ -48,14 +47,5 @@ class ProductAdapter(private val onWishListModified: onWishListModified?,
 
     fun setWishListIds(likedIds: List<Int>) {
         likedProductIds = likedIds
-    }
-
-    fun removeProduct(productId: Int) {
-        val productIndex = data.indexOfFirst { it.id == productId }
-
-        if (productIndex != -1) {
-            data.removeAt(productIndex)
-            notifyItemRemoved(productIndex)
-        }
     }
 }

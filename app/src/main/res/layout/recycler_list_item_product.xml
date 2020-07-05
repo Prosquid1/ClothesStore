@@ -118,6 +118,15 @@
             android:background="@drawable/ic_checkout"
             />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/remove.from.cart.button"
+            android:layout_width="@dimen/add_to_cart_icon_size"
+            android:layout_height="@dimen/add_to_cart_icon_size"
+            android:layout_marginTop="@dimen/side_icon_vertical_padding"
+            android:background="@drawable/ic_checkout"
+            android:visibility="gone"
+            />
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </RelativeLayout>

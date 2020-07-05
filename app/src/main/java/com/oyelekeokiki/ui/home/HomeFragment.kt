@@ -64,8 +64,8 @@ class HomeFragment : Fragment() {
         recycler_home.configureCSRecycler()
         productAdapter = ProductAdapter({ product, isLiked ->
             homeViewModel.updateWishListWithProduct(product, isLiked)
-        }, { productId, _ ->
-            homeViewModel.addToCart(productId)
+        }, {
+            homeViewModel.addToCart(it)
         })
         recycler_home.adapter = productAdapter
     }
@@ -104,7 +104,7 @@ class HomeFragment : Fragment() {
 
     /** Observe and Show Snackbar with Undo action **/
     private fun observeAddToCartSuccess() {
-        homeViewModel.addToCartSuccess.observe(
+        homeViewModel.cartUpdateSuccess.observe(
             viewLifecycleOwner,
             Observer { (productId, successMessage, type) ->
                 homeViewModel.fetchProducts() // This is not a good approach, implemented because products cannot be queried by ID (on API) or stored on the device
@@ -116,7 +116,7 @@ class HomeFragment : Fragment() {
 
     /** Observe and Show Snackbar with Retry **/
     private fun observeAddToCartError() {
-        homeViewModel.addToCartFailed.observe(
+        homeViewModel.cartUpdateFailed.observe(
             viewLifecycleOwner,
             Observer { (productId, failureReason, type) ->
                 swipe_refresh_layout.showCSSnackBar(failureReason, type) {

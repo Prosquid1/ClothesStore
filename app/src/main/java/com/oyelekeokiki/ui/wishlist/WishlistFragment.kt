@@ -74,7 +74,7 @@ class WishlistFragment : Fragment() {
 
     /** Observe and Show Snackbar with Undo action **/
     private fun observeAddToCartSuccess() {
-        wishlistViewModel.addToCartSuccess.observe(
+        wishlistViewModel.cartUpdateSuccess.observe(
             viewLifecycleOwner,
             Observer { (productId, successMessage, type) ->
                 swipe_refresh_layout.showCSSnackBar(successMessage, type) {
@@ -85,7 +85,7 @@ class WishlistFragment : Fragment() {
 
     /** Observe and Show Snackbar with Retry **/
     private fun observeAddToCartError() {
-        wishlistViewModel.addToCartFailed.observe(
+        wishlistViewModel.cartUpdateFailed.observe(
             viewLifecycleOwner,
             Observer { (productId, failureReason, type) ->
                 swipe_refresh_layout.showCSSnackBar(failureReason, type) {
