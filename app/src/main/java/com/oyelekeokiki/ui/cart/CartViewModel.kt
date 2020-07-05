@@ -125,7 +125,7 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    override fun onCartFetchComplete() {
+    override fun onAddToCartComplete(productId: Int) {
         fetchCartItems()
     }
 }

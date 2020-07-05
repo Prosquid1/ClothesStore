@@ -28,6 +28,12 @@ class WishlistViewModel @Inject constructor(
         updateWishListProductsFromServer()
     }
 
+    override fun onAddToCartComplete(productId: Int) {
+        viewModelScope.launch {
+            wishListDatabaseSource.updateProductStockCount(productId, -1)
+        }
+    }
+
     /**
      * Merge items from server into items with database
      * This is because product details might have been changed by admin or another client
