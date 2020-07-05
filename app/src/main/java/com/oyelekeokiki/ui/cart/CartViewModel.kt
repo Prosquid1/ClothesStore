@@ -103,7 +103,7 @@ class CartViewModel @Inject constructor(
                             ActionResponseType.SUCCESS
                         )
                     )
-                    updateProductCountInWishList(cartItem.id, -1)
+                    fetchCartItems()
                 } else if (result is Failure) {
                     cartItemDeletedFailed.postValue(
                         Triple(
@@ -123,5 +123,9 @@ class CartViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    override fun onCartFetchComplete() {
+        fetchCartItems()
     }
 }

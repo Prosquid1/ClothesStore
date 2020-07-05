@@ -98,7 +98,6 @@ class CartFragment : Fragment() {
         cartViewModel.cartItemAddedSuccess.observe(
             viewLifecycleOwner,
             Observer { (cartItem, successMessage, type) ->
-                cartViewModel.fetchCartItems()
                 swipe_refresh_layout.showCSSnackBar(successMessage, type) {
                     cartViewModel.deleteFromCart(cartItem)
                 }
@@ -121,7 +120,6 @@ class CartFragment : Fragment() {
         cartViewModel.cartItemDeletedSuccess.observe(
             viewLifecycleOwner,
             Observer { (cartItem, successMessage, type) ->
-                cartViewModel.fetchCartItems() // This is not a good approach, I only implemented because products cannot be queried by ID (on API) or stored on the device
                 swipe_refresh_layout.showCSSnackBar(successMessage, type) {
                     cartViewModel.addToCart(cartItem)
                 }

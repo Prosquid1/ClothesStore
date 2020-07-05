@@ -57,6 +57,7 @@ open class BaseCartImplModel constructor(
                         )
                     )
                     updateProductCountInWishList(cartItem.productId, -1)
+
                 } else if (result is Failure) {
                     cartItemAddedFailed.postValue(
                         Triple(
@@ -77,6 +78,12 @@ open class BaseCartImplModel constructor(
             }
         }
     }
+
+    /**
+     *To be overriden
+     *This is not a good approach, I only implemented because products cannot be queried by ID (on API) or stored on the device
+     * **/
+    open fun onCartFetchComplete() {}
 
     /**
      * This is an instantaneous function to reflect an item has been updated
