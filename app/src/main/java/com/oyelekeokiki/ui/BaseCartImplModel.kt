@@ -23,13 +23,13 @@ open class BaseCartImplModel constructor(
     private val networkStatusChecker: NetworkStatusChecker,
     application: Application
 ) : AndroidViewModel(application) {
-    var addToCartSuccess: MutableLiveData<Triple<String, String, ActionResponseType>> =
+    var cartUpdateSuccess: MutableLiveData<Triple<String, String, ActionResponseType>> =
         MutableLiveData()
-    var addToCartFailed: MutableLiveData<Triple<String, String, ActionResponseType>> =
+    var cartUpdateFailed: MutableLiveData<Triple<String, String, ActionResponseType>> =
         MutableLiveData()
 
     private fun showCartInternetErrorWithRetry(retryingProductId: String) {
-        addToCartFailed.postValue(
+        cartUpdateFailed.postValue(
             Triple(
                 retryingProductId,
                 NO_INTERNET_CONNECTION,
@@ -48,7 +48,7 @@ open class BaseCartImplModel constructor(
             try {
                 val result = remoteApi.addProductToCart(productId)
                 if (result is Success) {
-                    addToCartSuccess.postValue(
+                    cartUpdateSuccess.postValue(
                         Triple(
                             productId,
                             result.data.message,
@@ -57,7 +57,7 @@ open class BaseCartImplModel constructor(
                     )
                     updateProductCountInWishList(productId, -1)
                 } else if (result is Failure) {
-                    addToCartFailed.postValue(
+                    cartUpdateFailed.postValue(
                         Triple(
                             productId,
                             result.error?.message ?: "An error occurred!",
@@ -66,7 +66,7 @@ open class BaseCartImplModel constructor(
                     )
                 }
             } catch (e: Exception) {
-                addToCartFailed.postValue(
+                cartUpdateFailed.postValue(
                     Triple(
                         productId,
                         e.localizedMessage,
@@ -86,7 +86,7 @@ open class BaseCartImplModel constructor(
             try {
                 val result = remoteApi.deleteProductFromCart(productId)
                 if (result is Success) {
-                    addToCartSuccess.postValue(
+                    cartUpdateSuccess.postValue(
                         Triple(
                             productId,
                             result.data.message,
@@ -95,7 +95,7 @@ open class BaseCartImplModel constructor(
                     )
                     updateProductCountInWishList(productId, 1)
                 } else if (result is Failure) {
-                    addToCartFailed.postValue(
+                    cartUpdateFailed.postValue(
                         Triple(
                             productId,
                             result.error?.message ?: "An error occurred!",
@@ -104,7 +104,7 @@ open class BaseCartImplModel constructor(
                     )
                 }
             } catch (e: Exception) {
-                addToCartFailed.postValue(
+                cartUpdateFailed.postValue(
                     Triple(
                         productId,
                         e.localizedMessage,
