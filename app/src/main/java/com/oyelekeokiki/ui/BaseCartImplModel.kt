@@ -89,11 +89,11 @@ open class BaseCartImplModel constructor(
                     cartUpdateSuccess.postValue(
                         Triple(
                             cartItemId,
-                            result.data.message,
+                            "Deleted successfully!",
                             ActionResponseType.SUCCESS
                         )
                     )
-                    updateProductCountInWishList(cartItemId, 1)
+                    updateProductCountInWishList(cartItemId, -1)
                 } else if (result is Failure) {
                     cartUpdateFailed.postValue(
                         Triple(

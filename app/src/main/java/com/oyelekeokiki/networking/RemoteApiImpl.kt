@@ -2,8 +2,7 @@ package com.oyelekeokiki.networking
 
 import com.oyelekeokiki.model.*
 import com.oyelekeokiki.model.response.AddToCartResponse
-import com.oyelekeokiki.model.response.DeleteFromCartResponse
-import java.lang.NullPointerException
+import retrofit2.Response
 import javax.inject.Inject
 
 /**
@@ -27,13 +26,12 @@ class RemoteApiImpl @Inject constructor(
 
   override suspend fun getCart(): Result<List<CartItem>> = try {
     val data = apiService.getCart()
-
     Success(data)
   } catch (error: Throwable) {
     Failure(error)
   }
 
-  override suspend fun deleteProductFromCart(productId: String): Result<DeleteFromCartResponse> = try {
+  override suspend fun deleteProductFromCart(productId: String): Result<Response<Unit>> = try {
     val data = apiService.deleteCartItem(productId)
     Success(data)
   } catch (error: Throwable) {
@@ -42,7 +40,6 @@ class RemoteApiImpl @Inject constructor(
 
   override suspend fun addProductToCart(productId: String): Result<AddToCartResponse> = try {
     val product = apiService.addCartItem(productId)
-
     Success(product)
   } catch (error: Throwable) {
     Failure(error)
