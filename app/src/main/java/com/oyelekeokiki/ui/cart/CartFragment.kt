@@ -62,7 +62,7 @@ class CartFragment : Fragment() {
     private fun initRecyclerView() {
         recycler_home.configureCSRecycler()
         productAdapter = ProductAdapter(null, {
-            cartViewModel.removeFromCart(it)
+            cartViewModel.deleteFromCart(it)
         })
         recycler_home.adapter = productAdapter
     }
@@ -93,7 +93,7 @@ class CartFragment : Fragment() {
 
     /** Observe and Show Snackbar with Undo action **/
     private fun observeRemoveFromCartSuccess() {
-        cartViewModel.removeFromCartSuccess.observe(
+        cartViewModel.cartUpdateSuccess.observe(
             viewLifecycleOwner,
             Observer { (productId, successMessage, type) ->
                 cartViewModel.fetchCartItems() // This is not a good approach, implemented because products cannot be queried by ID (on API) or stored on the device
@@ -105,7 +105,7 @@ class CartFragment : Fragment() {
 
     /** Observe and Show Snackbar with Retry **/
     private fun observeRemoveFromCartError() {
-        cartViewModel.deleteFromCartFailed.observe(
+        cartViewModel.cartUpdateFailed.observe(
             viewLifecycleOwner,
             Observer { (productId, failureReason, type) ->
                 swipe_refresh_layout.showCSSnackBar(failureReason, type) {
