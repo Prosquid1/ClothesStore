@@ -16,7 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
@@ -65,8 +64,8 @@ class HomeFragment : Fragment() {
         recycler_home.configureCSRecycler()
         productAdapter = ProductAdapter({ product, isLiked ->
             homeViewModel.updateWishListWithProduct(product, isLiked)
-        }, {
-            homeViewModel.addToCart(it)
+        }, { productId, _ ->
+            homeViewModel.addToCart(productId)
         })
         recycler_home.adapter = productAdapter
     }

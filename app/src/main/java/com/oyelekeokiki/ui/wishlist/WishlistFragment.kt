@@ -50,9 +50,9 @@ class WishlistFragment : Fragment() {
 
     private fun initRecyclerView() {
         recycler_home.configureCSRecycler()
-        productAdapter = ProductAdapter ({ product, isLiked ->
+        productAdapter = ProductAdapter({ product, isLiked ->
             wishlistViewModel.updateWishListWithProductChanged(product, isLiked)
-        }, {wishlistViewModel.addToCart(it)})
+        }, { productId, _ -> wishlistViewModel.addToCart(productId) })
         recycler_home.adapter = productAdapter
     }
 
@@ -60,7 +60,7 @@ class WishlistFragment : Fragment() {
         wishlistViewModel.wishlist.observe(
             viewLifecycleOwner,
             Observer { wishList ->
-                if (wishList.isEmpty())setEmptyState() else setActiveDataWith(wishList)
+                if (wishList.isEmpty()) setEmptyState() else setActiveDataWith(wishList)
             })
     }
 

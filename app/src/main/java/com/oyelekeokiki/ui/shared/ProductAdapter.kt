@@ -10,11 +10,11 @@ import com.oyelekeokiki.model.Product
  * Displays the products from the API, into a list of items.
  */
 
-typealias WishListModified = (product: Product, isLiked: Boolean) -> Unit
-typealias AddedToCart = (productId: String) -> Unit
+typealias onWishListModified = (product: Product, isLiked: Boolean) -> Unit
+typealias onCartModified = (productId: String, wasAdded: Boolean ) -> Unit
 
-class ProductAdapter(private val onWishListModified: WishListModified,
-                     private val onAddedToCart: AddedToCart) :
+class ProductAdapter(private val onWishListModified: onWishListModified,
+                     private val onOnCartModified: onCartModified) :
     RecyclerView.Adapter<ProductHolder>() {
 
     private val data: MutableList<Product> = mutableListOf()
@@ -31,7 +31,8 @@ class ProductAdapter(private val onWishListModified: WishListModified,
     override fun onBindViewHolder(holder: ProductHolder, position: Int) {
         val product = data[position]
         val productIsInWishList = likedProductIds.contains(product.id)
-        holder.bindData(product, onWishListModified, onAddedToCart, productIsInWishList)
+        holder.bindData(product,
+            onWishListModified, onOnCartModified, productIsInWishList)
     }
 
     fun addData(item: Product) {

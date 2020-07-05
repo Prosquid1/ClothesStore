@@ -23,13 +23,13 @@ import kotlinx.android.synthetic.main.recycler_list_item_product.view.*
 const val MINIMUM_STOCK_THRESHOLD = 3
 
 @SuppressLint("SetTextI18n")
-class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+open class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
     LayoutContainer {
 
-    fun bindData(
+    open fun bindData(
         product: Product,
-        onWishListModified: WishListModified,
-        onAddedToCart: AddedToCart?,
+        onWishListModified: onWishListModified,
+        onOnCartModified: onCartModified?,
         productIsLiked: Boolean = true //Since this adapter will be reused by WishListFragment
     ) {
         containerView.product_name.text = product.name
@@ -40,13 +40,13 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
         setupStockView(product.stock)
         setupProductImageView(product.name)
         setupLikeView(product, productIsLiked, onWishListModified)
-        setupAddToCartView(product.id, onAddedToCart)
+        setupAddToCartView(product.id, onOnCartModified)
     }
 
     private fun setupLikeView(
         product: Product,
         productIsLiked: Boolean,
-        onWishListModified: WishListModified
+        onWishListModified: onWishListModified
     ) {
         containerView.add_to_wishlist_button.isLiked = productIsLiked
         containerView.add_to_wishlist_button.setOnLikeListener(object : OnLikeListener {
@@ -62,12 +62,12 @@ class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(
 
     private fun setupAddToCartView(
         productId: Int,
-        onAddedToCart: AddedToCart?
+        onCartModified: onCartModified?
     ) {
-        if (onAddedToCart == null) {
+        if (onCartModified == null) {
             return
         }
-        containerView.add_to_cart_button.setOnClickListener { onAddedToCart(productId.toString()) }
+        containerView.add_to_cart_button.setOnClickListener { onCartModified(productId.toString(), true) }
     }
 
     // Product URL is not available so colors will be generated based on product name
