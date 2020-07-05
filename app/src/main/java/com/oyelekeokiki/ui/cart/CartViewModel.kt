@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 class CartViewModel @Inject constructor(
     private val remoteApi: RemoteApi,
-    private val wishListDatabaseSource: WishListDatabaseSource,
+    wishListDatabaseSource: WishListDatabaseSource,
     private val networkStatusChecker: NetworkStatusChecker,
     application: Application
 ) : BaseCartImplModel(remoteApi, wishListDatabaseSource, networkStatusChecker, application) {
@@ -70,8 +70,8 @@ class CartViewModel @Inject constructor(
                 if (productsResult is Success) {
                     val serverProducts = productsResult.data
                     val cartToProductItems = serverProducts.convertToCartProduct(productsInCartIds)
-                    totalValueText.postValue(cartToProductItems.getTotalValue().toString().formatPrice())
                     cartItems.postValue(cartToProductItems)
+                    totalValueText.postValue(cartToProductItems.getTotalValue().toString().formatPrice())
                 } else if (productsResult is Failure) {
                     errorMessage.postValue(productsResult.error?.localizedMessage)
                 }

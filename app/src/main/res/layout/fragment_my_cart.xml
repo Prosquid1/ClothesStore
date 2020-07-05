@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/payment.button"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:padding="@dimen/mini_horizontal_padding"
         android:weightSum="2">
 
@@ -44,6 +45,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/payment.button"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

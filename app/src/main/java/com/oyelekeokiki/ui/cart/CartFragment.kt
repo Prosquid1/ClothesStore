@@ -28,7 +28,7 @@ class CartFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_my_cart, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -157,6 +157,8 @@ class CartFragment : Fragment() {
         cartAdapter.setData(cartToProductItems)
         text_error_message.visibility = View.GONE
         recycler_home.visibility = View.VISIBLE
+        total_text_layout.visibility = View.VISIBLE
+        payment_button.visibility = View.VISIBLE
         recycler_home.scheduleLayoutAnimation()
     }
 
@@ -164,6 +166,8 @@ class CartFragment : Fragment() {
         recycler_home.visibility = View.GONE
         text_error_message.visibility = View.VISIBLE
         text_error_message.text = message
+        total_text_layout.visibility = View.GONE
+        payment_button.visibility = View.GONE
     }
 
 }
