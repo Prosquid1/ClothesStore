@@ -1,13 +1,11 @@
 package com.oyelekeokiki.ui.cart
 
 import android.app.Application
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.database.WishListDatabaseSource
 import com.oyelekeokiki.helpers.NO_INTERNET_CONNECTION
+import com.oyelekeokiki.helpers.getProductsInIDsList
 import com.oyelekeokiki.model.Failure
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.model.Success
@@ -24,7 +22,6 @@ class CartViewModel @Inject constructor(
     application: Application
 ) : BaseCartImplModel(remoteApi, wishListDatabaseSource, networkStatusChecker, application) {
     var cartItems: MutableLiveData<List<Product>> = MutableLiveData()
-    var wishListProductIds: LiveData<List<Int>> = wishListDatabaseSource.getWishListIds()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
     var isFetching: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -40,14 +37,34 @@ class CartViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            isFetching.postValue(true);
+            isFetching.postValue(true)
             try {
-                val result = remoteApi.getProducts()
-                if (result is Success) {
-                    cartItems.postValue(result.data)
+                val cartResult = remoteApi.getCart()
+                if (cartResult is Success) {
+                    queryCartItemsForProducts(cartResult.data.map { it.productId })
+                } else if (cartResult is Failure) {
+                    isFetching.postValue(false);
+                    errorMessage.postValue(cartResult.error?.localizedMessage)
+                }
 
-                } else if (result is Failure) {
-                    errorMessage.postValue(result.error?.localizedMessage)
+            } catch (e: Exception) {
+                errorMessage.postValue(e.localizedMessage)
+                isFetching.postValue(false);
+            }
+        }
+    }
+
+    //Supposed to be a server call with an array of product Ids
+    private fun queryCartItemsForProducts(productsInCartIds: List<Int>) {
+        viewModelScope.launch {
+            try {
+                val productsResult = remoteApi.getProducts()
+
+                if (productsResult is Success) {
+                    val serverProducts = productsResult.data
+                    cartItems.postValue(serverProducts.getProductsInIDsList(productsInCartIds))
+                } else if (productsResult is Failure) {
+                    errorMessage.postValue(productsResult.error?.localizedMessage)
                 }
                 isFetching.postValue(false);
             } catch (e: Exception) {
