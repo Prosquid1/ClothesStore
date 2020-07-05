@@ -12,6 +12,7 @@ import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.ColorHelper
 import com.oyelekeokiki.helpers.StockCountPriority
 import com.oyelekeokiki.model.Product
+import com.oyelekeokiki.ui.cart.OnCartModified
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.recycler_list_item_product.view.*
 

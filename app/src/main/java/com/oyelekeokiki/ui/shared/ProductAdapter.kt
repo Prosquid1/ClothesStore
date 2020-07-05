@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.oyelekeokiki.R
 import com.oyelekeokiki.model.Product
+import com.oyelekeokiki.ui.cart.OnCartModified
 
 /**
  * Displays the products from the API, into a list of items.
  */
 
 typealias OnWishListModified = (product: Product, isLiked: Boolean) -> Unit
-typealias OnCartModified = (productId: String) -> Unit
 
 class ProductAdapter(
     private val onWishListModified: OnWishListModified?,
@@ -30,10 +30,10 @@ class ProductAdapter(
 
     override fun getItemCount() = data.size
 
-    override fun onBindViewHolder(viewHolder: ProductViewHolder, position: Int) {
+    override fun onBindViewHolder(productViewHolder: ProductViewHolder, position: Int) {
         val product = data[position]
         val productIsInWishList = likedProductIds.contains(product.id)
-        viewHolder.bindData(
+        productViewHolder.bindData(
             product,
             onWishListModified, onCartModified, productIsInWishList
         )

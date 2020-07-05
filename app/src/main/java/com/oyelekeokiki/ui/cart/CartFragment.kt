@@ -11,7 +11,6 @@ import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.configureCSRecycler
 import com.oyelekeokiki.helpers.showCSSnackBar
 import com.oyelekeokiki.model.Product
-import com.oyelekeokiki.ui.shared.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
@@ -21,7 +20,7 @@ class CartFragment : Fragment() {
 
     @Inject
     lateinit var cartViewModel: CartViewModel
-    lateinit var productAdapter: ProductAdapter
+    lateinit var cartAdapter: CartAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,10 +60,10 @@ class CartFragment : Fragment() {
 
     private fun initRecyclerView() {
         recycler_home.configureCSRecycler()
-        productAdapter = ProductAdapter(null, {
+        cartAdapter = CartAdapter {
             cartViewModel.deleteFromCart(it)
-        })
-        recycler_home.adapter = productAdapter
+        }
+        recycler_home.adapter = cartAdapter
     }
 
     private fun observeCartItems() {
@@ -122,7 +121,7 @@ class CartFragment : Fragment() {
     }
 
     private fun setActiveDataWith(products: List<Product>) {
-        productAdapter.setData(products)
+        cartAdapter.setData(products)
         text_error_message.visibility = View.GONE
         recycler_home.visibility = View.VISIBLE
         recycler_home.scheduleLayoutAnimation()
@@ -133,5 +132,5 @@ class CartFragment : Fragment() {
         text_error_message.visibility = View.VISIBLE
         text_error_message.text = message
     }
-    
+
 }

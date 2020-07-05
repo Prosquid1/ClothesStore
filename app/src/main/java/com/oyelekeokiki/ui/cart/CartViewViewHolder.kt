@@ -1,8 +1,10 @@
-package com.oyelekeokiki.ui.shared
+package com.oyelekeokiki.ui.cart
 
 import android.annotation.SuppressLint
 import android.view.View
 import com.oyelekeokiki.model.Product
+import com.oyelekeokiki.ui.shared.OnWishListModified
+import com.oyelekeokiki.ui.shared.ProductViewHolder
 import kotlinx.android.synthetic.main.recycler_list_item_product.view.*
 
 @SuppressLint("SetTextI18n")
