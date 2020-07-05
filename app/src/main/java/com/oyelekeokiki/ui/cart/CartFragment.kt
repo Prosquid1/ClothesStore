@@ -97,10 +97,8 @@ class CartFragment : Fragment() {
     private fun observeReAddedToCartSuccess() {
         cartViewModel.cartItemAddedSuccess.observe(
             viewLifecycleOwner,
-            Observer { (cartItem, successMessage, type) ->
-                swipe_refresh_layout.showCSSnackBar(successMessage, type) {
-                    cartViewModel.deleteFromCart(cartItem)
-                }
+            Observer { (_, successMessage, _) ->
+                swipe_refresh_layout.showCSSnackBar(successMessage)
             })
     }
 
