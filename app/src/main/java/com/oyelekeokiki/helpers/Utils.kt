@@ -2,7 +2,6 @@ package com.oyelekeokiki.helpers
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -18,6 +17,10 @@ import com.oyelekeokiki.ui.shared.CSItemAnimator
 import java.util.*
 
 const val NO_INTERNET_CONNECTION = "No Internet connection!"
+
+fun String.formatPrice(): String {
+    return "£${this}"
+}
 
 fun String.convertToNCharacters(n: Int, padChar: Char = '.'): String {
     if (this.length >= n) {
@@ -52,12 +55,17 @@ fun List<Product>.getProductsInIDsList(productIds: List<Int>): List<Product> {
     return productIds.flatMap { mappedId -> this.filter { mappedId == it.id } }
 }
 
+fun List<CartToProductItem>.getTotalValue(): Int {
+    return sumBy { ((it.product.price?: "").toInt() * it.cartItemIds.size) }
+}
+
 fun List<Product>.convertToCartProduct(cartItemIds: List<CartItem>): List<CartToProductItem> {
     val cartItemsGroupedByProduct = cartItemIds.groupBy { it.productId }.values
 
     val productIdToProductMap = this.map { Pair(it.id, it) }.toMap()
     val productIdToCartItemsMap =
-        cartItemsGroupedByProduct.map { array -> Pair(array[0].productId, array.map { it.id }) }.toMap()
+        cartItemsGroupedByProduct.map { array -> Pair(array[0].productId, array.map { it.id }) }
+            .toMap()
 
     return productIdToCartItemsMap.map {
         CartToProductItem(

@@ -4,9 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.database.WishListDatabaseSource
-import com.oyelekeokiki.helpers.ActionResponseType
-import com.oyelekeokiki.helpers.NO_INTERNET_CONNECTION
-import com.oyelekeokiki.helpers.convertToCartProduct
+import com.oyelekeokiki.helpers.*
 import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.CartToProductItem
 import com.oyelekeokiki.model.Failure
@@ -71,7 +69,9 @@ class CartViewModel @Inject constructor(
 
                 if (productsResult is Success) {
                     val serverProducts = productsResult.data
-                    cartItems.postValue(serverProducts.convertToCartProduct(productsInCartIds))
+                    val cartToProductItems = serverProducts.convertToCartProduct(productsInCartIds)
+                    totalValueText.postValue(cartToProductItems.getTotalValue().toString().formatPrice())
+                    cartItems.postValue(cartToProductItems)
                 } else if (productsResult is Failure) {
                     errorMessage.postValue(productsResult.error?.localizedMessage)
                 }

@@ -11,6 +11,7 @@ import com.like.OnLikeListener
 import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.ColorHelper
 import com.oyelekeokiki.helpers.StockCountPriority
+import com.oyelekeokiki.helpers.formatPrice
 import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.cart.OnCartModified
@@ -101,7 +102,7 @@ open class ProductViewHolder(override val containerView: View) :
         }
         containerView.product_old_price.visibility = View.VISIBLE
         containerView.product_old_price.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-        containerView.product_old_price.text = "£${oldPrice}"
+        containerView.product_old_price.text = oldPrice.formatPrice()
     }
 
     private fun setupLikeButton(soldOut: Boolean) {
