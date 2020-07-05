@@ -15,7 +15,7 @@
         android:id="@+id/navigation_wish_list"
         android:name="com.oyelekeokiki.ui.wishlist.WishlistFragment"
         android:label="@string/title_wish_list"
-        tools:layout="@layout/fragment_products" />
+        tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_cart"
