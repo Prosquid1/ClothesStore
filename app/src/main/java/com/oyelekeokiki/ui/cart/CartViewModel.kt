@@ -26,6 +26,7 @@ class CartViewModel @Inject constructor(
 ) : BaseCartImplModel(remoteApi, wishListDatabaseSource, networkStatusChecker, application) {
     var cartItems: MutableLiveData<List<CartToProductItem>> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
+    var totalValueText: MutableLiveData<String> = MutableLiveData()
     var isFetching: MutableLiveData<Boolean> = MutableLiveData()
 
     var cartItemDeletedSuccess: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =

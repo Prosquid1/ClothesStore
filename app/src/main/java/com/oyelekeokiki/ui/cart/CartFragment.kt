@@ -13,6 +13,7 @@ import com.oyelekeokiki.helpers.showCSSnackBar
 import com.oyelekeokiki.model.CartToProductItem
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_my_cart.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -44,6 +45,8 @@ class CartFragment : Fragment() {
 
         observeRemoveFromCartSuccess()
         observeRemoveFromCartError()
+
+        observeTotalValueText()
     }
 
     private fun setupSwipeRefreshView() {
@@ -90,6 +93,14 @@ class CartFragment : Fragment() {
             viewLifecycleOwner,
             Observer { fetching ->
                 setRefreshStateWith(fetching)
+            })
+    }
+
+    private fun observeTotalValueText() {
+        cartViewModel.totalValueText.observe(
+            viewLifecycleOwner,
+            Observer {
+                total_value_text.text = it
             })
     }
 
