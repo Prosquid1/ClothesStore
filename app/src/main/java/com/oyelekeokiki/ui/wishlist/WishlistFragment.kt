@@ -52,7 +52,7 @@ class WishlistFragment : Fragment() {
         recycler_home.configureCSRecycler()
         productAdapter = ProductAdapter({ product, isLiked ->
             wishlistViewModel.updateWishListWithProductChanged(product, isLiked)
-        }, { productId, _ -> wishlistViewModel.addToCart(productId) })
+        }, { wishlistViewModel.addToCart(it) })
         recycler_home.adapter = productAdapter
     }
 
