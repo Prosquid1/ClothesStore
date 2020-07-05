@@ -5,7 +5,7 @@ import android.view.View
 import com.oyelekeokiki.model.Product
 
 @SuppressLint("SetTextI18n")
-class CartViewHolder(override val containerView: View) : ProductHolder(containerView) {
+class CartViewViewHolder(override val containerView: View) : ProductViewHolder(containerView) {
     override fun bindData(
         product: Product,
         onWishListModified: onWishListModified,

@@ -23,12 +23,12 @@ import kotlinx.android.synthetic.main.recycler_list_item_product.view.*
 const val MINIMUM_STOCK_THRESHOLD = 3
 
 @SuppressLint("SetTextI18n")
-open class ProductHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+open class ProductViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
     LayoutContainer {
 
     open fun bindData(
         product: Product,
-        onWishListModified: onWishListModified,
+        onWishListModified: onWishListModified?,
         onOnCartModified: onCartModified?,
         productIsLiked: Boolean = true //Since this adapter will be reused by WishListFragment
     ) {
@@ -39,7 +39,10 @@ open class ProductHolder(override val containerView: View) : RecyclerView.ViewHo
         containerView.product_category.text = product.category
         setupStockView(product.stock)
         setupProductImageView(product.name)
-        setupLikeView(product, productIsLiked, onWishListModified)
+        onWishListModified?.let {
+            setupLikeView(product, productIsLiked, it)
+        }
+
         setupAddToCartView(product.id, onOnCartModified)
     }
 
