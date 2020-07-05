@@ -77,27 +77,27 @@ open class BaseCartImplModel constructor(
         }
     }
 
-    fun deleteFromCart(productId: String) {
+    fun deleteFromCart(cartItemId: String) {
         if (!networkStatusChecker.hasInternetConnection()) {
-            showCartInternetErrorWithRetry(productId)
+            showCartInternetErrorWithRetry(cartItemId)
             return
         }
         viewModelScope.launch {
             try {
-                val result = remoteApi.deleteProductFromCart(productId)
+                val result = remoteApi.deleteProductFromCart(cartItemId)
                 if (result is Success) {
                     cartUpdateSuccess.postValue(
                         Triple(
-                            productId,
+                            cartItemId,
                             result.data.message,
                             ActionResponseType.SUCCESS
                         )
                     )
-                    updateProductCountInWishList(productId, 1)
+                    updateProductCountInWishList(cartItemId, 1)
                 } else if (result is Failure) {
                     cartUpdateFailed.postValue(
                         Triple(
-                            productId,
+                            cartItemId,
                             result.error?.message ?: "An error occurred!",
                             ActionResponseType.ERROR
                         )
@@ -106,7 +106,7 @@ open class BaseCartImplModel constructor(
             } catch (e: Exception) {
                 cartUpdateFailed.postValue(
                     Triple(
-                        productId,
+                        cartItemId,
                         e.localizedMessage,
                         ActionResponseType.ERROR
                     )

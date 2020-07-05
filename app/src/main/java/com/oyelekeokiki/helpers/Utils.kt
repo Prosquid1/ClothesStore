@@ -2,6 +2,7 @@ package com.oyelekeokiki.helpers
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.oyelekeokiki.R
+import com.oyelekeokiki.model.CartToProductItem
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.shared.CSItemAnimator
 import java.util.*
@@ -47,6 +49,13 @@ fun RecyclerView.configureCSRecycler() {
 
 fun List<Product>.getProductsInIDsList(productIds: List<Int>): List<Product> {
     return productIds.flatMap { mappedId -> this.filter { mappedId == it.id } }
+}
+
+fun List<Product>.convertToCartProduct(productIds: List<Int>): List<CartToProductItem> {
+    return productIds.flatMap { mappedId ->
+        this.filter { mappedId == it.id }
+    }.groupBy { it.id }
+    .map { CartToProductItem(it.key, it.value[0], it.value.count()) } // Cannot be an empty list
 }
 
 fun ViewGroup.showCSSnackBar(

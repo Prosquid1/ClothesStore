@@ -5,9 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.database.WishListDatabaseSource
 import com.oyelekeokiki.helpers.NO_INTERNET_CONNECTION
-import com.oyelekeokiki.helpers.getProductsInIDsList
+import com.oyelekeokiki.helpers.convertToCartProduct
+import com.oyelekeokiki.helpers.convertToCartProductGroup
+import com.oyelekeokiki.model.CartToProductItem
 import com.oyelekeokiki.model.Failure
-import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.model.Success
 import com.oyelekeokiki.networking.NetworkStatusChecker
 import com.oyelekeokiki.networking.RemoteApi
@@ -21,7 +22,7 @@ class CartViewModel @Inject constructor(
     private val networkStatusChecker: NetworkStatusChecker,
     application: Application
 ) : BaseCartImplModel(remoteApi, wishListDatabaseSource, networkStatusChecker, application) {
-    var cartItems: MutableLiveData<List<Product>> = MutableLiveData()
+    var cartItems: MutableLiveData<List<CartToProductItem>> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
     var isFetching: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -62,7 +63,7 @@ class CartViewModel @Inject constructor(
 
                 if (productsResult is Success) {
                     val serverProducts = productsResult.data
-                    cartItems.postValue(serverProducts.getProductsInIDsList(productsInCartIds))
+                    cartItems.postValue(serverProducts.convertToCartProduct(productsInCartIds))
                 } else if (productsResult is Failure) {
                     errorMessage.postValue(productsResult.error?.localizedMessage)
                 }

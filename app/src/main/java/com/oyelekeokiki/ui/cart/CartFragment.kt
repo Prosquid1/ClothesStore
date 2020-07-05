@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.configureCSRecycler
 import com.oyelekeokiki.helpers.showCSSnackBar
+import com.oyelekeokiki.model.CartToProductItem
 import com.oyelekeokiki.model.Product
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -69,8 +70,8 @@ class CartFragment : Fragment() {
     private fun observeCartItems() {
         cartViewModel.cartItems.observe(
             viewLifecycleOwner,
-            Observer { products ->
-                setActiveDataWith(products)
+            Observer { cartToProductItems ->
+                setActiveDataWith(cartToProductItems)
             })
     }
 
@@ -94,10 +95,10 @@ class CartFragment : Fragment() {
     private fun observeRemoveFromCartSuccess() {
         cartViewModel.cartUpdateSuccess.observe(
             viewLifecycleOwner,
-            Observer { (productId, successMessage, type) ->
+            Observer { (cartItemId, successMessage, type) ->
                 cartViewModel.fetchCartItems() // This is not a good approach, implemented because products cannot be queried by ID (on API) or stored on the device
                 swipe_refresh_layout.showCSSnackBar(successMessage, type) {
-                    cartViewModel.deleteFromCart(productId)
+                    cartViewModel.deleteFromCart(cartItemId)
                 }
             })
     }
@@ -106,9 +107,9 @@ class CartFragment : Fragment() {
     private fun observeRemoveFromCartError() {
         cartViewModel.cartUpdateFailed.observe(
             viewLifecycleOwner,
-            Observer { (productId, failureReason, type) ->
+            Observer { (cartItemId, failureReason, type) ->
                 swipe_refresh_layout.showCSSnackBar(failureReason, type) {
-                    cartViewModel.deleteFromCart(productId)
+                    cartViewModel.deleteFromCart(cartItemId)
                 }
             })
     }
@@ -120,8 +121,8 @@ class CartFragment : Fragment() {
         swipe_refresh_layout.isRefreshing = isRefreshing
     }
 
-    private fun setActiveDataWith(products: List<Product>) {
-        cartAdapter.setData(products)
+    private fun setActiveDataWith(cartToProductItems: List<CartToProductItem>) {
+        cartAdapter.setData(cartToProductItems)
         text_error_message.visibility = View.GONE
         recycler_home.visibility = View.VISIBLE
         recycler_home.scheduleLayoutAnimation()

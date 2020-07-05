@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.oyelekeokiki.R
+import com.oyelekeokiki.model.CartToProductItem
 import com.oyelekeokiki.model.Product
 
 /**
@@ -17,7 +18,7 @@ class CartAdapter(
 ) :
     RecyclerView.Adapter<CartViewViewHolder>() {
 
-    private val data: MutableList<Product> = mutableListOf()
+    private val data: MutableList<CartToProductItem> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -28,14 +29,14 @@ class CartAdapter(
     override fun getItemCount() = data.size
 
     override fun onBindViewHolder(cartViewViewHolder: CartViewViewHolder, position: Int) {
-        val product = data[position]
-        cartViewViewHolder.bindData(
-            product,
+        val cartToProductItem = data[position]
+        cartViewViewHolder.bindCartItem(
+            cartToProductItem,
             null, onCartModified, false
         )
     }
 
-    fun setData(data: List<Product>) {
+    fun setData(data: List<CartToProductItem>) {
         this.data.clear()
         this.data.addAll(data)
         notifyDataSetChanged()
