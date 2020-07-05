@@ -3,10 +3,11 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="empty_text_margin_bottom">60dp</dimen>
+    <dimen name="pay_text_size">15.2sp</dimen>
     <dimen name="primaryTextSize">13.6sp</dimen>
     <dimen name="secondaryTextSize">12sp</dimen>
     <dimen name="tertiaryTextSize">10.8sp</dimen>
-    <dimen name="totalTextSize">14.6sp</dimen>
+    <dimen name="totalTextSize">16.6sp</dimen>
     <dimen name="imageListCardSize">60dp</dimen>
     <dimen name="imageListCardRadius">30dp</dimen>
 
