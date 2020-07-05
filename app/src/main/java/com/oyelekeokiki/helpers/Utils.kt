@@ -55,8 +55,9 @@ fun List<Product>.getProductsInIDsList(productIds: List<Int>): List<Product> {
     return productIds.flatMap { mappedId -> this.filter { mappedId == it.id } }
 }
 
-fun List<CartToProductItem>.getTotalValue(): Int {
-    return sumBy { ((it.product.price?: "").toInt() * it.cartItemIds.size) }
+fun List<CartToProductItem>.getTotalValue(): String {
+    return this.toList()
+        .sumBy { ((it.product.price ?: "").toDouble().toInt() * it.cartItemIds.size) }.toString()
 }
 
 fun List<Product>.convertToCartProduct(cartItemIds: List<CartItem>): List<CartToProductItem> {
