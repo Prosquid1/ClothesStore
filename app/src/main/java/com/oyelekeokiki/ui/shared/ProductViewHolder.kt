@@ -11,6 +11,7 @@ import com.like.OnLikeListener
 import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.ColorHelper
 import com.oyelekeokiki.helpers.StockCountPriority
+import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.cart.OnCartModified
 import kotlinx.android.extensions.LayoutContainer
@@ -72,7 +73,14 @@ open class ProductViewHolder(override val containerView: View) :
         if (onCartModified == null) {
             return
         }
-        containerView.add_to_cart_button.setOnClickListener { onCartModified(productId.toString()) }
+        containerView.add_to_cart_button.setOnClickListener {
+            onCartModified(
+                CartItem(
+                    null,
+                    productId
+                )
+            )
+        }
     }
 
     // Product URL is not available so colors will be generated based on product name

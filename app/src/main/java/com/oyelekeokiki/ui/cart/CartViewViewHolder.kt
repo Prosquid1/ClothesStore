@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.StockCountPriority
+import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.CartToProductItem
 import com.oyelekeokiki.ui.shared.ProductViewHolder
 import kotlinx.android.synthetic.main.recycler_list_item_product.view.*
@@ -25,7 +26,7 @@ class CartViewViewHolder(override val containerView: View) : ProductViewHolder(c
 
         hideExtraViews()
 
-        setupDeleteFromCartButton(cartToProductItem.cartItemIds[0].toString(), onCartModified)
+        setupDeleteFromCartButton(cartToProductItem, onCartModified)
         setupCartItemCountTextView(cartToProductItem.cartItemIds.size)
     }
 
@@ -35,9 +36,19 @@ class CartViewViewHolder(override val containerView: View) : ProductViewHolder(c
         containerView.remove_from_cart_button.visibility = View.VISIBLE
     }
 
-    private fun setupDeleteFromCartButton(firstCartItemId: String, onCartModified: OnCartModified) {
+    private fun getCartItemToDelete(cartToProductItem: CartToProductItem): CartItem {
+        val cartItemId = cartToProductItem.cartItemIds[0]
+        val productId = cartToProductItem.product.id
+        return CartItem(cartItemId, productId)
+    }
+
+    private fun setupDeleteFromCartButton(
+        cartToProductItem: CartToProductItem,
+        onCartModified: OnCartModified
+    ) {
+        val cartItemToDelete = getCartItemToDelete(cartToProductItem)
         containerView.remove_from_cart_button.setOnClickListener {
-            onCartModified(firstCartItemId)
+            onCartModified(cartItemToDelete)
         }
     }
 

@@ -5,6 +5,6 @@ package com.oyelekeokiki.model
  */
 
 data class CartItem(
-  val id: Int,
+  val id: Int?,
   val productId: Int
 )

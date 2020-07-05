@@ -7,11 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.database.WishListDatabaseSource
 import com.oyelekeokiki.helpers.ActionResponseType
 import com.oyelekeokiki.helpers.NO_INTERNET_CONNECTION
+import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.Failure
 import com.oyelekeokiki.model.Success
 import com.oyelekeokiki.networking.NetworkStatusChecker
 import com.oyelekeokiki.networking.RemoteApi
 import kotlinx.coroutines.launch
+import java.lang.IllegalArgumentException
 
 /**
  * All views in this project have the same add and delete from cart model and observable variables
@@ -23,43 +25,43 @@ open class BaseCartImplModel constructor(
     private val networkStatusChecker: NetworkStatusChecker,
     application: Application
 ) : AndroidViewModel(application) {
-    var cartUpdateSuccess: MutableLiveData<Triple<String, String, ActionResponseType>> =
+    var cartUpdateSuccess: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
         MutableLiveData()
-    var cartUpdateFailed: MutableLiveData<Triple<String, String, ActionResponseType>> =
+    var cartUpdateFailed: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
         MutableLiveData()
 
-    private fun showCartInternetErrorWithRetry(retryingProductId: String) {
+    fun showCartInternetErrorWithRetry(cartItem: CartItem) {
         cartUpdateFailed.postValue(
             Triple(
-                retryingProductId,
+                cartItem,
                 NO_INTERNET_CONNECTION,
                 ActionResponseType.ERROR
             )
         )
     }
 
-    fun addToCart(productId: String) {
+    fun addToCart(cartItem: CartItem) {
         if (!networkStatusChecker.hasInternetConnection()) {
-            showCartInternetErrorWithRetry(productId)
+            showCartInternetErrorWithRetry(cartItem)
             return
         }
 
         viewModelScope.launch {
             try {
-                val result = remoteApi.addProductToCart(productId)
+                val result = remoteApi.addProductToCart(cartItem.productId)
                 if (result is Success) {
                     cartUpdateSuccess.postValue(
                         Triple(
-                            productId,
+                            cartItem,
                             result.data.message,
                             ActionResponseType.SUCCESS
                         )
                     )
-                    updateProductCountInWishList(productId, -1)
+                    updateProductCountInWishList(cartItem.productId, -1)
                 } else if (result is Failure) {
                     cartUpdateFailed.postValue(
                         Triple(
-                            productId,
+                            cartItem,
                             result.error?.message ?: "An error occurred!",
                             ActionResponseType.ERROR
                         )
@@ -68,45 +70,7 @@ open class BaseCartImplModel constructor(
             } catch (e: Exception) {
                 cartUpdateFailed.postValue(
                     Triple(
-                        productId,
-                        e.localizedMessage,
-                        ActionResponseType.ERROR
-                    )
-                )
-            }
-        }
-    }
-
-    fun deleteFromCart(cartItemId: String) {
-        if (!networkStatusChecker.hasInternetConnection()) {
-            showCartInternetErrorWithRetry(cartItemId)
-            return
-        }
-        viewModelScope.launch {
-            try {
-                val result = remoteApi.deleteProductFromCart(cartItemId)
-                if (result is Success) {
-                    cartUpdateSuccess.postValue(
-                        Triple(
-                            cartItemId,
-                            "Deleted successfully!",
-                            ActionResponseType.SUCCESS
-                        )
-                    )
-                    updateProductCountInWishList(cartItemId, -1)
-                } else if (result is Failure) {
-                    cartUpdateFailed.postValue(
-                        Triple(
-                            cartItemId,
-                            result.error?.message ?: "An error occurred!",
-                            ActionResponseType.ERROR
-                        )
-                    )
-                }
-            } catch (e: Exception) {
-                cartUpdateFailed.postValue(
-                    Triple(
-                        cartItemId,
+                        cartItem,
                         e.localizedMessage,
                         ActionResponseType.ERROR
                     )
@@ -120,9 +84,9 @@ open class BaseCartImplModel constructor(
      * In the rare case the WishList items cannot be updated from server and has to rely on offline data
      * */
 
-    private fun updateProductCountInWishList(productId: String, count: Int) {
+    fun updateProductCountInWishList(productId: Int, count: Int) {
         viewModelScope.launch {
-            wishListDatabaseSource.updateProductStockCount(productId.toInt(), count)
+            wishListDatabaseSource.updateProductStockCount(productId, count)
         }
     }
 }

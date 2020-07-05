@@ -76,10 +76,8 @@ class WishlistFragment : Fragment() {
     private fun observeAddToCartSuccess() {
         wishlistViewModel.cartUpdateSuccess.observe(
             viewLifecycleOwner,
-            Observer { (productId, successMessage, type) ->
-                swipe_refresh_layout.showCSSnackBar(successMessage, type) {
-                    wishlistViewModel.deleteFromCart(productId)
-                }
+            Observer { (_, successMessage, _) ->
+                swipe_refresh_layout.showCSSnackBar(successMessage)
             })
     }
 

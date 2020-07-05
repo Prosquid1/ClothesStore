@@ -21,9 +21,9 @@ interface RemoteApiService {
   suspend fun getCart(): List<CartItem>
 
   @POST("cart")
-  suspend fun addCartItem(@Query("productId") productId: String): AddToCartResponse
+  suspend fun addCartItem(@Query("productId") productId: Int): AddToCartResponse
 
   @DELETE("cart")
-  suspend fun deleteCartItem(@Query("id") productId: String): Response<Unit>
+  suspend fun deleteCartItem(@Query("id") productId: Int): Response<Unit>
 
 }

@@ -11,7 +11,7 @@ interface RemoteApi {
 
   suspend fun getCart(): Result<List<CartItem>>
 
-  suspend fun addProductToCart(productId: String): Result<AddToCartResponse>
+  suspend fun addProductToCart(productId: Int): Result<AddToCartResponse>
 
-  suspend fun deleteProductFromCart(productId: String): Result<Response<Unit>>
+  suspend fun deleteProductFromCart(productId: Int): Result<Response<Unit>>
 }

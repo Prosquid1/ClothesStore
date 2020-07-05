@@ -106,11 +106,9 @@ class HomeFragment : Fragment() {
     private fun observeAddToCartSuccess() {
         homeViewModel.cartUpdateSuccess.observe(
             viewLifecycleOwner,
-            Observer { (productId, successMessage, type) ->
+            Observer { (_, successMessage, _) ->
                 homeViewModel.fetchProducts() // This is not a good approach, implemented because products cannot be queried by ID (on API) or stored on the device
-                swipe_refresh_layout.showCSSnackBar(successMessage, type) {
-                    homeViewModel.deleteFromCart(productId)
-                }
+                swipe_refresh_layout.showCSSnackBar(successMessage)
             })
     }
 

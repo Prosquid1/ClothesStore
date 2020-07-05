@@ -31,14 +31,14 @@ class RemoteApiImpl @Inject constructor(
     Failure(error)
   }
 
-  override suspend fun deleteProductFromCart(productId: String): Result<Response<Unit>> = try {
+  override suspend fun deleteProductFromCart(productId: Int): Result<Response<Unit>> = try {
     val data = apiService.deleteCartItem(productId)
     Success(data)
   } catch (error: Throwable) {
     Failure(error)
   }
 
-  override suspend fun addProductToCart(productId: String): Result<AddToCartResponse> = try {
+  override suspend fun addProductToCart(productId: Int): Result<AddToCartResponse> = try {
     val product = apiService.addCartItem(productId)
     Success(product)
   } catch (error: Throwable) {
