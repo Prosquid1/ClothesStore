@@ -11,7 +11,6 @@ import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.configureCSRecycler
 import com.oyelekeokiki.helpers.showCSSnackBar
 import com.oyelekeokiki.model.CartToProductItem
-import com.oyelekeokiki.model.Product
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
@@ -93,12 +92,12 @@ class CartFragment : Fragment() {
 
     /** Observe and Show Snackbar with Undo action **/
     private fun observeRemoveFromCartSuccess() {
-        cartViewModel.cartUpdateSuccess.observe(
+        cartViewModel.cartItemAddedSuccess.observe(
             viewLifecycleOwner,
-            Observer { (cartItemId, successMessage, type) ->
-                cartViewModel.fetchCartItems() // This is not a good approach, implemented because products cannot be queried by ID (on API) or stored on the device
+            Observer { (cartItem, successMessage, type) ->
+                cartViewModel.fetchCartItems() // This is not a good approach, I only implemented because products cannot be queried by ID (on API) or stored on the device
                 swipe_refresh_layout.showCSSnackBar(successMessage, type) {
-                    cartViewModel.deleteFromCart(cartItemId)
+                    cartViewModel.addToCart(cartItem)
                 }
             })
     }
@@ -107,9 +106,9 @@ class CartFragment : Fragment() {
     private fun observeRemoveFromCartError() {
         cartViewModel.cartUpdateFailed.observe(
             viewLifecycleOwner,
-            Observer { (cartItemId, failureReason, type) ->
+            Observer { (cartItem, failureReason, type) ->
                 swipe_refresh_layout.showCSSnackBar(failureReason, type) {
-                    cartViewModel.deleteFromCart(cartItemId)
+                    cartViewModel.deleteFromCart(cartItem)
                 }
             })
     }

@@ -74,7 +74,7 @@ class WishlistFragment : Fragment() {
 
     /** Observe and Show Snackbar with Undo action **/
     private fun observeAddToCartSuccess() {
-        wishlistViewModel.cartUpdateSuccess.observe(
+        wishlistViewModel.cartItemAddedSuccess.observe(
             viewLifecycleOwner,
             Observer { (_, successMessage, _) ->
                 swipe_refresh_layout.showCSSnackBar(successMessage)

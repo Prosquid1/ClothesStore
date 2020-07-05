@@ -104,7 +104,7 @@ class HomeFragment : Fragment() {
 
     /** Observe and Show Snackbar with Undo action **/
     private fun observeAddToCartSuccess() {
-        homeViewModel.cartUpdateSuccess.observe(
+        homeViewModel.cartItemAddedSuccess.observe(
             viewLifecycleOwner,
             Observer { (_, successMessage, _) ->
                 homeViewModel.fetchProducts() // This is not a good approach, implemented because products cannot be queried by ID (on API) or stored on the device

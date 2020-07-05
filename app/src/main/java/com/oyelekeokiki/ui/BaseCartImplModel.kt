@@ -13,7 +13,6 @@ import com.oyelekeokiki.model.Success
 import com.oyelekeokiki.networking.NetworkStatusChecker
 import com.oyelekeokiki.networking.RemoteApi
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
 
 /**
  * All views in this project have the same add and delete from cart model and observable variables
@@ -25,7 +24,7 @@ open class BaseCartImplModel constructor(
     private val networkStatusChecker: NetworkStatusChecker,
     application: Application
 ) : AndroidViewModel(application) {
-    var cartUpdateSuccess: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
+    var cartItemAddedSuccess: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
         MutableLiveData()
     var cartUpdateFailed: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
         MutableLiveData()
@@ -50,7 +49,7 @@ open class BaseCartImplModel constructor(
             try {
                 val result = remoteApi.addProductToCart(cartItem.productId)
                 if (result is Success) {
-                    cartUpdateSuccess.postValue(
+                    cartItemAddedSuccess.postValue(
                         Triple(
                             cartItem,
                             result.data.message,

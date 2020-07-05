@@ -24,6 +24,8 @@ class CartViewModel @Inject constructor(
     private val networkStatusChecker: NetworkStatusChecker,
     application: Application
 ) : BaseCartImplModel(remoteApi, wishListDatabaseSource, networkStatusChecker, application) {
+    var cartItemDeletedSuccess: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
+        MutableLiveData()
     var cartItems: MutableLiveData<List<CartToProductItem>> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
     var isFetching: MutableLiveData<Boolean> = MutableLiveData()
@@ -91,7 +93,7 @@ class CartViewModel @Inject constructor(
             try {
                 val result = remoteApi.deleteProductFromCart(cartItem.id)
                 if (result is Success) {
-                    cartUpdateSuccess.postValue(
+                    cartItemAddedSuccess.postValue(
                         Triple(
                             cartItem,
                             "Deleted successfully!",

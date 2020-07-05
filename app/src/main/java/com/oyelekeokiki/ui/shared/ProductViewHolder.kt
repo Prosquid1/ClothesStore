@@ -76,7 +76,7 @@ open class ProductViewHolder(override val containerView: View) :
         containerView.add_to_cart_button.setOnClickListener {
             onCartModified(
                 CartItem(
-                    null,
+                    null, // Cart id is nullable since you cannot delete a newly added item to cart
                     productId
                 )
             )
