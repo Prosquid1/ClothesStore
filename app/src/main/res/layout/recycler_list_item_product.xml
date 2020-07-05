@@ -115,7 +115,7 @@
             android:layout_width="@dimen/add_to_cart_icon_size"
             android:layout_height="@dimen/add_to_cart_icon_size"
             android:layout_marginTop="@dimen/side_icon_vertical_padding"
-            android:background="@drawable/ic_checkout"
+            android:background="@drawable/ic_add_to_cart"
             />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -123,7 +123,7 @@
             android:layout_width="@dimen/add_to_cart_icon_size"
             android:layout_height="@dimen/add_to_cart_icon_size"
             android:layout_marginTop="@dimen/side_icon_vertical_padding"
-            android:background="@drawable/ic_checkout"
+            android:background="@drawable/ic_remove_from_cart"
             android:visibility="gone"
             />
 
