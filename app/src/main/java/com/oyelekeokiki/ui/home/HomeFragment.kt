@@ -7,11 +7,9 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import com.oyelekeokiki.R
-import com.oyelekeokiki.helpers.ActionResponseType
 import com.oyelekeokiki.helpers.configureCSRecycler
-import com.oyelekeokiki.helpers.showSnackBarWithAction
+import com.oyelekeokiki.helpers.showCSSnackBar
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.shared.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -111,7 +109,7 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner,
             Observer { (productId, successMessage, type) ->
                 homeViewModel.fetchProducts() // This is not a good approach, implemented because products cannot be queried by ID (on API) or stored on the device
-                swipe_refresh_layout.showSnackBarWithAction(successMessage, type) {
+                swipe_refresh_layout.showCSSnackBar(successMessage, type) {
                     homeViewModel.deleteFromCart(productId)
                 }
             })
@@ -122,7 +120,7 @@ class HomeFragment : Fragment() {
         homeViewModel.addToCartFailed.observe(
             viewLifecycleOwner,
             Observer { (productId, failureReason, type) ->
-                swipe_refresh_layout.showSnackBarWithAction(failureReason, type) {
+                swipe_refresh_layout.showCSSnackBar(failureReason, type) {
                     homeViewModel.addToCart(productId)
                 }
             })

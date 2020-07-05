@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.configureCSRecycler
-import com.oyelekeokiki.helpers.showSnackBarWithAction
+import com.oyelekeokiki.helpers.showCSSnackBar
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.shared.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,7 +77,7 @@ class WishlistFragment : Fragment() {
         wishlistViewModel.addToCartSuccess.observe(
             viewLifecycleOwner,
             Observer { (productId, successMessage, type) ->
-                swipe_refresh_layout.showSnackBarWithAction(successMessage, type) {
+                swipe_refresh_layout.showCSSnackBar(successMessage, type) {
                     wishlistViewModel.deleteFromCart(productId)
                 }
             })
@@ -88,7 +88,7 @@ class WishlistFragment : Fragment() {
         wishlistViewModel.addToCartFailed.observe(
             viewLifecycleOwner,
             Observer { (productId, failureReason, type) ->
-                swipe_refresh_layout.showSnackBarWithAction(failureReason, type) {
+                swipe_refresh_layout.showCSSnackBar(failureReason, type) {
                     wishlistViewModel.addToCart(productId)
                 }
             })

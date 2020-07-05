@@ -49,25 +49,27 @@ fun List<Product>.getProductsInIDsList(productIds: List<Int>): List<Product> {
     return productIds.flatMap { mappedId -> this.filter { mappedId == it.id } }
 }
 
-fun ViewGroup.showSnackBarWithAction(
+fun ViewGroup.showCSSnackBar(
     message: String,
-    responseWithType: ActionResponseType,
-    action: (View) -> Unit
+    responseWithType: ActionResponseType? = null,
+    action: ((View) -> Unit)? = null
 ) {
     val snackBarLength =
         if (responseWithType == ActionResponseType.SUCCESS) Snackbar.LENGTH_SHORT else Snackbar.LENGTH_LONG
-    val snackbarActionMessage =
-        if (responseWithType == ActionResponseType.SUCCESS) this.context.getString(R.string.undo) else this.context.getString(
-            R.string.retry
-        )
+
     val snackbarActionColorId =
         if (responseWithType == ActionResponseType.SUCCESS) R.color.green else R.color.red
 
     val snackBar = Snackbar
         .make(this, message, snackBarLength)
-    snackBar.setAction(snackbarActionMessage, action)
-    context?.let {
-        snackBar.setActionTextColor(ContextCompat.getColor(it, snackbarActionColorId))
+    action.let {
+        val snackbarActionMessage =
+            if (responseWithType == ActionResponseType.SUCCESS) this.context.getString(R.string.undo) else this.context.getString(
+                R.string.retry
+            )
+        if (snackbarActionMessage.isEmpty()) return@let
+        snackBar.setAction(snackbarActionMessage, it)
+        snackBar.setActionTextColor(ContextCompat.getColor(context, snackbarActionColorId))
     }
 
     snackBar.show()
@@ -105,7 +107,7 @@ enum class StockCountPriority {
     }
 }
 
-enum class ActionResponseType {
+enum class ActionResponseType() {
     SUCCESS, ERROR;
 }
 
