@@ -114,7 +114,7 @@ class HomeFragment : Fragment() {
 
     /** Observe and Show Snackbar with Retry **/
     private fun observeAddToCartError() {
-        homeViewModel.cartUpdateFailed.observe(
+        homeViewModel.cartItemAddedFailed.observe(
             viewLifecycleOwner,
             Observer { (productId, failureReason, type) ->
                 swipe_refresh_layout.showCSSnackBar(failureReason, type) {

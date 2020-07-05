@@ -39,6 +39,9 @@ class CartFragment : Fragment() {
         observeCartItemsFetchError()
         observeSwipeRefresh()
 
+        observeReAddedToCartSuccess()
+        observeReAddedToCartError()
+
         observeRemoveFromCartSuccess()
         observeRemoveFromCartError()
     }
@@ -91,8 +94,31 @@ class CartFragment : Fragment() {
     }
 
     /** Observe and Show Snackbar with Undo action **/
-    private fun observeRemoveFromCartSuccess() {
+    private fun observeReAddedToCartSuccess() {
         cartViewModel.cartItemAddedSuccess.observe(
+            viewLifecycleOwner,
+            Observer { (cartItem, successMessage, type) ->
+                cartViewModel.fetchCartItems()
+                swipe_refresh_layout.showCSSnackBar(successMessage, type) {
+                    cartViewModel.deleteFromCart(cartItem)
+                }
+            })
+    }
+
+    /** Observe and Show Snackbar with Retry **/
+    private fun observeReAddedToCartError() {
+        cartViewModel.cartItemAddedFailed.observe(
+            viewLifecycleOwner,
+            Observer { (cartItem, failureReason, type) ->
+                swipe_refresh_layout.showCSSnackBar(failureReason, type) {
+                    cartViewModel.addToCart(cartItem)
+                }
+            })
+    }
+
+    /** Observe and Show Snackbar with Undo action **/
+    private fun observeRemoveFromCartSuccess() {
+        cartViewModel.cartItemDeletedSuccess.observe(
             viewLifecycleOwner,
             Observer { (cartItem, successMessage, type) ->
                 cartViewModel.fetchCartItems() // This is not a good approach, I only implemented because products cannot be queried by ID (on API) or stored on the device
@@ -104,7 +130,7 @@ class CartFragment : Fragment() {
 
     /** Observe and Show Snackbar with Retry **/
     private fun observeRemoveFromCartError() {
-        cartViewModel.cartUpdateFailed.observe(
+        cartViewModel.cartItemDeletedFailed.observe(
             viewLifecycleOwner,
             Observer { (cartItem, failureReason, type) ->
                 swipe_refresh_layout.showCSSnackBar(failureReason, type) {

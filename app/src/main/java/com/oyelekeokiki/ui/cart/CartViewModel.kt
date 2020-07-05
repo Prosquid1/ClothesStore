@@ -24,11 +24,14 @@ class CartViewModel @Inject constructor(
     private val networkStatusChecker: NetworkStatusChecker,
     application: Application
 ) : BaseCartImplModel(remoteApi, wishListDatabaseSource, networkStatusChecker, application) {
-    var cartItemDeletedSuccess: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
-        MutableLiveData()
     var cartItems: MutableLiveData<List<CartToProductItem>> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
     var isFetching: MutableLiveData<Boolean> = MutableLiveData()
+
+    var cartItemDeletedSuccess: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
+        MutableLiveData()
+    var cartItemDeletedFailed: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
+        MutableLiveData()
 
     init {
         fetchCartItems()
@@ -93,7 +96,7 @@ class CartViewModel @Inject constructor(
             try {
                 val result = remoteApi.deleteProductFromCart(cartItem.id)
                 if (result is Success) {
-                    cartItemAddedSuccess.postValue(
+                    cartItemDeletedSuccess.postValue(
                         Triple(
                             cartItem,
                             "Deleted successfully!",
@@ -102,7 +105,7 @@ class CartViewModel @Inject constructor(
                     )
                     updateProductCountInWishList(cartItem.id, -1)
                 } else if (result is Failure) {
-                    cartUpdateFailed.postValue(
+                    cartItemDeletedFailed.postValue(
                         Triple(
                             cartItem,
                             result.error?.message ?: "An error occurred!",
@@ -111,7 +114,7 @@ class CartViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                cartUpdateFailed.postValue(
+                cartItemDeletedFailed.postValue(
                     Triple(
                         cartItem,
                         e.localizedMessage,

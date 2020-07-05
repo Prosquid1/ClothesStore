@@ -26,11 +26,11 @@ open class BaseCartImplModel constructor(
 ) : AndroidViewModel(application) {
     var cartItemAddedSuccess: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
         MutableLiveData()
-    var cartUpdateFailed: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
+    var cartItemAddedFailed: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
         MutableLiveData()
 
     fun showCartInternetErrorWithRetry(cartItem: CartItem) {
-        cartUpdateFailed.postValue(
+        cartItemAddedFailed.postValue(
             Triple(
                 cartItem,
                 NO_INTERNET_CONNECTION,
@@ -58,7 +58,7 @@ open class BaseCartImplModel constructor(
                     )
                     updateProductCountInWishList(cartItem.productId, -1)
                 } else if (result is Failure) {
-                    cartUpdateFailed.postValue(
+                    cartItemAddedFailed.postValue(
                         Triple(
                             cartItem,
                             result.error?.message ?: "An error occurred!",
@@ -67,7 +67,7 @@ open class BaseCartImplModel constructor(
                     )
                 }
             } catch (e: Exception) {
-                cartUpdateFailed.postValue(
+                cartItemAddedFailed.postValue(
                     Triple(
                         cartItem,
                         e.localizedMessage,
