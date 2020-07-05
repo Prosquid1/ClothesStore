@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.oyelekeokiki.R
 import com.oyelekeokiki.model.CartToProductItem
-import com.oyelekeokiki.model.Product
 
 /**
  * Displays the products from the API, into a list of items.
@@ -31,8 +30,7 @@ class CartAdapter(
     override fun onBindViewHolder(cartViewViewHolder: CartViewViewHolder, position: Int) {
         val cartToProductItem = data[position]
         cartViewViewHolder.bindCartItem(
-            cartToProductItem,
-            null, onCartModified, false
+            cartToProductItem, onCartModified, false
         )
     }
 
