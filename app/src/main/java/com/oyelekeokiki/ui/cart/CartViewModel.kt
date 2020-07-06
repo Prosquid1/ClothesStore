@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.utils.*
 import com.oyelekeokiki.model.CartItem
-import com.oyelekeokiki.model.CartToProductItem
+import com.oyelekeokiki.model.CartItemsToProduct
 import com.oyelekeokiki.model.Failure
 import com.oyelekeokiki.model.Success
 import com.oyelekeokiki.networking.NetworkStatusChecker
@@ -19,7 +19,7 @@ class CartViewModel @Inject constructor(
     private val networkStatusChecker: NetworkStatusChecker,
     application: Application
 ) : BaseCartImplModel(remoteApi, networkStatusChecker, application) {
-    var cartItems: MutableLiveData<List<CartToProductItem>> = MutableLiveData()
+    var cartItems: MutableLiveData<List<CartItemsToProduct>> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
     var totalValueText: MutableLiveData<String> = MutableLiveData()
     var isFetching: MutableLiveData<Boolean> = MutableLiveData()
@@ -68,7 +68,7 @@ class CartViewModel @Inject constructor(
                     val serverProducts = productsResult.data
                     val cartToProductItems = serverProducts.convertToCartProduct(productsInCartIds)
                     cartItems.postValue(cartToProductItems)
-                    totalValueText.postValue(cartToProductItems.getTotalValue().formatPrice())
+                    totalValueText.postValue(cartToProductItems.getTotalValueString().formatPrice())
                 } else if (productsResult is Failure) {
                     errorMessage.postValue(productsResult.error?.localizedMessage)
                 }
