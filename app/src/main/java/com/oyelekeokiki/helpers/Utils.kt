@@ -13,12 +13,9 @@ import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.CartToProductItem
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.shared.CSItemAnimator
-import com.oyelekeokiki.ui.shared.MINIMUM_STOCK_THRESHOLD
 import java.util.*
 
-const val NO_INTERNET_CONNECTION = "No Internet connection!"
-
-fun Int.formatPrice(): String {
+fun String.formatPrice(): String {
     return "£${this}"
 }
 
@@ -130,11 +127,9 @@ enum class StockCountHelper {
     }
 
     companion object {
-        private const val NO_STOCK = 0
-
         fun getDimAlphaValue(count: Int) = when (count) {
-            NO_STOCK -> 0.34f
-            else -> 1f
+            NO_STOCK -> SOLD_OUT_ITEM_ALPHA
+            else -> AVAILABLE_ITEM_ALPHA
         }
 
         fun getTextValue(count: Int): String = when (count) {

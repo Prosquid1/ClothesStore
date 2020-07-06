@@ -18,12 +18,9 @@ import com.oyelekeokiki.ui.cart.OnCartModified
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.recycler_list_item_product.view.*
 
-
 /**
  * Holder to display the Product item in a grid or list.
  */
-
-const val MINIMUM_STOCK_THRESHOLD = 3
 
 @SuppressLint("SetTextI18n")
 open class ProductViewHolder(override val containerView: View) :
@@ -37,7 +34,7 @@ open class ProductViewHolder(override val containerView: View) :
         productIsLiked: Boolean
     ) {
         containerView.product_name.text = product.name
-        containerView.product_price.text = "£${product.price}"
+        containerView.product_price.text = product.price?.formatPrice()
         setupOldPriceView(product.oldPrice)
 
         containerView.product_category.text = product.category
@@ -67,6 +64,7 @@ open class ProductViewHolder(override val containerView: View) :
         })
     }
 
+    // Only WishList and Home Fragment can access this view
     private fun setupAddToCartView(
         productId: Int,
         onCartModified: OnCartModified?
@@ -77,7 +75,7 @@ open class ProductViewHolder(override val containerView: View) :
         containerView.add_to_cart_button.setOnClickListener {
             onCartModified(
                 CartItem(
-                    null, // Cart id is nullable since you cannot delete a newly added item to cart
+                    null, // Cart id is null since you don't know the cart Item ID from both accessing fragments
                     productId
                 )
             )
@@ -102,7 +100,7 @@ open class ProductViewHolder(override val containerView: View) :
         }
         containerView.product_old_price.visibility = View.VISIBLE
         containerView.product_old_price.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-        containerView.product_old_price.text = oldPrice.toInt().formatPrice()
+        containerView.product_old_price.text = oldPrice.formatPrice()
     }
 
     private fun setupLikeButton(soldOut: Boolean) {
