@@ -18,6 +18,7 @@ class CartViewModel @Inject constructor(
     var cartItems: MutableLiveData<List<CartItemsToProduct>> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
     var totalValueText: MutableLiveData<String> = MutableLiveData()
+    var isFetching: MutableLiveData<Boolean> = MutableLiveData()
 
     var cartItemDeletedSuccess: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
         MutableLiveData()
@@ -41,7 +42,7 @@ class CartViewModel @Inject constructor(
                 }
 
             } catch (e: Exception) {
-                errorMessage.postValue(e.localizedMessage)
+                errorMessage.postValue(ExceptionUtil.getFetchExceptionMessage(e))
                 isFetching.postValue(false);
             }
         }
@@ -52,18 +53,15 @@ class CartViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val productsResult = remoteApi.getProducts()
-
                 if (productsResult is Success) {
                     val serverProducts = productsResult.data
                     val cartToProductItems = serverProducts.convertToCartProduct(productsInCartIds)
                     cartItems.postValue(cartToProductItems)
                     totalValueText.postValue(cartToProductItems.getTotalValueString().formatPrice())
-                } else if (productsResult is Failure) {
-                    errorMessage.postValue(productsResult.error?.localizedMessage)
                 }
                 isFetching.postValue(false);
             } catch (e: Exception) {
-                errorMessage.postValue(e.localizedMessage)
+                errorMessage.postValue(ExceptionUtil.getFetchExceptionMessage(e))
                 isFetching.postValue(false);
             }
         }
@@ -86,20 +84,12 @@ class CartViewModel @Inject constructor(
                         )
                     )
                     fetchCartItems()
-                } else if (result is Failure) {
-                    cartItemDeletedFailed.postValue(
-                        Triple(
-                            cartItem,
-                            result.error?.message ?: "An error occurred!",
-                            ActionResponseType.ERROR
-                        )
-                    )
                 }
             } catch (e: Exception) {
                 cartItemDeletedFailed.postValue(
                     Triple(
                         cartItem,
-                        e.localizedMessage,
+                        ExceptionUtil.getFetchExceptionMessage(e),
                         ActionResponseType.ERROR
                     )
                 )

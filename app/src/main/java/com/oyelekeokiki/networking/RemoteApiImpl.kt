@@ -10,39 +10,39 @@ import javax.inject.Inject
  */
 
 class RemoteApiImpl @Inject constructor(
-  private val apiService: RemoteApiService
+    private val apiService: RemoteApiService
 ) : RemoteApi {
 
-  override suspend fun getProducts(): Result<List<Product>> = try {
-    val data = apiService.getProducts()
-    if (data.isNotEmpty()) {
-      Success(data)
-    } else {
-      Failure(NullPointerException("No products available"))
+    override suspend fun getProducts(): Result<List<Product>> = try {
+        val data = apiService.getProducts()
+        if (data.isNotEmpty()) {
+            Success(data)
+        } else {
+            Failure(NullPointerException("No products available"))
+        }
+    } catch (error: Throwable) {
+        Failure(error)
     }
-  } catch (error: Throwable) {
-    Failure(error)
-  }
 
-  override suspend fun getCart(): Result<List<CartItem>> = try {
-    val data = apiService.getCart()
-    Success(data)
-  } catch (error: Throwable) {
-    Failure(error)
-  }
+    override suspend fun getCart(): Result<List<CartItem>> = try {
+        val data = apiService.getCart()
+        Success(data)
+    } catch (error: Throwable) {
+        Failure(error)
+    }
 
-  override suspend fun deleteProductFromCart(productId: Int): Result<Response<Unit>> = try {
-    val data = apiService.deleteCartItem(productId)
-    Success(data)
-  } catch (error: Throwable) {
-    Failure(error)
-  }
+    override suspend fun deleteProductFromCart(productId: Int): Result<Response<Unit>> = try {
+        val data = apiService.deleteCartItem(productId)
+        Success(data)
+    } catch (error: Throwable) {
+        Failure(error)
+    }
 
-  override suspend fun addProductToCart(productId: Int): Result<AddToCartResponse> = try {
-    val product = apiService.addCartItem(productId)
-    Success(product)
-  } catch (error: Throwable) {
-    Failure(error)
-  }
+    override suspend fun addProductToCart(productId: Int): Result<AddToCartResponse> = try {
+        val product = apiService.addCartItem(productId)
+        Success(product)
+    } catch (error: Throwable) {
+        Failure(error)
+    }
 
 }

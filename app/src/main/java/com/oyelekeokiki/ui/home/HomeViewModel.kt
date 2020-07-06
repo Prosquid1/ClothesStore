@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.database.WishListDatabaseSource
-import com.oyelekeokiki.model.Failure
+import com.oyelekeokiki.helpers.ExceptionUtil
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.model.Success
 import com.oyelekeokiki.networking.RemoteApi
@@ -19,6 +19,7 @@ class HomeViewModel @Inject constructor(
     var products: MutableLiveData<List<Product>> = MutableLiveData()
     var wishListProductIds: LiveData<List<Int>> = wishListDatabaseSource.getWishListIds()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
+    var isFetching: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
         fetchProducts()
@@ -31,13 +32,10 @@ class HomeViewModel @Inject constructor(
                 val result = remoteApi.getProducts()
                 if (result is Success) {
                     products.postValue(result.data)
-
-                } else if (result is Failure) {
-                    errorMessage.postValue(result.error?.localizedMessage)
                 }
                 isFetching.postValue(false);
             } catch (e: Exception) {
-                errorMessage.postValue(e.localizedMessage)
+                errorMessage.postValue(ExceptionUtil.getFetchExceptionMessage(e))
                 isFetching.postValue(false);
             }
         }

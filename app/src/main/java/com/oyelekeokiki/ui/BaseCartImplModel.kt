@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.helpers.ActionResponseType
+import com.oyelekeokiki.helpers.ExceptionUtil
 import com.oyelekeokiki.model.CartItem
-import com.oyelekeokiki.model.Failure
 import com.oyelekeokiki.model.Success
 import com.oyelekeokiki.networking.RemoteApi
 import kotlinx.coroutines.launch
@@ -21,7 +21,6 @@ open class BaseCartImplModel constructor(
         MutableLiveData()
     var cartItemAddedFailed: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
         MutableLiveData()
-    var isFetching: MutableLiveData<Boolean> = MutableLiveData()
 
     fun addToCart(cartItem: CartItem) {
         viewModelScope.launch {
@@ -36,21 +35,12 @@ open class BaseCartImplModel constructor(
                         )
                     )
                     onAddToCartComplete(cartItem.productId)
-
-                } else if (result is Failure) {
-                    cartItemAddedFailed.postValue(
-                        Triple(
-                            cartItem,
-                            result.error?.message ?: "An error occurred!",
-                            ActionResponseType.ERROR
-                        )
-                    )
                 }
             } catch (e: Exception) {
                 cartItemAddedFailed.postValue(
                     Triple(
                         cartItem,
-                        e.localizedMessage,
+                        ExceptionUtil.getFetchExceptionMessage(e),
                         ActionResponseType.ERROR
                     )
                 )

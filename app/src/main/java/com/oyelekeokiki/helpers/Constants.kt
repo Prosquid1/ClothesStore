@@ -9,6 +9,7 @@ const val NO_INTERNET_CONNECTION = "No Internet connection!"
 const val NO_STOCK_INT = 0
 const val OUT_OF_STOCK_TEXT = "(Out of stock)"
 const val SOLD_OUT_ITEM_ALPHA = 0.34f
+const val UNKNOWN_ERROR = "An unknown error occurred!"
 
 typealias OnCartModified = (cartItem: CartItem) -> Unit
 typealias OnWishListModified = (product: Product, isLiked: Boolean) -> Unit
