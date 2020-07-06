@@ -2,7 +2,6 @@ package com.oyelekeokiki.database
 
 import androidx.lifecycle.LiveData
 import com.oyelekeokiki.model.Product
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class WishListDatabaseSource @Inject constructor(private val wishListDao: WishListDao) {
@@ -15,9 +14,9 @@ class WishListDatabaseSource @Inject constructor(private val wishListDao: WishLi
 
     fun getWishList(): LiveData<List<Product>> = wishListDao.getWishList()
 
-    fun getWishListIds(): LiveData<List<Int>> = wishListDao.getWishListIds()
+    fun getWishListIds(): LiveData<List<Int>> = wishListDao.getLiveWishListIds()
 
-    suspend fun getWishListIdsSync(): List<Int> = wishListDao.getWishListIdsSync()
+    suspend fun getWishListIdsSync(): List<Int> = wishListDao.getWishListIds()
 
     suspend fun updateProductStockCount(productId: Int, by: Int) = wishListDao.updateProductStockCount(productId, by)
 

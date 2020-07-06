@@ -10,8 +10,6 @@ import androidx.test.runner.AndroidJUnit4
 import com.oyelekeokiki.database.AppDataBase
 import com.oyelekeokiki.database.WishListDao
 import com.oyelekeokiki.model.Product
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -96,7 +94,7 @@ class AppDatabaseTest {
         val listOfNewProducts = listOf(product, anotherProduct)
         wishListDao?.insertWishListProducts(listOfNewProducts)
 
-        val allNewlyAddedProducts = wishListDao?.getWishListIds()?.getOrAwaitValue()
+        val allNewlyAddedProducts = wishListDao?.getLiveWishListIds()?.getOrAwaitValue()
         assertEquals(allNewlyAddedProducts, listOfNewProducts.map { it.id } )
     }
 
