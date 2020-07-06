@@ -1,7 +1,7 @@
 package com.oyelekeokiki
 
 import com.oyelekeokiki.model.CartItem
-import com.oyelekeokiki.model.CartToProductItem
+import com.oyelekeokiki.model.CartItemsToProduct
 import com.oyelekeokiki.model.Product
 
 object MockObject {
@@ -18,12 +18,23 @@ object MockObject {
         )
     }
 
-    fun provideCartToProductItems(): List<CartToProductItem> {
+    fun provideCartIds(): List<List<Int>> {
         return arrayListOf(
-            CartToProductItem(arrayListOf(1), provideProducts()[0]),
-            CartToProductItem(arrayListOf(2,3), provideProducts()[1]),
-            CartToProductItem(arrayListOf(4,5,6), provideProducts()[2]),
-            CartToProductItem(arrayListOf(7,8,9,10), provideProducts()[3])
+            arrayListOf(1),
+            arrayListOf(2),
+            arrayListOf(3),
+            arrayListOf(4)
+        )
+    }
+
+    fun provideCartItemsToProduct(): List<CartItemsToProduct> {
+        val cartIds = provideCartIds()
+        val products = provideProducts()
+        return arrayListOf(
+            CartItemsToProduct(cartIds[0], products[0]),
+            CartItemsToProduct(cartIds[1], products[1]),
+            CartItemsToProduct(cartIds[2], products[2]),
+            CartItemsToProduct(cartIds[3], products[3])
         )
     }
 
