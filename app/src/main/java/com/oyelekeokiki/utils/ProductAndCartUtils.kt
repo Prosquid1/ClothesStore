@@ -14,8 +14,8 @@ fun List<Product>.convertToCartProduct(cartItemIds: List<CartItem>): List<CartTo
 
     return productIdToCartItemsMap.map {
         CartToProductItem(
-            productIdToProductMap[it.key] as Product,
-            productIdToCartItemsMap[it.key] as List<Int>
+            productIdToCartItemsMap[it.key] as List<Int>,
+            productIdToProductMap[it.key] as Product
         )
     }
 }
@@ -29,6 +29,6 @@ fun List<CartToProductItem>.getTotalValue(): String {
         .sumBy { ((it.product.price ?: "").toDouble().toInt() * it.cartItemIds.size) }.toString()
 }
 
-enum class ActionResponseType() {
+enum class ActionResponseType {
     SUCCESS, ERROR;
 }

@@ -7,7 +7,7 @@ import com.oyelekeokiki.model.Product
 object MockObject {
 
     const val LOW_STOCK_INT = 2
-    const val MEDIUM_STOCK_INT = 20
+    const val MEDIUM_STOCK_INT = 5
 
     fun provideCartItems(): List<CartItem> {
         return arrayListOf(
