@@ -3,7 +3,7 @@ package com.oyelekeokiki
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
-import com.oyelekeokiki.helpers.configureCSRecycler
+import com.oyelekeokiki.utils.configureCSRecycler
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

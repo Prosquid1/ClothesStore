@@ -4,9 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.oyelekeokiki.database.WishListDatabaseSource
-import com.oyelekeokiki.helpers.ActionResponseType
-import com.oyelekeokiki.helpers.NO_INTERNET_CONNECTION
+import com.oyelekeokiki.utils.ActionResponseType
+import com.oyelekeokiki.utils.NO_INTERNET_CONNECTION
 import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.Failure
 import com.oyelekeokiki.model.Success

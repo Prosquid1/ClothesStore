@@ -1,8 +1,8 @@
 package com.oyelekeokiki
 
-import com.oyelekeokiki.helpers.NO_STOCK_INT
-import com.oyelekeokiki.helpers.OUT_OF_STOCK_TEXT
-import com.oyelekeokiki.helpers.StockCountHelper
+import com.oyelekeokiki.utils.NO_STOCK_INT
+import com.oyelekeokiki.utils.OUT_OF_STOCK_TEXT
+import com.oyelekeokiki.utils.StockCountHelper
 import org.junit.Test
 
 class StockUtilsTest {

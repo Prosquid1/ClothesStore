@@ -1,4 +1,4 @@
-package com.oyelekeokiki.helpers
+package com.oyelekeokiki.utils
 
 fun String.convertToNCharacters(n: Int, padChar: Char = '.'): String {
     if (this.length >= n) {

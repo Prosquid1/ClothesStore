@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.oyelekeokiki.R
-import com.oyelekeokiki.helpers.OnCartModified
+import com.oyelekeokiki.utils.OnCartModified
 import com.oyelekeokiki.model.CartToProductItem
 
 /**

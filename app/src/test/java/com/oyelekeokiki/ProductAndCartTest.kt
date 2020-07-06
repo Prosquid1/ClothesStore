@@ -1,6 +1,6 @@
 package com.oyelekeokiki
 
-import com.oyelekeokiki.helpers.StockCountHelper
+import com.oyelekeokiki.utils.StockCountHelper
 import org.junit.Test
 
 class ProductAndCartTest {

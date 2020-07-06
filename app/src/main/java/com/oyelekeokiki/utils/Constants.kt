@@ -1,4 +1,4 @@
-package com.oyelekeokiki.helpers
+package com.oyelekeokiki.utils
 
 import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.Product

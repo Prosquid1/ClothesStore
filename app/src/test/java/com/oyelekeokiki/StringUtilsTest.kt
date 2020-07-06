@@ -1,6 +1,6 @@
 package com.oyelekeokiki
 
-import com.oyelekeokiki.helpers.*
+import com.oyelekeokiki.utils.*
 import org.junit.Test
 
 class StringUtilsTest {
