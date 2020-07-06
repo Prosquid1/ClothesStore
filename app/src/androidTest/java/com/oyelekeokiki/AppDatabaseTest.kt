@@ -10,6 +10,7 @@ import androidx.test.runner.AndroidJUnit4
 import com.oyelekeokiki.database.AppDataBase
 import com.oyelekeokiki.database.WishListDao
 import com.oyelekeokiki.model.Product
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -37,7 +38,9 @@ class AppDatabaseTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+
     private val product = Product(1, "Test Product", "Test Description", oldPrice = "2.00", price = "1.89", stock = 2);
+    private val anotherProduct = Product(2, "Test Product 2", "Test Description 2", oldPrice = "3.00", price = "4.89", stock = 3);
 
     @Before
     fun setup() {
@@ -57,37 +60,46 @@ class AppDatabaseTest {
     }
 
     @Test
-    fun shouldDeleteAll(){
-        wishListDao?.deleteAll()
-        assertEquals(wishListDao?.getProductsCount(), 0)
+    fun shouldDeleteAll() {
+        runBlocking { wishListDao?.deleteAll() }
+        assertEquals(wishListDao?.getWishListCount()?.getOrAwaitValue(), 0)
     }
 
     @Test
-    fun shouldInsertProduct() {
+    fun shouldInsertProduct() = runBlocking {
         wishListDao?.addToWishList(product)
         val productTest = wishListDao?.getWishListItemWith(product.id)
-        assertEquals(product.id, productTest?.getOrAwaitValue()?.id)
+        assertEquals(product.id, productTest?.id)
     }
 
     @Test
-    fun shouldDeleteProduct() {
+    fun shouldDeleteProduct() = runBlocking {
         wishListDao?.removeFromWishList(product.id)
         val productTest = wishListDao?.getWishListItemWith(product.id)
-        assertNull(productTest?.getOrAwaitValue())
+        assertNull(productTest)
     }
 
     @Test
-    fun shouldInsertAll() {
-        val anotherProduct = Product(2, "Test Product 2", "Test Description 2", oldPrice = "3.00", price = "4.89", stock = 3);
+    fun shouldInsertAll() = runBlocking  {
         val listOfNewProducts = listOf(product, anotherProduct)
         wishListDao?.insertWishListProducts(listOfNewProducts)
 
         val allNewlyAddedProducts = wishListDao?.getWishList()?.getOrAwaitValue()
+
         assertEquals(allNewlyAddedProducts?.size, listOfNewProducts.size )
     }
 
     @Test
-    fun databaseIsAtomic() {
+    fun selectIdsFromDatabase() = runBlocking {
+        val listOfNewProducts = listOf(product, anotherProduct)
+        wishListDao?.insertWishListProducts(listOfNewProducts)
+
+        val allNewlyAddedProducts = wishListDao?.getLiveWishListIds()?.getOrAwaitValue()
+        assertEquals(allNewlyAddedProducts, listOfNewProducts.map { it.id } )
+    }
+
+    @Test
+    fun databaseIsAtomic() = runBlocking {
         val listOfNewProducts = listOf(product, product, product, product)
         wishListDao?.deleteAll()
         wishListDao?.insertWishListProducts(listOfNewProducts)

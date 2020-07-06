@@ -43,17 +43,21 @@ final APP_COMPAT_VERSION = '1.1.0'
 final CONSTRAINT_LAYOUT_VERSION = '1.1.3'
 final COROUTINES_VERSION = '1.3.5'
 final CORE_TESTING_VERSION = '2.1.0'
+final GSON_VERSION = '2.4.0'
 final HILT_VIEWMODEL_VERSION = '1.0.0-alpha01'
 final KTX_CORE_VERSION = '1.3.0'
 final LIFECYCLE_VERSION = '2.2.0'
+final LIKE_BUTTON_VERSION = '0.2.3'
 final MATERIAL_DESIGN_VERSION = '1.1.0'
 final NAVIGATION_VERSION = '2.3.0'
 final OK_HTTP_VERSION = '4.5.0'
 final RETROFIT_SERIALIZER_VERSION = '0.4.0'
 final RETROFIT_VERSION = '2.8.1'
 final ROOM_VERSION = '2.2.5'
+final SWIPE_REFRESH_VERSION = '1.1.0'
 final TEST_RUNNER_VERSION = '1.0.2'
 final VECTOR_DRAWABLE_VERSION = '1.1.0'
+
 
 dependencies {
 
@@ -85,6 +89,9 @@ dependencies {
     implementation "com.google.android.material:material:$MATERIAL_DESIGN_VERSION"
     implementation "androidx.constraintlayout:constraintlayout:$CONSTRAINT_LAYOUT_VERSION"
     implementation "androidx.vectordrawable:vectordrawable:$VECTOR_DRAWABLE_VERSION"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$SWIPE_REFRESH_VERSION"
+
+    implementation "com.github.jd-alexander:LikeButton:$LIKE_BUTTON_VERSION"
 
     // Database
     implementation "androidx.room:room-runtime:$ROOM_VERSION"
@@ -95,12 +102,13 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$HILT_VIEWMODEL_VERSION"
-    annotationProcessor "androidx.hilt:hilt-compiler:$HILT_VIEWMODEL_VERSION"
+    kapt "androidx.hilt:hilt-compiler:$HILT_VIEWMODEL_VERSION"
 
     //Networking
     implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:$RETROFIT_SERIALIZER_VERSION"
     implementation "com.squareup.okhttp3:okhttp:$OK_HTTP_VERSION"
     implementation "com.squareup.okhttp3:logging-interceptor:$OK_HTTP_VERSION"
-    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+
+    implementation "com.squareup.retrofit2:converter-gson:$GSON_VERSION"
 }

@@ -10,25 +10,35 @@ import com.oyelekeokiki.model.Product
 
 @Dao
 interface WishListDao {
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun addToWishList(it: Product)
+  // Coroutine functions
+  @Query("DELETE FROM Product")
+  suspend fun deleteAll()
+
+  @Query("SELECT id FROM Product")
+  suspend fun getWishListIds(): List<Int>
+
+  @Query("SELECT * FROM Product WHERE id= :productId")
+  suspend fun getWishListItemWith(productId: Int): Product
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun insertWishListProducts(it: List<Product>)
+  suspend fun addToWishList(it: Product)
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  suspend fun insertWishListProducts(it: List<Product>)
 
   @Query("DELETE FROM Product WHERE id = :productId")
-  fun removeFromWishList(productId: Int)
+  suspend fun removeFromWishList(productId: Int)
+
+  @Query("UPDATE Product SET stock = stock + :count WHERE ID = :productId")
+  suspend fun updateProductStockCount(productId: Int, count: Int)
+
+  //LiveData
+  @Query("SELECT id FROM Product")
+  fun getLiveWishListIds(): LiveData<List<Int>>
 
   @Query("SELECT * FROM Product")
   fun getWishList(): LiveData<List<Product>>
 
-  @Query("SELECT * FROM Product WHERE id= :productId")
-  fun getWishListItemWith(productId: Int): LiveData<Product>
-
-  @Query("DELETE FROM Product")
-  fun deleteAll()
-
   @Query("SELECT count(*) FROM Product")
-  fun getProductsCount(): Int
-
+  fun getWishListCount(): LiveData<Int>
 }

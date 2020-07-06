@@ -1,11 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <include
+        layout="@layout/fragment_home"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/total.text.layout"
+        android:layout_marginBottom="@dimen/activity_vertical_margin" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/total.text.layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/payment.button"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="@dimen/mini_horizontal_padding"
+        android:visibility="gone"
+        android:padding="@dimen/mini_horizontal_padding"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/total.text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cart_total_text"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:textSize="@dimen/primaryTextSize" />
+
+        <TextView
+            android:id="@+id/total.value.text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/money_blue"
+            android:textSize="@dimen/totalTextSize"
+            tools:text="50" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/payment.button"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/mini_horizontal_padding"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:text="@string/pay_button_text"
+        android:alpha="0.9"
+        android:enabled="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/pay_text_size"
+        app:backgroundTint="@color/black" />
+
+</RelativeLayout>
