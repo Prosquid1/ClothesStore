@@ -18,10 +18,9 @@ import javax.inject.Inject
 
 class CartViewModel @Inject constructor(
     private val remoteApi: RemoteApi,
-    wishListDatabaseSource: WishListDatabaseSource,
     private val networkStatusChecker: NetworkStatusChecker,
     application: Application
-) : BaseCartImplModel(remoteApi, wishListDatabaseSource, networkStatusChecker, application) {
+) : BaseCartImplModel(remoteApi, networkStatusChecker, application) {
     var cartItems: MutableLiveData<List<CartToProductItem>> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
     var totalValueText: MutableLiveData<String> = MutableLiveData()

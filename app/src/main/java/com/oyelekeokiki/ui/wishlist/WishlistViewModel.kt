@@ -20,7 +20,7 @@ class WishlistViewModel @Inject constructor(
     private val wishListDatabaseSource: WishListDatabaseSource,
     networkStatusChecker: NetworkStatusChecker,
     application: Application
-) : BaseCartImplModel(remoteApi, wishListDatabaseSource, networkStatusChecker, application) {
+) : BaseCartImplModel(remoteApi, networkStatusChecker, application) {
     var wishlist: LiveData<List<Product>> = wishListDatabaseSource.getWishList()
     var wishListProductIds: LiveData<List<Int>> = wishListDatabaseSource.getWishListIds()
 

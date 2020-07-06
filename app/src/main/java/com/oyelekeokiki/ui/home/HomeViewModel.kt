@@ -20,7 +20,7 @@ class HomeViewModel @Inject constructor(
     private val wishListDatabaseSource: WishListDatabaseSource,
     private val networkStatusChecker: NetworkStatusChecker,
     application: Application
-) : BaseCartImplModel(remoteApi, wishListDatabaseSource, networkStatusChecker, application) {
+) : BaseCartImplModel(remoteApi, networkStatusChecker, application) {
     var products: MutableLiveData<List<Product>> = MutableLiveData()
     var wishListProductIds: LiveData<List<Int>> = wishListDatabaseSource.getWishListIds()
     var errorMessage: MutableLiveData<String> = MutableLiveData()

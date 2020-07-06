@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 
 open class BaseCartImplModel constructor(
     private val remoteApi: RemoteApi,
-    private val wishListDatabaseSource: WishListDatabaseSource,
     private val networkStatusChecker: NetworkStatusChecker,
     application: Application
 ) : AndroidViewModel(application) {
