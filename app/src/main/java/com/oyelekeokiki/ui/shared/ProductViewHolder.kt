@@ -10,7 +10,7 @@ import com.like.LikeButton
 import com.like.OnLikeListener
 import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.ColorHelper
-import com.oyelekeokiki.helpers.StockCountPriority
+import com.oyelekeokiki.helpers.StockCountHelper
 import com.oyelekeokiki.helpers.formatPrice
 import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.Product
@@ -110,22 +110,20 @@ open class ProductViewHolder(override val containerView: View) :
     }
 
     private fun setupStockView(count: Int) {
-        val itemIsSoldOut = count == 0
-        containerView.stock_count.text = if (itemIsSoldOut) "(Out of stock)" else "(${count} left)"
-        containerView.add_to_cart_button.alpha = if (itemIsSoldOut) 0.34f else 1.0f
-        setupSoldOutView(itemIsSoldOut)
-        setupLikeButton(itemIsSoldOut)
+        val stockCountHelper = StockCountHelper.getPriority(count)
+        containerView.stock_count.text = StockCountHelper.getTextValue(count)
+        containerView.add_to_cart_button.alpha = StockCountHelper.getDimAlphaValue(count)
+        setupSoldOutView(stockCountHelper.isItemSoldOut())
+        setupLikeButton(stockCountHelper.isItemSoldOut())
 
-        val stockPriority =
-            if (count >= MINIMUM_STOCK_THRESHOLD) StockCountPriority.MEDIUM else StockCountPriority.LOW
-        setupStockTextColor(stockPriority)
+        setupStockTextColor(stockCountHelper)
     }
 
-    private fun setupStockTextColor(priority: StockCountPriority) {
+    private fun setupStockTextColor(helper: StockCountHelper) {
         containerView.stock_count.setTextColor(
             ContextCompat.getColor(
                 containerView.context,
-                priority.getColor()
+                helper.getColor()
             )
         )
     }

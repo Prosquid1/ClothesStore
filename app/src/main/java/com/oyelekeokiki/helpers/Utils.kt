@@ -14,6 +14,7 @@ import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.CartToProductItem
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.ui.shared.CSItemAnimator
+import com.oyelekeokiki.ui.shared.MINIMUM_STOCK_THRESHOLD
 import java.util.*
 
 const val NO_INTERNET_CONNECTION = "No Internet connection!"
@@ -125,12 +126,40 @@ object ColorHelper {
     }
 }
 
-enum class StockCountPriority {
-    LOW, MEDIUM;
+enum class StockCountHelper() {
+    NONE, LOW, MEDIUM;
 
     fun getColor() = when (this) {
-        LOW -> R.color.red
+        NONE -> R.color.red
+        LOW -> R.color.green
         MEDIUM -> R.color.money_blue
+    }
+
+    fun isItemSoldOut() = when (this) {
+        NONE -> true
+        else -> false
+    }
+
+    companion object {
+        private const val NO_STOCK = 0
+
+        fun getDimAlphaValue(count: Int) = when (count) {
+            NO_STOCK -> 0.34f
+            else -> 1f
+        }
+
+        fun getTextValue(count: Int): String = when (count) {
+            0 -> "(Out of stock)"
+            else -> "(${count} left)"
+        }
+
+        fun getPriority(count: Int): StockCountHelper {
+            return when {
+                count == NO_STOCK -> NONE
+                count <= MINIMUM_STOCK_THRESHOLD -> LOW
+                else -> MEDIUM
+            }
+        }
     }
 }
 
