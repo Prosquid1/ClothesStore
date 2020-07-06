@@ -19,7 +19,4 @@ class WishListDatabaseSource @Inject constructor(private val wishListDao: WishLi
     suspend fun getWishListIdsSync(): List<Int> = wishListDao.getWishListIds()
 
     suspend fun updateProductStockCount(productId: Int, by: Int) = wishListDao.updateProductStockCount(productId, by)
-
-    fun getWishListCount(): LiveData<Int> = wishListDao.getWishListCount()
-
 }

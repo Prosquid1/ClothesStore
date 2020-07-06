@@ -9,6 +9,7 @@ import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
 import com.oyelekeokiki.database.AppDataBase
 import com.oyelekeokiki.database.WishListDao
+import com.oyelekeokiki.utils.MockObject
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -36,7 +37,7 @@ class AppDatabaseTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule() //Required for getOrAwaitValue function
 
-    private val product = MockObject.provideSingleTestProduct()
+    private val product = MockObject.provideProducts()[0]
 
     @Before
     fun setup() {
@@ -52,7 +53,7 @@ class AppDatabaseTest {
     @After
     @Throws(IOException::class)
     fun tearDown() {
-        appDataBase?.close();
+        appDataBase?.close()
     }
 
     @Test
@@ -64,24 +65,43 @@ class AppDatabaseTest {
     @Test
     fun shouldInsertProduct() = runBlocking {
         wishListDao?.addToWishList(product)
-        val productTest = wishListDao?.getWishListItemWith(product.id)
-        assertEquals(product.id, productTest?.id)
+        val expectedProduct = wishListDao?.getWishListItemWith(product.id)
+        assertEquals(product.id, expectedProduct?.id)
     }
 
     @Test
     fun shouldDeleteProduct() = runBlocking {
+        wishListDao?.addToWishList(product)
         wishListDao?.removeFromWishList(product.id)
-        val productTest = wishListDao?.getWishListItemWith(product.id)
-        assertNull(productTest)
+        val expectedProduct = wishListDao?.getWishListItemWith(product.id)
+        assertNull(expectedProduct)
     }
 
     @Test
     fun shouldInsertAll() = runBlocking {
-        val listOfNewProducts = MockObject.provideTestProducts()
+        val listOfNewProducts = MockObject.provideProducts()
         wishListDao?.insertWishListProducts(listOfNewProducts)
 
-        val allNewlyAddedProducts = wishListDao?.getWishList()?.getOrAwaitValue()
-        assertEquals(allNewlyAddedProducts?.size, listOfNewProducts.size)
+        val expectedAddedProducts = wishListDao?.getWishList()?.getOrAwaitValue()
+        assertEquals(expectedAddedProducts?.size, listOfNewProducts.size)
+    }
+
+    @Test
+    fun shouldUpdateProductStockCount() = runBlocking {
+        val newProductCount = 20
+        wishListDao?.addToWishList(product)
+        wishListDao?.updateProductStockCount(product.id, newProductCount)
+        val expectedCount = wishListDao?.getProductStockCount(product.id)
+        assertEquals(expectedCount, newProductCount)
+    }
+
+    @Test
+    fun getLiveWishListIds() = runBlocking {
+        val listOfNewProducts = MockObject.provideProducts()
+        wishListDao?.insertWishListProducts(listOfNewProducts)
+
+        val expectedNewlyAddedProductIds = wishListDao?.getLiveWishListIds()?.getOrAwaitValue()
+        assertEquals(listOfNewProducts.map { it.id }, expectedNewlyAddedProductIds)
     }
 
     @Test
@@ -90,8 +110,8 @@ class AppDatabaseTest {
         wishListDao?.deleteAll()
         wishListDao?.insertWishListProducts(listOfNewProducts)
 
-        val allNewlyAddedProducts = wishListDao?.getWishList()?.getOrAwaitValue()
-        assertEquals(allNewlyAddedProducts?.size, 1)
+        val expectedNewlyAddedProducts = wishListDao?.getWishList()?.getOrAwaitValue()
+        assertEquals(expectedNewlyAddedProducts?.size, 1)
     }
 }
 
