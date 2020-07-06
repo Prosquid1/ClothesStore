@@ -4,8 +4,8 @@ import com.oyelekeokiki.model.Product
 
 object MockObject {
 
-    val LOW_STOCK_INT = 5
-    val MEDIUM_STOCK_INT = 5
+    const val LOW_STOCK_INT = 2
+    const val MEDIUM_STOCK_INT = 5
 
     fun provideSingleTestProduct(): Product {
         return provideTestProducts()[0]
