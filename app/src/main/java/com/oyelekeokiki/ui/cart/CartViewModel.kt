@@ -1,6 +1,5 @@
 package com.oyelekeokiki.ui.cart
 
-import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.helpers.*
@@ -16,9 +15,8 @@ import javax.inject.Inject
 
 class CartViewModel @Inject constructor(
     private val remoteApi: RemoteApi,
-    private val networkStatusChecker: NetworkStatusChecker,
-    application: Application
-) : BaseCartImplModel(remoteApi, networkStatusChecker, application) {
+    private val networkStatusChecker: NetworkStatusChecker
+) : BaseCartImplModel(remoteApi, networkStatusChecker) {
     var cartItems: MutableLiveData<List<CartItemsToProduct>> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
     var totalValueText: MutableLiveData<String> = MutableLiveData()

@@ -3,6 +3,7 @@ package com.oyelekeokiki.ui
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.helpers.ActionResponseType
 import com.oyelekeokiki.helpers.NO_INTERNET_CONNECTION
@@ -19,9 +20,8 @@ import kotlinx.coroutines.launch
 
 open class BaseCartImplModel constructor(
     private val remoteApi: RemoteApi,
-    private val networkStatusChecker: NetworkStatusChecker,
-    application: Application
-) : AndroidViewModel(application) {
+    private val networkStatusChecker: NetworkStatusChecker
+) : ViewModel() {
     var cartItemAddedSuccess: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
         MutableLiveData()
     var cartItemAddedFailed: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =

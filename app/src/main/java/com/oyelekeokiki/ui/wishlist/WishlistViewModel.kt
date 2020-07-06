@@ -1,6 +1,5 @@
 package com.oyelekeokiki.ui.wishlist
 
-import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -18,9 +17,8 @@ import javax.inject.Inject
 class WishlistViewModel @Inject constructor(
     private val remoteApi: RemoteApi,
     private val wishListDatabaseSource: WishListDatabaseSource,
-    networkStatusChecker: NetworkStatusChecker,
-    application: Application
-) : BaseCartImplModel(remoteApi, networkStatusChecker, application) {
+    networkStatusChecker: NetworkStatusChecker
+) : BaseCartImplModel(remoteApi, networkStatusChecker) {
     var wishlist: LiveData<List<Product>> = wishListDatabaseSource.getWishList()
     var wishListProductIds: LiveData<List<Int>> = wishListDatabaseSource.getWishListIds()
 

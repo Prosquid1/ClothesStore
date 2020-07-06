@@ -1,6 +1,5 @@
 package com.oyelekeokiki.ui.home
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -18,9 +17,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val remoteApi: RemoteApi,
     private val wishListDatabaseSource: WishListDatabaseSource,
-    private val networkStatusChecker: NetworkStatusChecker,
-    application: Application
-) : BaseCartImplModel(remoteApi, networkStatusChecker, application) {
+    private val networkStatusChecker: NetworkStatusChecker
+) : BaseCartImplModel(remoteApi, networkStatusChecker) {
     var products: MutableLiveData<List<Product>> = MutableLiveData()
     var wishListProductIds: LiveData<List<Int>> = wishListDatabaseSource.getWishListIds()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
