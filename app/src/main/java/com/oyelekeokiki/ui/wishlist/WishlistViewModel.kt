@@ -8,7 +8,6 @@ import com.oyelekeokiki.helpers.getProductsInIDsList
 import com.oyelekeokiki.model.Failure
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.model.Success
-import com.oyelekeokiki.networking.NetworkStatusChecker
 import com.oyelekeokiki.networking.RemoteApi
 import com.oyelekeokiki.ui.BaseCartImplModel
 import kotlinx.coroutines.launch
@@ -16,9 +15,8 @@ import javax.inject.Inject
 
 class WishlistViewModel @Inject constructor(
     private val remoteApi: RemoteApi,
-    private val wishListDatabaseSource: WishListDatabaseSource,
-    networkStatusChecker: NetworkStatusChecker
-) : BaseCartImplModel(remoteApi, networkStatusChecker) {
+    private val wishListDatabaseSource: WishListDatabaseSource
+) : BaseCartImplModel(remoteApi) {
     var wishlist: LiveData<List<Product>> = wishListDatabaseSource.getWishList()
     var wishListProductIds: LiveData<List<Int>> = wishListDatabaseSource.getWishListIds()
 

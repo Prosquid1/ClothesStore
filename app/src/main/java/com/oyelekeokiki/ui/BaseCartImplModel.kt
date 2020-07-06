@@ -1,16 +1,12 @@
 package com.oyelekeokiki.ui
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.helpers.ActionResponseType
-import com.oyelekeokiki.helpers.NO_INTERNET_CONNECTION
 import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.Failure
 import com.oyelekeokiki.model.Success
-import com.oyelekeokiki.networking.NetworkStatusChecker
 import com.oyelekeokiki.networking.RemoteApi
 import kotlinx.coroutines.launch
 
@@ -19,30 +15,15 @@ import kotlinx.coroutines.launch
  * **/
 
 open class BaseCartImplModel constructor(
-    private val remoteApi: RemoteApi,
-    private val networkStatusChecker: NetworkStatusChecker
+    private val remoteApi: RemoteApi
 ) : ViewModel() {
     var cartItemAddedSuccess: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
         MutableLiveData()
     var cartItemAddedFailed: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
         MutableLiveData()
-
-    fun showCartInternetErrorWithRetry(cartItem: CartItem) {
-        cartItemAddedFailed.postValue(
-            Triple(
-                cartItem,
-                NO_INTERNET_CONNECTION,
-                ActionResponseType.ERROR
-            )
-        )
-    }
+    var isFetching: MutableLiveData<Boolean> = MutableLiveData()
 
     fun addToCart(cartItem: CartItem) {
-        if (!networkStatusChecker.hasInternetConnection()) {
-            showCartInternetErrorWithRetry(cartItem)
-            return
-        }
-
         viewModelScope.launch {
             try {
                 val result = remoteApi.addProductToCart(cartItem.productId)
@@ -78,17 +59,9 @@ open class BaseCartImplModel constructor(
     }
 
     /**
-     *To be overriden
-     *This is not a good approach, I only implemented because products cannot be queried by ID (on API) or stored on the device
+     *  To be overriden
+     *  I only implemented because products cannot be queried by ID (on API) or stored on the device
      * **/
     open fun onAddToCartComplete(productId: Int) {}
 
-    /**
-     * This is an instantaneous function to reflect an item has been updated
-     * In the rare case the WishList items cannot be updated from server and has to rely on offline data
-     * */
-
-    fun updateProductCountInWishList(productId: Int, count: Int) {
-
-    }
 }

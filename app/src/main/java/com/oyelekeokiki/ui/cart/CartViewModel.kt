@@ -7,20 +7,17 @@ import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.CartItemsToProduct
 import com.oyelekeokiki.model.Failure
 import com.oyelekeokiki.model.Success
-import com.oyelekeokiki.networking.NetworkStatusChecker
 import com.oyelekeokiki.networking.RemoteApi
 import com.oyelekeokiki.ui.BaseCartImplModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CartViewModel @Inject constructor(
-    private val remoteApi: RemoteApi,
-    private val networkStatusChecker: NetworkStatusChecker
-) : BaseCartImplModel(remoteApi, networkStatusChecker) {
+    private val remoteApi: RemoteApi
+) : BaseCartImplModel(remoteApi) {
     var cartItems: MutableLiveData<List<CartItemsToProduct>> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
     var totalValueText: MutableLiveData<String> = MutableLiveData()
-    var isFetching: MutableLiveData<Boolean> = MutableLiveData()
 
     var cartItemDeletedSuccess: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
         MutableLiveData()
@@ -32,12 +29,6 @@ class CartViewModel @Inject constructor(
     }
 
     fun fetchCartItems() {
-        if (!networkStatusChecker.hasInternetConnection()) {
-            isFetching.postValue(false);
-            errorMessage.postValue(NO_INTERNET_CONNECTION)
-            return
-        }
-
         viewModelScope.launch {
             isFetching.postValue(true)
             try {
@@ -45,7 +36,7 @@ class CartViewModel @Inject constructor(
                 if (cartResult is Success) {
                     queryCartItemsForProducts(cartResult.data)
                 } else if (cartResult is Failure) {
-                    isFetching.postValue(false);
+                    isFetching.postValue(false)
                     errorMessage.postValue(cartResult.error?.localizedMessage)
                 }
 
@@ -79,11 +70,6 @@ class CartViewModel @Inject constructor(
     }
 
     fun deleteFromCart(cartItem: CartItem) {
-        if (!networkStatusChecker.hasInternetConnection()) {
-            showCartInternetErrorWithRetry(cartItem)
-            return
-        }
-
         if (cartItem.id == null) {
             throw IllegalArgumentException("Delete from cart being called from an illegal reference")
         }
