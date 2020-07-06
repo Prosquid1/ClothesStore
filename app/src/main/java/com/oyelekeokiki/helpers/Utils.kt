@@ -19,7 +19,7 @@ import java.util.*
 
 const val NO_INTERNET_CONNECTION = "No Internet connection!"
 
-fun String.formatPrice(): String {
+fun Int.formatPrice(): String {
     return "£${this}"
 }
 
@@ -126,7 +126,7 @@ object ColorHelper {
     }
 }
 
-enum class StockCountHelper() {
+enum class StockCountHelper {
     NONE, LOW, MEDIUM;
 
     fun getColor() = when (this) {

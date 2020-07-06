@@ -71,7 +71,7 @@ class CartViewModel @Inject constructor(
                     val serverProducts = productsResult.data
                     val cartToProductItems = serverProducts.convertToCartProduct(productsInCartIds)
                     cartItems.postValue(cartToProductItems)
-                    totalValueText.postValue(cartToProductItems.getTotalValue().formatPrice())
+                    totalValueText.postValue(cartToProductItems.getTotalValue().toInt().formatPrice())
                 } else if (productsResult is Failure) {
                     errorMessage.postValue(productsResult.error?.localizedMessage)
                 }

@@ -102,7 +102,7 @@ open class ProductViewHolder(override val containerView: View) :
         }
         containerView.product_old_price.visibility = View.VISIBLE
         containerView.product_old_price.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-        containerView.product_old_price.text = oldPrice.formatPrice()
+        containerView.product_old_price.text = oldPrice.toInt().formatPrice()
     }
 
     private fun setupLikeButton(soldOut: Boolean) {
