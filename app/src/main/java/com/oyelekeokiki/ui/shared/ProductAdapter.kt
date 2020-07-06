@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.oyelekeokiki.R
-import com.oyelekeokiki.utils.OnWishListModified
+import com.oyelekeokiki.helpers.OnWishListModified
 import com.oyelekeokiki.model.Product
-import com.oyelekeokiki.utils.OnCartModified
+import com.oyelekeokiki.helpers.OnCartModified
 
 /**
  * Displays the products from the API, into a list of items.

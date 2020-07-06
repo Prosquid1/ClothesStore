@@ -1,4 +1,4 @@
-package com.oyelekeokiki.utils
+package com.oyelekeokiki.helpers
 
 import com.oyelekeokiki.R
 

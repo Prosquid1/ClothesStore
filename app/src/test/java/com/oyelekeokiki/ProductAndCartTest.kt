@@ -1,7 +1,8 @@
 package com.oyelekeokiki
 
-import com.oyelekeokiki.utils.convertToCartProduct
-import com.oyelekeokiki.utils.getTotalValueString
+import com.oyelekeokiki.helpers.MockObject
+import com.oyelekeokiki.helpers.convertToCartProduct
+import com.oyelekeokiki.helpers.getTotalValueString
 import org.junit.Test
 
 class ProductAndCartTest {

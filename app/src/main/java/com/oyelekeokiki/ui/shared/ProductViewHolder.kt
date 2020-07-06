@@ -9,13 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.like.LikeButton
 import com.like.OnLikeListener
 import com.oyelekeokiki.R
-import com.oyelekeokiki.utils.ColorHelper
-import com.oyelekeokiki.utils.OnWishListModified
-import com.oyelekeokiki.utils.StockCountHelper
-import com.oyelekeokiki.utils.formatPrice
+import com.oyelekeokiki.helpers.ColorHelper
+import com.oyelekeokiki.helpers.OnWishListModified
+import com.oyelekeokiki.helpers.StockCountHelper
+import com.oyelekeokiki.helpers.formatPrice
 import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.Product
-import com.oyelekeokiki.utils.OnCartModified
+import com.oyelekeokiki.helpers.OnCartModified
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.recycler_list_item_product.view.*
 

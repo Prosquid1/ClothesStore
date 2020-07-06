@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.database.WishListDatabaseSource
-import com.oyelekeokiki.utils.NO_INTERNET_CONNECTION
+import com.oyelekeokiki.helpers.NO_INTERNET_CONNECTION
 import com.oyelekeokiki.model.Failure
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.model.Success

@@ -1,4 +1,4 @@
-package com.oyelekeokiki
+package com.oyelekeokiki.helpers
 
 import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.CartItemsToProduct
@@ -18,7 +18,7 @@ object MockObject {
         )
     }
 
-    fun provideCartIds(): List<List<Int>> {
+    private fun provideCartIds(): List<List<Int>> {
         return arrayListOf(
             arrayListOf(1),
             arrayListOf(2),

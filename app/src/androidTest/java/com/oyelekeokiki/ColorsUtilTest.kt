@@ -1,7 +1,7 @@
 package com.oyelekeokiki
 
 import androidx.test.runner.AndroidJUnit4
-import com.oyelekeokiki.utils.ColorHelper
+import com.oyelekeokiki.helpers.ColorHelper
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Test
