@@ -9,8 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.configureCSRecycler
-import com.oyelekeokiki.helpers.formatPrice
-import com.oyelekeokiki.helpers.getTotalValue
 import com.oyelekeokiki.helpers.showCSSnackBar
 import com.oyelekeokiki.model.CartToProductItem
 import dagger.hilt.android.AndroidEntryPoint

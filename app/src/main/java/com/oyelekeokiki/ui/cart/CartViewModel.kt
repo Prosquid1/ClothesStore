@@ -3,7 +3,6 @@ package com.oyelekeokiki.ui.cart
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.oyelekeokiki.database.WishListDatabaseSource
 import com.oyelekeokiki.helpers.*
 import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.CartToProductItem
@@ -13,7 +12,6 @@ import com.oyelekeokiki.networking.NetworkStatusChecker
 import com.oyelekeokiki.networking.RemoteApi
 import com.oyelekeokiki.ui.BaseCartImplModel
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 class CartViewModel @Inject constructor(

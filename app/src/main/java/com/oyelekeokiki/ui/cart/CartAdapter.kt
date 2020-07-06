@@ -4,14 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.oyelekeokiki.R
-import com.oyelekeokiki.model.CartItem
+import com.oyelekeokiki.helpers.OnCartModified
 import com.oyelekeokiki.model.CartToProductItem
 
 /**
- * Displays the products from the API, into a list of items.
+ * Displays the cart items from the API
  */
-
-typealias OnCartModified = (cartItem: CartItem) -> Unit
 
 class CartAdapter(
     private val onCartModified: OnCartModified
