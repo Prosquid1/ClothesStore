@@ -25,9 +25,8 @@ import java.util.concurrent.TimeoutException
 
 
 /**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * Ideally, Database tests should be executed on an Android device.
+ * See [testing documentation](https://developer.android.com/training/data-storage/room/testing-db).
  */
 @RunWith(AndroidJUnit4::class)
 class AppDatabaseTest {
@@ -36,19 +35,17 @@ class AppDatabaseTest {
     private var appDataBase: AppDataBase? = null
 
     @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
+    val instantTaskExecutorRule = InstantTaskExecutorRule() //Required for getOrAwaitValue function
 
-
-    private val product = Product(1, "Test Product", "Test Description", oldPrice = "2.00", price = "1.89", stock = 2);
-    private val anotherProduct = Product(2, "Test Product 2", "Test Description 2", oldPrice = "3.00", price = "4.89", stock = 3);
+    private val product = MockObject.provideSingleTestProduct()
 
     @Before
     fun setup() {
         appDataBase = Room
             .inMemoryDatabaseBuilder(
                 InstrumentationRegistry.getInstrumentation().context,
-                AppDataBase::class.java)
-            .allowMainThreadQueries()
+                AppDataBase::class.java
+            )
             .build()
         wishListDao = appDataBase?.wishListDao()
     }
@@ -60,8 +57,8 @@ class AppDatabaseTest {
     }
 
     @Test
-    fun shouldDeleteAll() {
-        runBlocking { wishListDao?.deleteAll() }
+    fun shouldDeleteAll() = runBlocking {
+        wishListDao?.deleteAll()
         assertEquals(wishListDao?.getWishListCount()?.getOrAwaitValue(), 0)
     }
 
@@ -80,22 +77,12 @@ class AppDatabaseTest {
     }
 
     @Test
-    fun shouldInsertAll() = runBlocking  {
-        val listOfNewProducts = listOf(product, anotherProduct)
+    fun shouldInsertAll() = runBlocking {
+        val listOfNewProducts = MockObject.provideTestProducts()
         wishListDao?.insertWishListProducts(listOfNewProducts)
 
         val allNewlyAddedProducts = wishListDao?.getWishList()?.getOrAwaitValue()
-
-        assertEquals(allNewlyAddedProducts?.size, listOfNewProducts.size )
-    }
-
-    @Test
-    fun selectIdsFromDatabase() = runBlocking {
-        val listOfNewProducts = listOf(product, anotherProduct)
-        wishListDao?.insertWishListProducts(listOfNewProducts)
-
-        val allNewlyAddedProducts = wishListDao?.getLiveWishListIds()?.getOrAwaitValue()
-        assertEquals(allNewlyAddedProducts, listOfNewProducts.map { it.id } )
+        assertEquals(allNewlyAddedProducts?.size, listOfNewProducts.size)
     }
 
     @Test
@@ -105,7 +92,7 @@ class AppDatabaseTest {
         wishListDao?.insertWishListProducts(listOfNewProducts)
 
         val allNewlyAddedProducts = wishListDao?.getWishList()?.getOrAwaitValue()
-        assertEquals(allNewlyAddedProducts?.size, 1 )
+        assertEquals(allNewlyAddedProducts?.size, 1)
     }
 }
 
