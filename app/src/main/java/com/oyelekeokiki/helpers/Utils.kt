@@ -128,18 +128,18 @@ enum class StockCountHelper {
 
     companion object {
         fun getDimAlphaValue(count: Int) = when (count) {
-            NO_STOCK -> SOLD_OUT_ITEM_ALPHA
+            NO_STOCK_INT -> SOLD_OUT_ITEM_ALPHA
             else -> AVAILABLE_ITEM_ALPHA
         }
 
         fun getTextValue(count: Int): String = when (count) {
-            0 -> "(Out of stock)"
+            NO_STOCK_INT -> OUT_OF_STOCK_TEXT
             else -> "(${count} left)"
         }
 
         fun getPriority(count: Int): StockCountHelper {
             return when {
-                count == NO_STOCK -> NONE
+                count == NO_STOCK_INT -> NONE
                 count <= MINIMUM_STOCK_THRESHOLD -> LOW
                 else -> MEDIUM
             }
