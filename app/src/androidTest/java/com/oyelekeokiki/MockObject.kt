@@ -3,6 +3,11 @@ package com.oyelekeokiki
 import com.oyelekeokiki.model.Product
 
 object MockObject {
+
+    fun provideTestString(): String {
+        return "This is a test string"
+    }
+
     fun provideSingleTestProduct(): Product {
         return provideTestProducts()[0]
     }

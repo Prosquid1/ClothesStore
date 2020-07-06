@@ -1,7 +1,6 @@
 package com.oyelekeokiki.helpers
 
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -35,16 +34,6 @@ fun RecyclerView.configureCSRecycler() {
         context,
         DividerItemDecoration.VERTICAL
     )
-    context?.let {
-        itemDecoration.setDrawable(
-            ColorDrawable(
-                ContextCompat.getColor(
-                    it,
-                    R.color.lightcolorPrimary
-                )
-            )
-        )
-    }
     addItemDecoration(
         itemDecoration
     )
