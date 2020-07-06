@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.database.WishListDatabaseSource
 import com.oyelekeokiki.helpers.ExceptionUtil
+import com.oyelekeokiki.model.Failure
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.model.Success
 import com.oyelekeokiki.networking.RemoteApi
@@ -32,11 +33,13 @@ class HomeViewModel @Inject constructor(
                 val result = remoteApi.getProducts()
                 if (result is Success) {
                     products.postValue(result.data)
+                } else if (result is Failure) {
+                    errorMessage.postValue(ExceptionUtil.getFetchExceptionMessage(result.error))
                 }
                 isFetching.postValue(false);
             } catch (e: Exception) {
                 errorMessage.postValue(ExceptionUtil.getFetchExceptionMessage(e))
-                isFetching.postValue(false);
+                isFetching.postValue(false)
             }
         }
     }

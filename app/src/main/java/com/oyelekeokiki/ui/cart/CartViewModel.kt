@@ -38,7 +38,7 @@ class CartViewModel @Inject constructor(
                     queryCartItemsForProducts(cartResult.data)
                 } else if (cartResult is Failure) {
                     isFetching.postValue(false)
-                    errorMessage.postValue(cartResult.error?.localizedMessage)
+                    errorMessage.postValue(ExceptionUtil.getFetchExceptionMessage(cartResult.error))
                 }
 
             } catch (e: Exception) {
