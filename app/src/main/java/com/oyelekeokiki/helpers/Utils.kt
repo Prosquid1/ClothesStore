@@ -94,7 +94,7 @@ fun ViewGroup.showCSSnackBar(
 
 object ColorHelper {
 
-    private fun getModifiedHexInt(char: Char): Int {
+    fun getModifiedHexInt(char: Char): Int {
         val charInt = char.toInt()
         val randomizingSeed = if (charInt % 2 == 0) 1 else 2
         return charInt * randomizingSeed

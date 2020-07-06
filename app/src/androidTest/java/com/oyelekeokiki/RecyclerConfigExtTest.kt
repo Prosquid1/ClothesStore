@@ -11,7 +11,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 
 @RunWith(AndroidJUnit4::class)
-class CSRecyclerTest {
+class RecyclerConfigExtTest {
 
     lateinit var recyclerView: RecyclerView
 
