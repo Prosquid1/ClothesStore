@@ -10,5 +10,5 @@ const val NO_STOCK_INT = 0
 const val OUT_OF_STOCK_TEXT = "(Out of stock)"
 const val SOLD_OUT_ITEM_ALPHA = 0.34f
 
-typealias OnWishListModified = (product: Product, isLiked: Boolean) -> Unit
 typealias OnCartModified = (cartItem: CartItem) -> Unit
+typealias OnWishListModified = (product: Product, isLiked: Boolean) -> Unit

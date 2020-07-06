@@ -5,12 +5,6 @@ import java.util.*
 
 object ColorHelper {
 
-    fun getModifiedHexInt(char: Char): Int {
-        val charInt = char.toInt()
-        val randomizingSeed = if (charInt % 2 == 0) 1 else 2
-        return charInt * randomizingSeed
-    }
-
     fun generateColorFromText(string: String): Int {
         val mutatedString = string.toLowerCase(Locale.ROOT).convertToNCharacters(3)
 
@@ -23,5 +17,11 @@ object ColorHelper {
         val blue = colorArray[2] + colorArray[0]
 
         return Color.rgb(red, green, blue)
+    }
+
+    fun getModifiedHexInt(char: Char): Int {
+        val charInt = char.toInt()
+        val randomizingSeed = if (charInt % 2 == 0) 1 else 2
+        return charInt * randomizingSeed
     }
 }

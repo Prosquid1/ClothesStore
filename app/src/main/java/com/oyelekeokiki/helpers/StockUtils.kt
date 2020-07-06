@@ -5,17 +5,6 @@ import com.oyelekeokiki.R
 enum class StockCountHelper {
     NONE, LOW, MEDIUM;
 
-    fun getColor() = when (this) {
-        NONE -> R.color.red
-        LOW -> R.color.green
-        MEDIUM -> R.color.money_blue
-    }
-
-    fun isItemSoldOut() = when (this) {
-        NONE -> true
-        else -> false
-    }
-
     companion object {
         fun getDimAlphaValue(count: Int) = when (count) {
             NO_STOCK_INT -> SOLD_OUT_ITEM_ALPHA
@@ -34,6 +23,17 @@ enum class StockCountHelper {
                 else -> MEDIUM
             }
         }
+    }
+
+    fun getColor() = when (this) {
+        NONE -> R.color.red
+        LOW -> R.color.green
+        MEDIUM -> R.color.money_blue
+    }
+
+    fun isItemSoldOut() = when (this) {
+        NONE -> true
+        else -> false
     }
 }
 
