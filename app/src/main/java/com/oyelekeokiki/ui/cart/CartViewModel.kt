@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.helpers.*
 import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.CartItemsToProduct
+import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.networking.RemoteApi
 import com.oyelekeokiki.ui.BaseCartImplModel
 import kotlinx.coroutines.launch
@@ -13,7 +14,12 @@ import javax.inject.Inject
 class CartViewModel @Inject constructor(
     private val remoteApi: RemoteApi
 ) : BaseCartImplModel(remoteApi) {
-    var cartItems: MutableLiveData<List<CartItemsToProduct>> = MutableLiveData()
+
+    // For testing, due to the API's constraints
+    var cartItems: List<CartItem> = arrayListOf()
+    var cartProducts: List<Product> = arrayListOf()
+
+    var cartItemsToProducts: MutableLiveData<List<CartItemsToProduct>> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
     var totalValueText: MutableLiveData<String> = MutableLiveData()
     var isFetching: MutableLiveData<Boolean> = MutableLiveData()
@@ -31,8 +37,8 @@ class CartViewModel @Inject constructor(
         viewModelScope.launch {
             isFetching.postValue(true)
             try {
-                val cartResult = remoteApi.getCart()
-                queryCartItemsForProducts(cartResult)
+                cartItems = remoteApi.getCart()
+                getAllProducts()
             } catch (e: Exception) {
                 errorMessage.postValue(ExceptionUtil.getFetchExceptionMessage(e))
                 isFetching.postValue(false);
@@ -40,18 +46,22 @@ class CartViewModel @Inject constructor(
         }
     }
 
+    suspend fun getAllProducts() {
+        cartProducts = remoteApi.getProducts()
+        queryCartItemsForProducts(cartItems)
+    }
+
     //Supposed to be a server call with an array of product Ids
-    private suspend fun queryCartItemsForProducts(productsInCartIds: List<CartItem>) {
-        val serverProducts = remoteApi.getProducts()
-        val cartToProductItems = serverProducts.convertToCartProduct(productsInCartIds)
-        cartItems.postValue(cartToProductItems)
-        totalValueText.postValue(cartToProductItems.getTotalValueString().formatPrice())
+     private fun queryCartItemsForProducts(productsInCartIds: List<CartItem>) {
+        val convertedCartItemsToProducts = cartProducts.convertToCartItemsToProduct(productsInCartIds)
+        cartItemsToProducts.postValue(convertedCartItemsToProducts)
+        totalValueText.postValue(convertedCartItemsToProducts.getTotalValueString().formatPrice())
         isFetching.postValue(false);
     }
 
     fun deleteFromCart(cartItem: CartItem) {
         if (cartItem.id == null) {
-            throw IllegalArgumentException("Delete from cart being called from an illegal reference")
+            throw IllegalArgumentException(ILLEGAL_CART_DELETION)
         }
 
         viewModelScope.launch {
@@ -60,7 +70,7 @@ class CartViewModel @Inject constructor(
                 cartItemDeletedSuccess.postValue(
                     Triple(
                         cartItem,
-                        "Deleted successfully!",
+                        DELETED_CART_SUCCESS,
                         ActionResponseType.SUCCESS
                     )
                 )

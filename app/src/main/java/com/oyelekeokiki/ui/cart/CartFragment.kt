@@ -73,7 +73,7 @@ class CartFragment : Fragment() {
     }
 
     private fun observeCartItems() {
-        cartViewModel.cartItems.observe(
+        cartViewModel.cartItemsToProducts.observe(
             viewLifecycleOwner,
             Observer { cartToProductItems ->
                 setActiveDataWith(cartToProductItems)

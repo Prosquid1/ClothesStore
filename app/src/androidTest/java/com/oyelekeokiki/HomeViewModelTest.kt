@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer
 import com.oyelekeokiki.database.AppDataBase
 import com.oyelekeokiki.database.WishListDao
 import com.oyelekeokiki.database.WishListDatabaseSource
+import com.oyelekeokiki.helpers.MockObjectProvider
 import com.oyelekeokiki.helpers.NO_INTERNET_CONNECTION
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.networking.RemoteApi
@@ -21,6 +22,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 import java.io.IOException
+import java.lang.RuntimeException
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -37,7 +39,7 @@ class HomeViewModelTest {
     private lateinit var databaseSource: WishListDatabaseSource
 
     @Mock
-    private lateinit var apiUsersObserver: Observer<List<Product>>
+    private lateinit var apiProductsObserver: Observer<List<Product>>
 
     @Mock
     private lateinit var errorMessageObserver: Observer<String>
@@ -48,20 +50,20 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun givenServerResponse200_whenFetch_shouldReturnSuccess() {
+    fun serverReturnsDataOnSuccess() {
         runBlocking {
-            val expectedResult = arrayListOf<Product>()
+            val expectedResult = MockObjectProvider.provideProducts()
             doReturn(expectedResult)
                 .`when`(remoteApi)
                 .getProducts()
             val viewModel = HomeViewModel(remoteApi, databaseSource)
-            viewModel.products.observeForever(apiUsersObserver)
+            viewModel.products.observeForever(apiProductsObserver)
             verify(remoteApi).getProducts()
 
-            verify(apiUsersObserver).onChanged(
+            verify(apiProductsObserver).onChanged(
                 expectedResult
             )
-            viewModel.products.removeObserver(apiUsersObserver)
+            viewModel.products.removeObserver(apiProductsObserver)
         }
     }
 

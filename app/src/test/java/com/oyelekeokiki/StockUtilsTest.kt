@@ -1,6 +1,6 @@
 package com.oyelekeokiki
 
-import com.oyelekeokiki.helpers.MockObject
+import com.oyelekeokiki.helpers.MockObjectProvider
 import com.oyelekeokiki.helpers.NO_STOCK_INT
 import com.oyelekeokiki.helpers.OUT_OF_STOCK_TEXT
 import com.oyelekeokiki.helpers.StockCountHelper
@@ -44,7 +44,7 @@ class StockUtilsTest {
 
     @Test
     fun testStockAvailableTextValue() {
-        assert(StockCountHelper.getTextValue(MockObject.LOW_STOCK_INT) == "(2 left)")
+        assert(StockCountHelper.getTextValue(MockObjectProvider.LOW_STOCK_INT) == "(2 left)")
     }
 
     @Test
@@ -54,11 +54,11 @@ class StockUtilsTest {
 
     @Test
     fun testLowStockPriority() {
-        assert(StockCountHelper.getPriority(MockObject.LOW_STOCK_INT) == StockCountHelper.LOW)
+        assert(StockCountHelper.getPriority(MockObjectProvider.LOW_STOCK_INT) == StockCountHelper.LOW)
     }
 
     @Test
     fun testMediumStockPriority() {
-        assert(StockCountHelper.getPriority(MockObject.MEDIUM_STOCK_INT) == StockCountHelper.MEDIUM)
+        assert(StockCountHelper.getPriority(MockObjectProvider.MEDIUM_STOCK_INT) == StockCountHelper.MEDIUM)
     }
 }

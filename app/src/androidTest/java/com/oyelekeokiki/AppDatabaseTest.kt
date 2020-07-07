@@ -9,7 +9,7 @@ import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
 import com.oyelekeokiki.database.AppDataBase
 import com.oyelekeokiki.database.WishListDao
-import com.oyelekeokiki.helpers.MockObject
+import com.oyelekeokiki.helpers.MockObjectProvider
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -37,7 +37,7 @@ class AppDatabaseTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule() //Required for getOrAwaitValue function
 
-    private val product = MockObject.provideProducts()[0]
+    private val product = MockObjectProvider.provideProducts()[0]
 
     @Before
     fun setup() {
@@ -79,7 +79,7 @@ class AppDatabaseTest {
 
     @Test
     fun shouldInsertAll() = runBlocking {
-        val listOfNewProducts = MockObject.provideProducts()
+        val listOfNewProducts = MockObjectProvider.provideProducts()
         wishListDao?.insertWishListProducts(listOfNewProducts)
 
         val expectedAddedProducts = wishListDao?.getWishList()?.getOrAwaitValue()
@@ -97,7 +97,7 @@ class AppDatabaseTest {
 
     @Test
     fun getLiveWishListIds() = runBlocking {
-        val listOfNewProducts = MockObject.provideProducts()
+        val listOfNewProducts = MockObjectProvider.provideProducts()
         wishListDao?.insertWishListProducts(listOfNewProducts)
 
         val expectedNewlyAddedProductIds = wishListDao?.getLiveWishListIds()?.getOrAwaitValue()

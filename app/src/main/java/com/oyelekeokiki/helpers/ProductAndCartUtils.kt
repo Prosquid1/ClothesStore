@@ -4,7 +4,7 @@ import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.CartItemsToProduct
 import com.oyelekeokiki.model.Product
 
-fun List<Product>.convertToCartProduct(cartItemIds: List<CartItem>): List<CartItemsToProduct> {
+fun List<Product>.convertToCartItemsToProduct(cartItemIds: List<CartItem>): List<CartItemsToProduct> {
     val cartItemsGroupedByProduct = cartItemIds.groupBy { it.productId }.values
 
     val productIdToProductMap = this.map { Pair(it.id, it) }.toMap()

@@ -4,7 +4,7 @@ import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.CartItemsToProduct
 import com.oyelekeokiki.model.Product
 
-object MockObject {
+object MockObjectProvider {
 
     const val LOW_STOCK_INT = 2
     const val MEDIUM_STOCK_INT = 5

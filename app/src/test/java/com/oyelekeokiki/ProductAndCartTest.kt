@@ -1,17 +1,17 @@
 package com.oyelekeokiki
 
-import com.oyelekeokiki.helpers.MockObject
-import com.oyelekeokiki.helpers.convertToCartProduct
+import com.oyelekeokiki.helpers.MockObjectProvider
+import com.oyelekeokiki.helpers.convertToCartItemsToProduct
 import com.oyelekeokiki.helpers.getTotalValueString
 import org.junit.Test
 
 class ProductAndCartTest {
     @Test
     fun convertToCartProductTest() {
-        val mockingCartToProductItem = MockObject.provideProducts()
-            .convertToCartProduct(MockObject.provideCartItems())
+        val mockingCartToProductItem = MockObjectProvider.provideProducts()
+            .convertToCartItemsToProduct(MockObjectProvider.provideCartItems())
 
-        val expectedCartToProductItem = MockObject.provideCartItemsToProduct()
+        val expectedCartToProductItem = MockObjectProvider.provideCartItemsToProduct()
 
         val allProductsAreSame = mockingCartToProductItem.map { it.product }
             .containsAll(expectedCartToProductItem.map { it.product })
@@ -25,7 +25,7 @@ class ProductAndCartTest {
 
     @Test
     fun getTotalValueTest() {
-        val cartItemsToProducts = MockObject.provideCartItemsToProduct()
+        val cartItemsToProducts = MockObjectProvider.provideCartItemsToProduct()
         assert(cartItemsToProducts.getTotalValueString() == "10")
 
     }
