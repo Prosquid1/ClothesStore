@@ -1,8 +1,5 @@
 package com.oyelekeokiki.di
 
-import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
 import com.oyelekeokiki.BuildConfig
 import com.oyelekeokiki.networking.RemoteApiService
 import dagger.Module

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import com.oyelekeokiki.model.Product
 import javax.inject.Inject
 
-class WishListDatabaseSource @Inject constructor(private val wishListDao: WishListDao) {
+open class WishListDatabaseSource @Inject constructor(private val wishListDao: WishListDao) {
 
     suspend fun addToWishList(products: List<Product>) = wishListDao.insertWishListProducts(products)
 
