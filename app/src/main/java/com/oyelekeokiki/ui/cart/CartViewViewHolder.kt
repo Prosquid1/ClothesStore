@@ -10,6 +10,11 @@ import com.oyelekeokiki.model.CartItemsToProduct
 import com.oyelekeokiki.ui.shared.ProductViewHolder
 import kotlinx.android.synthetic.main.recycler_list_item_product.view.*
 
+/**
+ * Apart from the like button + add to wishlist - remove from wishlist button,
+ * [CartViewViewHolder] shares every other view with [ProductViewHolder]
+ * **/
+
 @SuppressLint("SetTextI18n")
 class CartViewViewHolder(override val containerView: View) : ProductViewHolder(containerView) {
     fun bindCartItem(

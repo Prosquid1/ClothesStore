@@ -8,7 +8,10 @@ import com.oyelekeokiki.helpers.OnCartModified
 import com.oyelekeokiki.model.CartItemsToProduct
 
 /**
- * Displays the cart items from the API
+ * Renders the cart items from the API
+ *
+ * This class is majorly to implement [CartViewViewHolder] as opposed to conditional statements alone
+ * @see [CartViewViewHolder]
  */
 
 class CartAdapter(

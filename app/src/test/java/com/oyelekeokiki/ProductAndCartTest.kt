@@ -2,7 +2,7 @@ package com.oyelekeokiki
 
 import com.oyelekeokiki.helpers.MockObjectProvider
 import com.oyelekeokiki.helpers.convertToCartItemsToProduct
-import com.oyelekeokiki.helpers.getTotalValueString
+import com.oyelekeokiki.helpers.getFormattedCartTotalPrice
 import org.junit.Test
 
 class ProductAndCartTest {
@@ -26,7 +26,7 @@ class ProductAndCartTest {
     @Test
     fun getTotalValueTest() {
         val cartItemsToProducts = MockObjectProvider.provideCartItemsToProduct()
-        assert(cartItemsToProducts.getTotalValueString() == "10")
+        assert(cartItemsToProducts.getFormattedCartTotalPrice() == "£10")
 
     }
 }

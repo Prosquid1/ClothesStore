@@ -10,8 +10,10 @@ import com.oyelekeokiki.networking.RemoteApi
 import kotlinx.coroutines.launch
 
 /**
- * All views in this project have the same add and delete from cart model and observable variables
- * **/
+ * All views in this project call [addToCart]
+ * [WishListFragment] and [HomeFragment] can observe [cartItemAddedSuccess] and [cartItemAddedFailed]
+ * Hence the need for a base class
+ **/
 
 open class BaseCartImplModel constructor(
     private val remoteApi: RemoteApi
@@ -46,9 +48,10 @@ open class BaseCartImplModel constructor(
     }
 
     /**
-     *  To be overriden
-     *  I only implemented because products cannot be queried by ID (on API) or stored on the device
-     * **/
+     *  To be overriden by [HomeFragment] and [CartFragment]
+     *  There is a need to re-query because [AddToCartResponse] returns only a string,
+     *  and the view needs to be updated with live data
+     **/
     open fun onAddToCartComplete(productId: Int) {}
 
 }

@@ -4,7 +4,9 @@ import android.graphics.Color
 import java.util.*
 
 object ColorHelper {
-
+    /**
+     * Helper function to generate a unique and constant color based on the first 3 characters
+     * */
     fun generateColorFromText(string: String): Int {
         val mutatedString = string.toLowerCase(Locale.ROOT).convertToNCharacters(3)
 

@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    /** Hide cart menu icon when you navigate to [CartFragment] **/
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id: Int = item.itemId
         if (id == R.id.open_cart_action) {

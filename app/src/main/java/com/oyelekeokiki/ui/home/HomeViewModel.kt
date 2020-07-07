@@ -47,4 +47,8 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    override fun onAddToCartComplete(productId: Int) {
+        fetchProducts()
+    }
 }

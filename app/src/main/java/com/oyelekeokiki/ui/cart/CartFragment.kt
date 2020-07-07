@@ -104,7 +104,6 @@ class CartFragment : Fragment() {
             })
     }
 
-    /** Observe and Show Snackbar with Undo action **/
     private fun observeReAddedToCartSuccess() {
         cartViewModel.cartItemAddedSuccess.observe(
             viewLifecycleOwner,
@@ -113,7 +112,6 @@ class CartFragment : Fragment() {
             })
     }
 
-    /** Observe and Show Snackbar with Retry **/
     private fun observeReAddedToCartError() {
         cartViewModel.cartItemAddedFailed.observe(
             viewLifecycleOwner,
@@ -124,7 +122,6 @@ class CartFragment : Fragment() {
             })
     }
 
-    /** Observe and Show Snackbar with Undo action **/
     private fun observeRemoveFromCartSuccess() {
         cartViewModel.cartItemDeletedSuccess.observe(
             viewLifecycleOwner,
@@ -135,7 +132,6 @@ class CartFragment : Fragment() {
             })
     }
 
-    /** Observe and Show Snackbar with Retry **/
     private fun observeRemoveFromCartError() {
         cartViewModel.cartItemDeletedFailed.observe(
             viewLifecycleOwner,

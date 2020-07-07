@@ -102,17 +102,14 @@ class HomeFragment : Fragment() {
             })
     }
 
-    /** Observe and Show Snackbar with Undo action **/
     private fun observeAddToCartSuccess() {
         homeViewModel.cartItemAddedSuccess.observe(
             viewLifecycleOwner,
             Observer { (_, successMessage, _) ->
-                homeViewModel.fetchProducts() // This is not a good approach, implemented because products cannot be queried by ID (on API) or stored on the device
                 swipe_refresh_layout.showCSSnackBar(successMessage)
             })
     }
 
-    /** Observe and Show Snackbar with Retry **/
     private fun observeAddToCartError() {
         homeViewModel.cartItemAddedFailed.observe(
             viewLifecycleOwner,

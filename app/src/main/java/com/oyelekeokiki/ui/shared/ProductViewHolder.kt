@@ -83,7 +83,10 @@ open class ProductViewHolder(override val containerView: View) :
         }
     }
 
-    // Product URL is not available so colors will be generated based on product name
+    /**
+     * Product URL is not available so colors will be generated based on product name
+     * @see [ColorUtils][generateColorFromText]
+     * */
     private fun setupProductImageView(productName: String) {
         containerView.product_image.setBackgroundResource(R.drawable.round_corner_image_layout)
         val drawable = containerView.product_image.background as GradientDrawable
