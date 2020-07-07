@@ -8,7 +8,7 @@ Android client for an online catalogue.
 Create a `serverSecrets.properties` file in the root directory of your project
 
 ![alt text](https://user-images.githubusercontent.com/13585693/86789145-e3d3f880-c05e-11ea-8525-03ff1879d45f.png "serverSecrets setup")
-Add the following below:
+
 ```kotlin
 API_KEY="XXXXXXX_API_KEY_HERE_XXXXX"
 BASE_URL="XXXXXXX_PROJECT_BASE_URL_HERE_XXXXX"
