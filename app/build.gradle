@@ -7,9 +7,9 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 
-def apikeyPropertiesFile = rootProject.file("apikey.properties")
-def apikeyProperties = new Properties()
-apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+def serverSecretsPropertiesFile = rootProject.file("serverSecrets.properties")
+def serverSecretsProperties = new Properties()
+serverSecretsProperties.load(new FileInputStream(serverSecretsPropertiesFile))
 
 android {
     final  JAVA_VERSION = JavaVersion.VERSION_1_8
@@ -21,7 +21,9 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        buildConfigField("String", "API_KEY", apikeyProperties['API_KEY'])
+        buildConfigField("String", "API_KEY", serverSecretsProperties['API_KEY'])
+        buildConfigField("String", "BASE_URL", serverSecretsProperties['BASE_URL'])
+        buildConfigField("String", "HEADER_AUTH_KEY", serverSecretsProperties['HEADER_AUTH_KEY'])
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
