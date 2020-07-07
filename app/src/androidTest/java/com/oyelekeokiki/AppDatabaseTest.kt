@@ -116,7 +116,7 @@ class AppDatabaseTest {
 }
 
 // Extension functions
-private fun <T> LiveData<T>.getOrAwaitValue(
+fun <T> LiveData<T>.getOrAwaitValue(
     time: Long = 2,
     timeUnit: TimeUnit = TimeUnit.SECONDS
 ): T {

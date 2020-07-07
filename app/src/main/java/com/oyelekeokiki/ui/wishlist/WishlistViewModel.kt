@@ -2,7 +2,6 @@ package com.oyelekeokiki.ui.wishlist
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.database.WishListDatabaseSource
 import com.oyelekeokiki.helpers.getProductsInIDsList
