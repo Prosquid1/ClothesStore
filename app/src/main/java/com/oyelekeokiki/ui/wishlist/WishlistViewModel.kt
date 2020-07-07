@@ -22,9 +22,13 @@ class WishlistViewModel @Inject constructor(
         updateWishListProductsFromServer()
     }
 
+    /** Decrement the product stock count offline, so stock count reduces
+     * Since this whole fragment relies on offline data and [Product] is observed
+     */
+
     override fun onAddToCartComplete(productId: Int) {
         viewModelScope.launch {
-            wishListDatabaseSource.updateProductStockCount(productId, -1)
+            wishListDatabaseSource.decrementProductStockCount(productId)
         }
     }
 

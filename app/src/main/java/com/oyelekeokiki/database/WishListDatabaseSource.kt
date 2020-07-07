@@ -10,13 +10,15 @@ open class WishListDatabaseSource @Inject constructor(private val wishListDao: W
 
     suspend fun addToWishList(product: Product) = wishListDao.addToWishList(product)
 
+    suspend fun decrementProductStockCount(productId: Int) = wishListDao.decrementProductStockCount(productId)
+
+    suspend fun getWishListIdsSync(): List<Int> = wishListDao.getWishListIds()
+
     suspend fun removeFromWishList(productId: Int) = wishListDao.removeFromWishList(productId)
+
 
     fun getWishList(): LiveData<List<Product>> = wishListDao.getWishList()
 
     fun getWishListIds(): LiveData<List<Int>> = wishListDao.getLiveWishListIds()
 
-    suspend fun getWishListIdsSync(): List<Int> = wishListDao.getWishListIds()
-
-    suspend fun updateProductStockCount(productId: Int, by: Int) = wishListDao.updateProductStockCount(productId, by)
 }

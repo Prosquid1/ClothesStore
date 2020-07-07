@@ -32,8 +32,8 @@ interface WishListDao {
   @Query("DELETE FROM Product WHERE id = :productId")
   suspend fun removeFromWishList(productId: Int)
 
-  @Query("UPDATE Product SET stock = :count WHERE ID = :productId")
-  suspend fun updateProductStockCount(productId: Int, count: Int)
+  @Query("UPDATE Product SET stock = stock - 1 WHERE ID = :productId")
+  suspend fun decrementProductStockCount(productId: Int)
 
   /** LiveData functions **/
   @Query("SELECT id FROM Product")
