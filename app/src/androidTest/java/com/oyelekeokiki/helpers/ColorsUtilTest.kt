@@ -1,4 +1,4 @@
-package com.oyelekeokiki
+package com.oyelekeokiki.helpers
 
 import androidx.test.runner.AndroidJUnit4
 import com.oyelekeokiki.helpers.ColorHelper

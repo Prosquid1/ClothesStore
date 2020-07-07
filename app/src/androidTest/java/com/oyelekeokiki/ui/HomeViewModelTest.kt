@@ -1,4 +1,4 @@
-package com.oyelekeokiki
+package com.oyelekeokiki.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
@@ -35,6 +35,7 @@ class HomeViewModelTest {
 
     @Mock
     private lateinit var remoteApi: RemoteApi
+
     @Mock
     private lateinit var databaseSource: WishListDatabaseSource
 

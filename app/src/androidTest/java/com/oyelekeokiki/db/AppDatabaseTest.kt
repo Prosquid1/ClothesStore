@@ -1,4 +1,4 @@
-package com.oyelekeokiki
+package com.oyelekeokiki.db
 
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule

@@ -1,7 +1,6 @@
-package com.oyelekeokiki
+package com.oyelekeokiki.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.room.Room
 import androidx.test.InstrumentationRegistry
@@ -9,16 +8,13 @@ import androidx.test.runner.AndroidJUnit4
 import com.oyelekeokiki.database.AppDataBase
 import com.oyelekeokiki.database.WishListDao
 import com.oyelekeokiki.database.WishListDatabaseSource
+import com.oyelekeokiki.db.getOrAwaitValue
 import com.oyelekeokiki.helpers.MockObjectProvider
 import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.networking.RemoteApi
-import com.oyelekeokiki.ui.BaseCartImplModel
-import com.oyelekeokiki.ui.home.HomeViewModel
-import com.oyelekeokiki.ui.wishlist.WishlistViewModel
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -26,9 +22,6 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import java.io.IOException
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 
 
 /**

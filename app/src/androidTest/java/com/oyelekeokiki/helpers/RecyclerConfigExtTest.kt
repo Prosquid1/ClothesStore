@@ -1,4 +1,4 @@
-package com.oyelekeokiki
+package com.oyelekeokiki.helpers
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.InstrumentationRegistry
