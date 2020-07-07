@@ -6,8 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.helpers.ActionResponseType
 import com.oyelekeokiki.helpers.ExceptionUtil
 import com.oyelekeokiki.model.CartItem
-import com.oyelekeokiki.model.Failure
-import com.oyelekeokiki.model.Success
 import com.oyelekeokiki.networking.RemoteApi
 import kotlinx.coroutines.launch
 
@@ -27,24 +25,14 @@ open class BaseCartImplModel constructor(
         viewModelScope.launch {
             try {
                 val result = remoteApi.addProductToCart(cartItem.productId)
-                if (result is Success) {
-                    cartItemAddedSuccess.postValue(
-                        Triple(
-                            cartItem,
-                            result.data.message,
-                            ActionResponseType.SUCCESS
-                        )
+                cartItemAddedSuccess.postValue(
+                    Triple(
+                        cartItem,
+                        result.message,
+                        ActionResponseType.SUCCESS
                     )
-                    onAddToCartComplete(cartItem.productId)
-                } else if (result is Failure) {
-                    cartItemAddedFailed.postValue(
-                        Triple(
-                            cartItem,
-                            ExceptionUtil.getFetchExceptionMessage(result.error),
-                            ActionResponseType.ERROR
-                        )
-                    )
-                }
+                )
+                onAddToCartComplete(cartItem.productId)
             } catch (e: Exception) {
                 cartItemAddedFailed.postValue(
                     Triple(

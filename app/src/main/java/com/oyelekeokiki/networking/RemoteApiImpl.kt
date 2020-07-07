@@ -13,36 +13,30 @@ class RemoteApiImpl @Inject constructor(
     private val apiService: RemoteApiService
 ) : RemoteApi {
 
-    override suspend fun getProducts(): Result<List<Product>> = try {
+    override suspend fun getProducts(): List<Product> {
         val data = apiService.getProducts()
         if (data.isNotEmpty()) {
-            Success(data)
+            return data
         } else {
-            Failure(NullPointerException("No products available"))
+            throw NullPointerException("No products available")
         }
-    } catch (error: Throwable) {
-        Failure(error)
     }
 
-    override suspend fun getCart(): Result<List<CartItem>> = try {
+    override suspend fun getCart(): List<CartItem> {
         val data = apiService.getCart()
-        Success(data)
-    } catch (error: Throwable) {
-        Failure(error)
+        if (data.isNotEmpty()) {
+            return data
+        } else {
+            throw NullPointerException("No products available")
+        }
     }
 
-    override suspend fun deleteProductFromCart(productId: Int): Result<Response<Unit>> = try {
-        val data = apiService.deleteCartItem(productId)
-        Success(data)
-    } catch (error: Throwable) {
-        Failure(error)
+    override suspend fun deleteProductFromCart(productId: Int): Response<Unit> {
+        return apiService.deleteCartItem(productId)
     }
 
-    override suspend fun addProductToCart(productId: Int): Result<AddToCartResponse> = try {
-        val product = apiService.addCartItem(productId)
-        Success(product)
-    } catch (error: Throwable) {
-        Failure(error)
+    override suspend fun addProductToCart(productId: Int): AddToCartResponse {
+        return apiService.addCartItem(productId)
     }
 
 }

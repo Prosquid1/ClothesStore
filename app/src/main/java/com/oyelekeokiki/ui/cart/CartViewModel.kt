@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.oyelekeokiki.helpers.*
 import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.CartItemsToProduct
-import com.oyelekeokiki.model.Failure
-import com.oyelekeokiki.model.Success
 import com.oyelekeokiki.networking.RemoteApi
 import com.oyelekeokiki.ui.BaseCartImplModel
 import kotlinx.coroutines.launch
@@ -34,13 +32,7 @@ class CartViewModel @Inject constructor(
             isFetching.postValue(true)
             try {
                 val cartResult = remoteApi.getCart()
-                if (cartResult is Success) {
-                    queryCartItemsForProducts(cartResult.data)
-                } else if (cartResult is Failure) {
-                    isFetching.postValue(false)
-                    errorMessage.postValue(ExceptionUtil.getFetchExceptionMessage(cartResult.error))
-                }
-
+                queryCartItemsForProducts(cartResult)
             } catch (e: Exception) {
                 errorMessage.postValue(ExceptionUtil.getFetchExceptionMessage(e))
                 isFetching.postValue(false);
@@ -49,22 +41,12 @@ class CartViewModel @Inject constructor(
     }
 
     //Supposed to be a server call with an array of product Ids
-    private fun queryCartItemsForProducts(productsInCartIds: List<CartItem>) {
-        viewModelScope.launch {
-            try {
-                val productsResult = remoteApi.getProducts()
-                if (productsResult is Success) {
-                    val serverProducts = productsResult.data
-                    val cartToProductItems = serverProducts.convertToCartProduct(productsInCartIds)
-                    cartItems.postValue(cartToProductItems)
-                    totalValueText.postValue(cartToProductItems.getTotalValueString().formatPrice())
-                }
-                isFetching.postValue(false);
-            } catch (e: Exception) {
-                errorMessage.postValue(ExceptionUtil.getFetchExceptionMessage(e))
-                isFetching.postValue(false);
-            }
-        }
+    private suspend fun queryCartItemsForProducts(productsInCartIds: List<CartItem>) {
+        val serverProducts = remoteApi.getProducts()
+        val cartToProductItems = serverProducts.convertToCartProduct(productsInCartIds)
+        cartItems.postValue(cartToProductItems)
+        totalValueText.postValue(cartToProductItems.getTotalValueString().formatPrice())
+        isFetching.postValue(false);
     }
 
     fun deleteFromCart(cartItem: CartItem) {
@@ -74,17 +56,16 @@ class CartViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                val result = remoteApi.deleteProductFromCart(cartItem.id)
-                if (result is Success) {
-                    cartItemDeletedSuccess.postValue(
-                        Triple(
-                            cartItem,
-                            "Deleted successfully!",
-                            ActionResponseType.SUCCESS
-                        )
+                remoteApi.deleteProductFromCart(cartItem.id)
+                cartItemDeletedSuccess.postValue(
+                    Triple(
+                        cartItem,
+                        "Deleted successfully!",
+                        ActionResponseType.SUCCESS
                     )
-                    fetchCartItems()
-                }
+                )
+                fetchCartItems()
+
             } catch (e: Exception) {
                 cartItemDeletedFailed.postValue(
                     Triple(
