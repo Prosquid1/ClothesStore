@@ -10,7 +10,7 @@ import com.oyelekeokiki.helpers.OnCartModified
 
 /**
  * Displays the products from the API, into a list of items.
- * Used by @class HomeFragment and WishListFragment
+ * Used by [HomeFragment] and [WishListFragment]
  */
 
 class ProductAdapter(

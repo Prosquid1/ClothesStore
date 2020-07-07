@@ -10,7 +10,7 @@ import com.oyelekeokiki.model.Product
 
 @Dao
 interface WishListDao {
-  // Coroutine functions
+  /** Coroutine functions **/
   @Query("DELETE FROM Product")
   suspend fun deleteAll()
 
@@ -35,7 +35,7 @@ interface WishListDao {
   @Query("UPDATE Product SET stock = :count WHERE ID = :productId")
   suspend fun updateProductStockCount(productId: Int, count: Int)
 
-  //LiveData
+  /** LiveData functions **/
   @Query("SELECT id FROM Product")
   fun getLiveWishListIds(): LiveData<List<Int>>
 

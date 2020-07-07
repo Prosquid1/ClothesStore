@@ -29,9 +29,9 @@ class WishlistViewModel @Inject constructor(
     }
 
     /**
-     * Merge items from server into items with database
+     * Update products from server into respective products in database
      * This is because product details might have been changed by admin or another client
-     * **/
+     **/
     private fun updateWishListProductsFromServer() {
         viewModelScope.launch {
             try {
@@ -40,6 +40,7 @@ class WishlistViewModel @Inject constructor(
                 val newestProductsData = result.getProductsInIDsList(wishListProductIds)
                 wishListDatabaseSource.addToWishList(newestProductsData)
             } catch (e: Exception) {
+                // Does not have to be handled
                 Log.e("Fetching products Exc", e.localizedMessage ?: "N/A")
             }
         }

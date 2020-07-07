@@ -5,6 +5,9 @@ import com.oyelekeokiki.R
 enum class StockCountHelper {
     NONE, LOW, MEDIUM;
 
+    /**
+     * Helper to setup [ProductCartViewHolder]
+     * **/
     companion object {
         fun getDimAlphaValue(count: Int) = when (count) {
             NO_STOCK_INT -> SOLD_OUT_ITEM_ALPHA

@@ -15,7 +15,7 @@ class CartViewModel @Inject constructor(
     private val remoteApi: RemoteApi
 ) : BaseCartImplModel(remoteApi) {
 
-    // For testing, due to the API's constraints
+    /** [cartItems] and [cartProducts] For testing, due to API constraints **/
     var cartItems: List<CartItem> = arrayListOf()
     var cartProducts: List<Product> = arrayListOf()
 
@@ -46,16 +46,19 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    suspend fun getAllProducts() {
+    private suspend fun getAllProducts() {
         cartProducts = remoteApi.getProducts()
         queryCartItemsForProducts(cartItems)
     }
 
-    //Supposed to be a server call with an array of product Ids
+    /**
+     * Supposed to be a server call with an array of product Ids
+     * TODO: Request assistance or clarification from Backend developer.
+     **/
      private fun queryCartItemsForProducts(productsInCartIds: List<CartItem>) {
         val convertedCartItemsToProducts = cartProducts.convertToCartItemsToProduct(productsInCartIds)
         cartItemsToProducts.postValue(convertedCartItemsToProducts)
-        totalValueText.postValue(convertedCartItemsToProducts.getTotalValueString().formatPrice())
+        totalValueText.postValue(convertedCartItemsToProducts.getFormattedCartTotalPrice())
         isFetching.postValue(false);
     }
 
