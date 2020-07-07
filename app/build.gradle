@@ -75,8 +75,8 @@ dependencies {
     //Testing
     androidTestImplementation "com.android.support.test:runner:$TEST_RUNNER_VERSION"
     androidTestImplementation "androidx.arch.core:core-testing:$CORE_TESTING_VERSION"
+    androidTestImplementation "org.mockito:mockito-android:$MOCKITO_VERSION"
     testImplementation "junit:junit:$JUNIT_VERSION"
-    testImplementation "org.mockito:mockito-core:$MOCKITO_VERSION"
 
     // Android Architecture
     implementation "android.arch.lifecycle:extensions:$LIFECYCLE_VERSION"
