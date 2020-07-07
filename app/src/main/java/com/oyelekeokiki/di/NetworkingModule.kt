@@ -1,10 +1,6 @@
 package com.oyelekeokiki.di
 
-import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
 import com.oyelekeokiki.BuildConfig
-import com.oyelekeokiki.networking.NetworkStatusChecker
 import com.oyelekeokiki.networking.RemoteApiService
 import dagger.Module
 import dagger.Provides
@@ -17,7 +13,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
@@ -65,10 +60,4 @@ object NetworkingModule {
     @Provides
     fun buildApiService(retrofit: Retrofit): RemoteApiService =
         retrofit.create(RemoteApiService::class.java)
-
-    @Provides
-    fun provideNetworkChecker(app: Application): NetworkStatusChecker =
-        NetworkStatusChecker(app.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-
-
 }

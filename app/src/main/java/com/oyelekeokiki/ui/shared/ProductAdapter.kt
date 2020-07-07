@@ -4,14 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.oyelekeokiki.R
+import com.oyelekeokiki.helpers.OnWishListModified
 import com.oyelekeokiki.model.Product
-import com.oyelekeokiki.ui.cart.OnCartModified
+import com.oyelekeokiki.helpers.OnCartModified
 
 /**
  * Displays the products from the API, into a list of items.
+ * Used by @class HomeFragment and WishListFragment
  */
-
-typealias OnWishListModified = (product: Product, isLiked: Boolean) -> Unit
 
 class ProductAdapter(
     private val onWishListModified: OnWishListModified?,

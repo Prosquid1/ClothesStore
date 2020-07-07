@@ -20,6 +20,9 @@ interface WishListDao {
   @Query("SELECT * FROM Product WHERE id= :productId")
   suspend fun getWishListItemWith(productId: Int): Product
 
+  @Query("SELECT stock FROM Product WHERE ID = :productId")
+  suspend fun getProductStockCount(productId: Int): Int
+
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun addToWishList(it: Product)
 
@@ -29,7 +32,7 @@ interface WishListDao {
   @Query("DELETE FROM Product WHERE id = :productId")
   suspend fun removeFromWishList(productId: Int)
 
-  @Query("UPDATE Product SET stock = stock + :count WHERE ID = :productId")
+  @Query("UPDATE Product SET stock = :count WHERE ID = :productId")
   suspend fun updateProductStockCount(productId: Int, count: Int)
 
   //LiveData

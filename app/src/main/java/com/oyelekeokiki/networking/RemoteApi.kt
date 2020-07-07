@@ -2,16 +2,15 @@ package com.oyelekeokiki.networking
 
 import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.Product
-import com.oyelekeokiki.model.Result
 import com.oyelekeokiki.model.response.AddToCartResponse
 import retrofit2.Response
 
 interface RemoteApi {
-  suspend fun getProducts(): Result<List<Product>>
+    suspend fun getProducts(): List<Product>
 
-  suspend fun getCart(): Result<List<CartItem>>
+    suspend fun getCart(): List<CartItem>
 
-  suspend fun addProductToCart(productId: Int): Result<AddToCartResponse>
+    suspend fun addProductToCart(productId: Int): AddToCartResponse
 
-  suspend fun deleteProductFromCart(productId: Int): Result<Response<Unit>>
+    suspend fun deleteProductFromCart(productId: Int): Response<Unit>
 }
