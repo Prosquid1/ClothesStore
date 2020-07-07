@@ -1,4 +1,4 @@
-package com.oyelekeokiki
+package com.oyelekeokiki.db
 
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -9,7 +9,7 @@ import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
 import com.oyelekeokiki.database.AppDataBase
 import com.oyelekeokiki.database.WishListDao
-import com.oyelekeokiki.model.Product
+import com.oyelekeokiki.helpers.MockObjectProvider
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -25,9 +25,8 @@ import java.util.concurrent.TimeoutException
 
 
 /**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * Ideally, Database tests should be executed on an Android device.
+ * See [testing documentation](https://developer.android.com/training/data-storage/room/testing-db).
  */
 @RunWith(AndroidJUnit4::class)
 class AppDatabaseTest {
@@ -36,19 +35,17 @@ class AppDatabaseTest {
     private var appDataBase: AppDataBase? = null
 
     @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
+    val instantTaskExecutorRule = InstantTaskExecutorRule() //Required for getOrAwaitValue function
 
-
-    private val product = Product(1, "Test Product", "Test Description", oldPrice = "2.00", price = "1.89", stock = 2);
-    private val anotherProduct = Product(2, "Test Product 2", "Test Description 2", oldPrice = "3.00", price = "4.89", stock = 3);
+    private val product = MockObjectProvider.provideProducts()[0]
 
     @Before
     fun setup() {
         appDataBase = Room
             .inMemoryDatabaseBuilder(
                 InstrumentationRegistry.getInstrumentation().context,
-                AppDataBase::class.java)
-            .allowMainThreadQueries()
+                AppDataBase::class.java
+            )
             .build()
         wishListDao = appDataBase?.wishListDao()
     }
@@ -56,46 +53,55 @@ class AppDatabaseTest {
     @After
     @Throws(IOException::class)
     fun tearDown() {
-        appDataBase?.close();
+        appDataBase?.close()
     }
 
     @Test
-    fun shouldDeleteAll() {
-        runBlocking { wishListDao?.deleteAll() }
+    fun shouldDeleteAll() = runBlocking {
+        wishListDao?.deleteAll()
         assertEquals(wishListDao?.getWishListCount()?.getOrAwaitValue(), 0)
     }
 
     @Test
     fun shouldInsertProduct() = runBlocking {
         wishListDao?.addToWishList(product)
-        val productTest = wishListDao?.getWishListItemWith(product.id)
-        assertEquals(product.id, productTest?.id)
+        val expectedProduct = wishListDao?.getWishListItemWith(product.id)
+        assertEquals(product.id, expectedProduct?.id)
     }
 
     @Test
     fun shouldDeleteProduct() = runBlocking {
+        wishListDao?.addToWishList(product)
         wishListDao?.removeFromWishList(product.id)
-        val productTest = wishListDao?.getWishListItemWith(product.id)
-        assertNull(productTest)
+        val expectedProduct = wishListDao?.getWishListItemWith(product.id)
+        assertNull(expectedProduct)
     }
 
     @Test
-    fun shouldInsertAll() = runBlocking  {
-        val listOfNewProducts = listOf(product, anotherProduct)
+    fun shouldInsertAll() = runBlocking {
+        val listOfNewProducts = MockObjectProvider.provideProducts()
         wishListDao?.insertWishListProducts(listOfNewProducts)
 
-        val allNewlyAddedProducts = wishListDao?.getWishList()?.getOrAwaitValue()
-
-        assertEquals(allNewlyAddedProducts?.size, listOfNewProducts.size )
+        val expectedAddedProducts = wishListDao?.getWishList()?.getOrAwaitValue()
+        assertEquals(expectedAddedProducts?.size, listOfNewProducts.size)
     }
 
     @Test
-    fun selectIdsFromDatabase() = runBlocking {
-        val listOfNewProducts = listOf(product, anotherProduct)
+    fun shouldUpdateProductStockCount() = runBlocking {
+        val newProductCount = 20
+        wishListDao?.addToWishList(product)
+        wishListDao?.updateProductStockCount(product.id, newProductCount)
+        val expectedCount = wishListDao?.getProductStockCount(product.id)
+        assertEquals(expectedCount, newProductCount)
+    }
+
+    @Test
+    fun getLiveWishListIds() = runBlocking {
+        val listOfNewProducts = MockObjectProvider.provideProducts()
         wishListDao?.insertWishListProducts(listOfNewProducts)
 
-        val allNewlyAddedProducts = wishListDao?.getLiveWishListIds()?.getOrAwaitValue()
-        assertEquals(allNewlyAddedProducts, listOfNewProducts.map { it.id } )
+        val expectedNewlyAddedProductIds = wishListDao?.getLiveWishListIds()?.getOrAwaitValue()
+        assertEquals(listOfNewProducts.map { it.id }, expectedNewlyAddedProductIds)
     }
 
     @Test
@@ -104,13 +110,13 @@ class AppDatabaseTest {
         wishListDao?.deleteAll()
         wishListDao?.insertWishListProducts(listOfNewProducts)
 
-        val allNewlyAddedProducts = wishListDao?.getWishList()?.getOrAwaitValue()
-        assertEquals(allNewlyAddedProducts?.size, 1 )
+        val expectedNewlyAddedProducts = wishListDao?.getWishList()?.getOrAwaitValue()
+        assertEquals(expectedNewlyAddedProducts?.size, 1)
     }
 }
 
 // Extension functions
-private fun <T> LiveData<T>.getOrAwaitValue(
+fun <T> LiveData<T>.getOrAwaitValue(
     time: Long = 2,
     timeUnit: TimeUnit = TimeUnit.SECONDS
 ): T {
@@ -134,3 +140,4 @@ private fun <T> LiveData<T>.getOrAwaitValue(
     @Suppress("UNCHECKED_CAST")
     return data as T
 }
+

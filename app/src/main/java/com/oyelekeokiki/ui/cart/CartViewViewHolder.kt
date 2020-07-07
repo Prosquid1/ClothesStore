@@ -4,20 +4,26 @@ import android.annotation.SuppressLint
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.oyelekeokiki.R
+import com.oyelekeokiki.helpers.OnCartModified
 import com.oyelekeokiki.model.CartItem
-import com.oyelekeokiki.model.CartToProductItem
+import com.oyelekeokiki.model.CartItemsToProduct
 import com.oyelekeokiki.ui.shared.ProductViewHolder
 import kotlinx.android.synthetic.main.recycler_list_item_product.view.*
+
+/**
+ * Apart from the like button + add to wishlist - remove from wishlist button,
+ * [CartViewViewHolder] shares every other view with [ProductViewHolder]
+ * **/
 
 @SuppressLint("SetTextI18n")
 class CartViewViewHolder(override val containerView: View) : ProductViewHolder(containerView) {
     fun bindCartItem(
-        cartToProductItem: CartToProductItem,
+        cartItemsToProduct: CartItemsToProduct,
         onCartModified: OnCartModified,
         productIsLiked: Boolean
     ) {
         super.bindData(
-            cartToProductItem.product,
+            cartItemsToProduct.product,
             null,
             onCartModified,
             productIsLiked
@@ -25,8 +31,8 @@ class CartViewViewHolder(override val containerView: View) : ProductViewHolder(c
 
         hideExtraViews()
 
-        setupDeleteFromCartButton(cartToProductItem, onCartModified)
-        setupCartItemCountTextView(cartToProductItem.cartItemIds.size)
+        setupDeleteFromCartButton(cartItemsToProduct, onCartModified)
+        setupCartItemCountTextView(cartItemsToProduct.cartItemIds.size)
     }
 
     private fun hideExtraViews() {
@@ -35,17 +41,17 @@ class CartViewViewHolder(override val containerView: View) : ProductViewHolder(c
         containerView.remove_from_cart_button.visibility = View.VISIBLE
     }
 
-    private fun getCartItemToDelete(cartToProductItem: CartToProductItem): CartItem {
-        val cartItemId = cartToProductItem.cartItemIds[0]
-        val productId = cartToProductItem.product.id
+    private fun getCartItemToDelete(cartItemsToProduct: CartItemsToProduct): CartItem {
+        val cartItemId = cartItemsToProduct.cartItemIds[0]
+        val productId = cartItemsToProduct.product.id
         return CartItem(cartItemId, productId)
     }
 
     private fun setupDeleteFromCartButton(
-        cartToProductItem: CartToProductItem,
+        cartItemsToProduct: CartItemsToProduct,
         onCartModified: OnCartModified
     ) {
-        val cartItemToDelete = getCartItemToDelete(cartToProductItem)
+        val cartItemToDelete = getCartItemToDelete(cartItemsToProduct)
         containerView.remove_from_cart_button.setOnClickListener {
             onCartModified(cartItemToDelete)
         }

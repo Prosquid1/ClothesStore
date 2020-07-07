@@ -1,28 +1,25 @@
 package com.oyelekeokiki.ui.cart
 
-import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.oyelekeokiki.database.WishListDatabaseSource
 import com.oyelekeokiki.helpers.*
 import com.oyelekeokiki.model.CartItem
-import com.oyelekeokiki.model.CartToProductItem
-import com.oyelekeokiki.model.Failure
-import com.oyelekeokiki.model.Success
-import com.oyelekeokiki.networking.NetworkStatusChecker
+import com.oyelekeokiki.model.CartItemsToProduct
+import com.oyelekeokiki.model.Product
 import com.oyelekeokiki.networking.RemoteApi
 import com.oyelekeokiki.ui.BaseCartImplModel
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 class CartViewModel @Inject constructor(
-    private val remoteApi: RemoteApi,
-    wishListDatabaseSource: WishListDatabaseSource,
-    private val networkStatusChecker: NetworkStatusChecker,
-    application: Application
-) : BaseCartImplModel(remoteApi, wishListDatabaseSource, networkStatusChecker, application) {
-    var cartItems: MutableLiveData<List<CartToProductItem>> = MutableLiveData()
+    private val remoteApi: RemoteApi
+) : BaseCartImplModel(remoteApi) {
+
+    /** [cartItems] and [cartProducts] For testing, due to API constraints **/
+    var cartItems: List<CartItem> = arrayListOf()
+    var cartProducts: List<Product> = arrayListOf()
+
+    var cartItemsToProducts: MutableLiveData<List<CartItemsToProduct>> = MutableLiveData()
     var errorMessage: MutableLiveData<String> = MutableLiveData()
     var totalValueText: MutableLiveData<String> = MutableLiveData()
     var isFetching: MutableLiveData<Boolean> = MutableLiveData()
@@ -37,88 +34,56 @@ class CartViewModel @Inject constructor(
     }
 
     fun fetchCartItems() {
-        if (!networkStatusChecker.hasInternetConnection()) {
-            isFetching.postValue(false);
-            errorMessage.postValue(NO_INTERNET_CONNECTION)
-            return
-        }
-
         viewModelScope.launch {
             isFetching.postValue(true)
             try {
-                val cartResult = remoteApi.getCart()
-                if (cartResult is Success) {
-                    queryCartItemsForProducts(cartResult.data)
-                } else if (cartResult is Failure) {
-                    isFetching.postValue(false);
-                    errorMessage.postValue(cartResult.error?.localizedMessage)
-                }
-
+                cartItems = remoteApi.getCart()
+                getAllProducts()
             } catch (e: Exception) {
-                errorMessage.postValue(e.localizedMessage)
+                errorMessage.postValue(ExceptionUtil.getFetchExceptionMessage(e))
                 isFetching.postValue(false);
             }
         }
     }
 
-    //Supposed to be a server call with an array of product Ids
-    private fun queryCartItemsForProducts(productsInCartIds: List<CartItem>) {
-        viewModelScope.launch {
-            try {
-                val productsResult = remoteApi.getProducts()
+    private suspend fun getAllProducts() {
+        cartProducts = remoteApi.getProducts()
+        queryCartItemsForProducts(cartItems)
+    }
 
-                if (productsResult is Success) {
-                    val serverProducts = productsResult.data
-                    val cartToProductItems = serverProducts.convertToCartProduct(productsInCartIds)
-                    cartItems.postValue(cartToProductItems)
-                    totalValueText.postValue(cartToProductItems.getTotalValue().formatPrice())
-                } else if (productsResult is Failure) {
-                    errorMessage.postValue(productsResult.error?.localizedMessage)
-                }
-                isFetching.postValue(false);
-            } catch (e: Exception) {
-                errorMessage.postValue(e.localizedMessage)
-                isFetching.postValue(false);
-            }
-        }
+    /**
+     * Supposed to be a server call with an array of product Ids
+     * TODO: Request assistance or clarification from Backend developer.
+     **/
+     private fun queryCartItemsForProducts(productsInCartIds: List<CartItem>) {
+        val convertedCartItemsToProducts = cartProducts.convertToCartItemsToProduct(productsInCartIds)
+        cartItemsToProducts.postValue(convertedCartItemsToProducts)
+        totalValueText.postValue(convertedCartItemsToProducts.getFormattedCartTotalPrice())
+        isFetching.postValue(false);
     }
 
     fun deleteFromCart(cartItem: CartItem) {
-        if (!networkStatusChecker.hasInternetConnection()) {
-            showCartInternetErrorWithRetry(cartItem)
-            return
-        }
-
         if (cartItem.id == null) {
-            throw IllegalArgumentException("Delete from cart being called from an illegal reference")
+            throw IllegalArgumentException(ILLEGAL_CART_DELETION)
         }
 
         viewModelScope.launch {
             try {
-                val result = remoteApi.deleteProductFromCart(cartItem.id)
-                if (result is Success) {
-                    cartItemDeletedSuccess.postValue(
-                        Triple(
-                            cartItem,
-                            "Deleted successfully!",
-                            ActionResponseType.SUCCESS
-                        )
+                remoteApi.deleteProductFromCart(cartItem.id)
+                cartItemDeletedSuccess.postValue(
+                    Triple(
+                        cartItem,
+                        DELETED_CART_SUCCESS,
+                        ActionResponseType.SUCCESS
                     )
-                    fetchCartItems()
-                } else if (result is Failure) {
-                    cartItemDeletedFailed.postValue(
-                        Triple(
-                            cartItem,
-                            result.error?.message ?: "An error occurred!",
-                            ActionResponseType.ERROR
-                        )
-                    )
-                }
+                )
+                fetchCartItems()
+
             } catch (e: Exception) {
                 cartItemDeletedFailed.postValue(
                     Triple(
                         cartItem,
-                        e.localizedMessage,
+                        ExceptionUtil.getFetchExceptionMessage(e),
                         ActionResponseType.ERROR
                     )
                 )

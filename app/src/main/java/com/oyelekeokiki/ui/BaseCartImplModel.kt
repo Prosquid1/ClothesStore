@@ -1,77 +1,45 @@
 package com.oyelekeokiki.ui
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.oyelekeokiki.database.WishListDatabaseSource
 import com.oyelekeokiki.helpers.ActionResponseType
-import com.oyelekeokiki.helpers.NO_INTERNET_CONNECTION
+import com.oyelekeokiki.helpers.ExceptionUtil
 import com.oyelekeokiki.model.CartItem
-import com.oyelekeokiki.model.Failure
-import com.oyelekeokiki.model.Success
-import com.oyelekeokiki.networking.NetworkStatusChecker
 import com.oyelekeokiki.networking.RemoteApi
 import kotlinx.coroutines.launch
 
 /**
- * All views in this project have the same add and delete from cart model and observable variables
- * **/
+ * All views in this project call [addToCart]
+ * [WishListFragment] and [HomeFragment] can observe [cartItemAddedSuccess] and [cartItemAddedFailed]
+ * Hence the need for a base class
+ **/
 
 open class BaseCartImplModel constructor(
-    private val remoteApi: RemoteApi,
-    private val wishListDatabaseSource: WishListDatabaseSource,
-    private val networkStatusChecker: NetworkStatusChecker,
-    application: Application
-) : AndroidViewModel(application) {
+    private val remoteApi: RemoteApi
+) : ViewModel() {
     var cartItemAddedSuccess: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
         MutableLiveData()
     var cartItemAddedFailed: MutableLiveData<Triple<CartItem, String, ActionResponseType>> =
         MutableLiveData()
 
-    fun showCartInternetErrorWithRetry(cartItem: CartItem) {
-        cartItemAddedFailed.postValue(
-            Triple(
-                cartItem,
-                NO_INTERNET_CONNECTION,
-                ActionResponseType.ERROR
-            )
-        )
-    }
-
     fun addToCart(cartItem: CartItem) {
-        if (!networkStatusChecker.hasInternetConnection()) {
-            showCartInternetErrorWithRetry(cartItem)
-            return
-        }
-
         viewModelScope.launch {
             try {
                 val result = remoteApi.addProductToCart(cartItem.productId)
-                if (result is Success) {
-                    cartItemAddedSuccess.postValue(
-                        Triple(
-                            cartItem,
-                            result.data.message,
-                            ActionResponseType.SUCCESS
-                        )
+                cartItemAddedSuccess.postValue(
+                    Triple(
+                        cartItem,
+                        result.message,
+                        ActionResponseType.SUCCESS
                     )
-                    onAddToCartComplete(cartItem.productId)
-
-                } else if (result is Failure) {
-                    cartItemAddedFailed.postValue(
-                        Triple(
-                            cartItem,
-                            result.error?.message ?: "An error occurred!",
-                            ActionResponseType.ERROR
-                        )
-                    )
-                }
+                )
+                onAddToCartComplete(cartItem.productId)
             } catch (e: Exception) {
                 cartItemAddedFailed.postValue(
                     Triple(
                         cartItem,
-                        e.localizedMessage,
+                        ExceptionUtil.getFetchExceptionMessage(e),
                         ActionResponseType.ERROR
                     )
                 )
@@ -80,17 +48,10 @@ open class BaseCartImplModel constructor(
     }
 
     /**
-     *To be overriden
-     *This is not a good approach, I only implemented because products cannot be queried by ID (on API) or stored on the device
-     * **/
+     *  To be overriden by [HomeFragment] and [CartFragment]
+     *  There is a need to re-query because [AddToCartResponse] returns only a string,
+     *  and the view needs to be updated with live data
+     **/
     open fun onAddToCartComplete(productId: Int) {}
 
-    /**
-     * This is an instantaneous function to reflect an item has been updated
-     * In the rare case the WishList items cannot be updated from server and has to rely on offline data
-     * */
-
-    fun updateProductCountInWishList(productId: Int, count: Int) {
-
-    }
 }

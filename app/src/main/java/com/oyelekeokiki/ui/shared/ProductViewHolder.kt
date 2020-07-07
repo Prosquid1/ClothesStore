@@ -10,20 +10,18 @@ import com.like.LikeButton
 import com.like.OnLikeListener
 import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.ColorHelper
+import com.oyelekeokiki.helpers.OnWishListModified
 import com.oyelekeokiki.helpers.StockCountHelper
 import com.oyelekeokiki.helpers.formatPrice
 import com.oyelekeokiki.model.CartItem
 import com.oyelekeokiki.model.Product
-import com.oyelekeokiki.ui.cart.OnCartModified
+import com.oyelekeokiki.helpers.OnCartModified
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.recycler_list_item_product.view.*
-
 
 /**
  * Holder to display the Product item in a grid or list.
  */
-
-const val MINIMUM_STOCK_THRESHOLD = 3
 
 @SuppressLint("SetTextI18n")
 open class ProductViewHolder(override val containerView: View) :
@@ -37,7 +35,7 @@ open class ProductViewHolder(override val containerView: View) :
         productIsLiked: Boolean
     ) {
         containerView.product_name.text = product.name
-        containerView.product_price.text = "£${product.price}"
+        containerView.product_price.text = product.price?.formatPrice()
         setupOldPriceView(product.oldPrice)
 
         containerView.product_category.text = product.category
@@ -67,6 +65,7 @@ open class ProductViewHolder(override val containerView: View) :
         })
     }
 
+    // Only WishList and Home Fragment can access this view
     private fun setupAddToCartView(
         productId: Int,
         onCartModified: OnCartModified?
@@ -77,14 +76,17 @@ open class ProductViewHolder(override val containerView: View) :
         containerView.add_to_cart_button.setOnClickListener {
             onCartModified(
                 CartItem(
-                    null, // Cart id is nullable since you cannot delete a newly added item to cart
+                    null, // Cart id is null since you don't know the cart Item ID from both accessing fragments
                     productId
                 )
             )
         }
     }
 
-    // Product URL is not available so colors will be generated based on product name
+    /**
+     * Product URL is not available so colors will be generated based on product name
+     * @see [ColorUtils][generateColorFromText]
+     * */
     private fun setupProductImageView(productName: String) {
         containerView.product_image.setBackgroundResource(R.drawable.round_corner_image_layout)
         val drawable = containerView.product_image.background as GradientDrawable

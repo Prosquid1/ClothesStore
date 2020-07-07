@@ -9,10 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.oyelekeokiki.R
 import com.oyelekeokiki.helpers.configureCSRecycler
-import com.oyelekeokiki.helpers.formatPrice
-import com.oyelekeokiki.helpers.getTotalValue
 import com.oyelekeokiki.helpers.showCSSnackBar
-import com.oyelekeokiki.model.CartToProductItem
+import com.oyelekeokiki.model.CartItemsToProduct
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_my_cart.*
@@ -75,7 +73,7 @@ class CartFragment : Fragment() {
     }
 
     private fun observeCartItems() {
-        cartViewModel.cartItems.observe(
+        cartViewModel.cartItemsToProducts.observe(
             viewLifecycleOwner,
             Observer { cartToProductItems ->
                 setActiveDataWith(cartToProductItems)
@@ -106,7 +104,6 @@ class CartFragment : Fragment() {
             })
     }
 
-    /** Observe and Show Snackbar with Undo action **/
     private fun observeReAddedToCartSuccess() {
         cartViewModel.cartItemAddedSuccess.observe(
             viewLifecycleOwner,
@@ -115,7 +112,6 @@ class CartFragment : Fragment() {
             })
     }
 
-    /** Observe and Show Snackbar with Retry **/
     private fun observeReAddedToCartError() {
         cartViewModel.cartItemAddedFailed.observe(
             viewLifecycleOwner,
@@ -126,7 +122,6 @@ class CartFragment : Fragment() {
             })
     }
 
-    /** Observe and Show Snackbar with Undo action **/
     private fun observeRemoveFromCartSuccess() {
         cartViewModel.cartItemDeletedSuccess.observe(
             viewLifecycleOwner,
@@ -137,7 +132,6 @@ class CartFragment : Fragment() {
             })
     }
 
-    /** Observe and Show Snackbar with Retry **/
     private fun observeRemoveFromCartError() {
         cartViewModel.cartItemDeletedFailed.observe(
             viewLifecycleOwner,
@@ -155,8 +149,8 @@ class CartFragment : Fragment() {
         swipe_refresh_layout.isRefreshing = isRefreshing
     }
 
-    private fun setActiveDataWith(cartToProductItems: List<CartToProductItem>) {
-        cartAdapter.setData(cartToProductItems)
+    private fun setActiveDataWith(cartItemsToProduct: List<CartItemsToProduct>) {
+        cartAdapter.setData(cartItemsToProduct)
         text_error_message.visibility = View.GONE
         recycler_home.visibility = View.VISIBLE
         total_text_layout.visibility = View.VISIBLE

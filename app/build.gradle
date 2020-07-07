@@ -7,9 +7,9 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 
-def apikeyPropertiesFile = rootProject.file("apikey.properties")
-def apikeyProperties = new Properties()
-apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+def serverSecretsPropertiesFile = rootProject.file("serverSecrets.properties")
+def serverSecretsProperties = new Properties()
+serverSecretsProperties.load(new FileInputStream(serverSecretsPropertiesFile))
 
 android {
     final  JAVA_VERSION = JavaVersion.VERSION_1_8
@@ -21,7 +21,9 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        buildConfigField("String", "API_KEY", apikeyProperties['API_KEY'])
+        buildConfigField("String", "API_KEY", serverSecretsProperties['API_KEY'])
+        buildConfigField("String", "BASE_URL", serverSecretsProperties['BASE_URL'])
+        buildConfigField("String", "HEADER_AUTH_KEY", serverSecretsProperties['HEADER_AUTH_KEY'])
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
@@ -37,18 +39,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
 }
 
 final APP_COMPAT_VERSION = '1.1.0'
-final CONSTRAINT_LAYOUT_VERSION = '1.1.3'
 final COROUTINES_VERSION = '1.3.5'
 final CORE_TESTING_VERSION = '2.1.0'
 final GSON_VERSION = '2.4.0'
 final HILT_VIEWMODEL_VERSION = '1.0.0-alpha01'
+final JUNIT_VERSION = '4.12'
 final KTX_CORE_VERSION = '1.3.0'
 final LIFECYCLE_VERSION = '2.2.0'
 final LIKE_BUTTON_VERSION = '0.2.3'
 final MATERIAL_DESIGN_VERSION = '1.1.0'
+final MOCKITO_VERSION = '3.3.3'
 final NAVIGATION_VERSION = '2.3.0'
 final OK_HTTP_VERSION = '4.5.0'
 final RETROFIT_SERIALIZER_VERSION = '0.4.0'
@@ -58,9 +64,7 @@ final SWIPE_REFRESH_VERSION = '1.1.0'
 final TEST_RUNNER_VERSION = '1.0.2'
 final VECTOR_DRAWABLE_VERSION = '1.1.0'
 
-
 dependencies {
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Kotlin
@@ -70,6 +74,8 @@ dependencies {
     //Testing
     androidTestImplementation "com.android.support.test:runner:$TEST_RUNNER_VERSION"
     androidTestImplementation "androidx.arch.core:core-testing:$CORE_TESTING_VERSION"
+    androidTestImplementation "org.mockito:mockito-android:$MOCKITO_VERSION"
+    testImplementation "junit:junit:$JUNIT_VERSION"
 
     // Android Architecture
     implementation "android.arch.lifecycle:extensions:$LIFECYCLE_VERSION"
@@ -87,10 +93,8 @@ dependencies {
     // Android UI
     implementation "androidx.appcompat:appcompat:$APP_COMPAT_VERSION"
     implementation "com.google.android.material:material:$MATERIAL_DESIGN_VERSION"
-    implementation "androidx.constraintlayout:constraintlayout:$CONSTRAINT_LAYOUT_VERSION"
     implementation "androidx.vectordrawable:vectordrawable:$VECTOR_DRAWABLE_VERSION"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$SWIPE_REFRESH_VERSION"
-
     implementation "com.github.jd-alexander:LikeButton:$LIKE_BUTTON_VERSION"
 
     // Database

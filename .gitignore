@@ -7,4 +7,4 @@
 .externalNativeBuild
 .cxx
 /.idea
-/apikey.properties
+/serverSecrets.properties
