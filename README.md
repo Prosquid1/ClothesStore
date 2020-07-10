@@ -1,4 +1,6 @@
 # ClothesStore (Android)
+[![kotlin](https://img.shields.io/badge/Kotlin-1.3.xx-blue)](https://kotlinlang.org/) [![MVI ](https://img.shields.io/badge/Architecture-MVVM-brightgreen)](https://developer.android.com/jetpack/guide) [![coroutines](https://img.shields.io/badge/Kotlin-Coroutines-orange)](https://developer.android.com/kotlin/coroutines) [![Dagger](https://img.shields.io/badge/Dagger-Hilt-orange)](https://dagger.dev/hilt)
+
 Android client for an online catalogue.
 
 ![App Demo Gif](https://user-images.githubusercontent.com/13585693/86788698-5b555800-c05e-11ea-880f-3a0afcb85f1f.gif)
