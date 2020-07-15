@@ -87,12 +87,12 @@ class AppDatabaseTest {
     }
 
     @Test
-    fun shouldUpdateProductStockCount() = runBlocking {
-        val newProductCount = 20
+    fun shouldDecrementProductStockCount() = runBlocking {
+        val expectedProductStockCount = product.stock - 1
         wishListDao?.addToWishList(product)
-        wishListDao?.updateProductStockCount(product.id, newProductCount)
-        val expectedCount = wishListDao?.getProductStockCount(product.id)
-        assertEquals(expectedCount, newProductCount)
+        wishListDao?.decrementProductStockCount(product.id)
+        val currentProductStockCount = wishListDao?.getProductStockCount(product.id)
+        assertEquals(currentProductStockCount, expectedProductStockCount)
     }
 
     @Test

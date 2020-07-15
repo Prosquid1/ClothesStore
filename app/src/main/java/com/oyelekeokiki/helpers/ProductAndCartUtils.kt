@@ -10,19 +10,14 @@ import com.oyelekeokiki.model.Product
  */
 
 fun List<Product>.convertToCartItemsToProduct(cartItemIds: List<CartItem>): List<CartItemsToProduct> {
-    val cartItemsGroupedByProduct = cartItemIds.groupBy { it.productId }.values
-
+    val cartItemsGroupedByProduct = cartItemIds.groupBy { it.productId }
+    // List of product IDs and all their cart ID occurences
     val productIdToProductMap = this.map { Pair(it.id, it) }.toMap()
-    val productIdToCartItemsMap =
-        cartItemsGroupedByProduct.map { array -> Pair(array[0].productId, array.map { it.id }) }
-            .toMap()
 
-    return productIdToCartItemsMap.map {
-        CartItemsToProduct(
-            productIdToCartItemsMap[it.key] as List<Int>,
-            productIdToProductMap[it.key] as Product
-        )
-    }
+    return cartItemsGroupedByProduct.map { CartItemsToProduct(
+        it.value.map { cartItem -> cartItem.id ?: -1  }, //CartItem gotten from server cannot be null
+        productIdToProductMap[it.key] as Product
+    ) }
 }
 
 fun List<Product>.getProductsInIDsList(productIds: List<Int>): List<Product> {
@@ -30,8 +25,7 @@ fun List<Product>.getProductsInIDsList(productIds: List<Int>): List<Product> {
 }
 
 fun List<CartItemsToProduct>.getFormattedCartTotalPrice(): String {
-    return this.toList()
-        .sumBy { ((it.product.price ?: "").toDouble().toInt() * it.cartItemIds.size) }.toString().formatPrice()
+    return this.sumBy { ((it.product.price ?: "").toDouble().toInt() * it.cartItemIds.size) }.toString().formatPrice()
 }
 
 enum class ActionResponseType {

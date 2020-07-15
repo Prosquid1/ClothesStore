@@ -20,19 +20,14 @@ import org.mockito.junit.MockitoJUnitRunner
 import java.lang.IllegalArgumentException
 import java.lang.RuntimeException
 
-//Coroutines cannot be tested in this class due to the client-side filtering from all products
-
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class CartViewModelTest {
 
     @get:Rule
     val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
-
     @Mock
     private lateinit var remoteApi: RemoteApi
-    @Mock
-    private lateinit var cartItemDeletedObserver: Observer<Triple<CartItem, String, ActionResponseType>>
 
     @Test
     fun getCart() {
