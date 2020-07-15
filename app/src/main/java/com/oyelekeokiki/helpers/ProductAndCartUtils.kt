@@ -25,8 +25,7 @@ fun List<Product>.getProductsInIDsList(productIds: List<Int>): List<Product> {
 }
 
 fun List<CartItemsToProduct>.getFormattedCartTotalPrice(): String {
-    return this.toList()
-        .sumBy { ((it.product.price ?: "").toDouble().toInt() * it.cartItemIds.size) }.toString().formatPrice()
+    return this.sumBy { ((it.product.price ?: "").toDouble().toInt() * it.cartItemIds.size) }.toString().formatPrice()
 }
 
 enum class ActionResponseType {
