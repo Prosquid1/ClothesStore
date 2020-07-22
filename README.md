@@ -17,7 +17,7 @@ BASE_URL="XXXXXXX_PROJECT_BASE_URL_HERE_XXXXX"
 HEADER_AUTH_KEY="XXXXXXX_HEADER_AUTH_KEY_XXXXX"
 ```
 
-The private keys above can be provided by Melissa Morgan
+The private keys above can be provided by Melissa.
 
 
 - Icons sourced from the vector icons catalogue in Android Studio, Licensed available under[ Apache license version 2.0.](https://www.apache.org/licenses/LICENSE-2.0.html)
