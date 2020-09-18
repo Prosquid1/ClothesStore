@@ -22,3 +22,6 @@ The private keys above can be provided by Melissa.
 
 - Icons sourced from the vector icons catalogue in Android Studio, Licensed available under[ Apache license version 2.0.](https://www.apache.org/licenses/LICENSE-2.0.html)
 - Theme was customized by a free tool called [MaterialPalette](https://www.materialpalette.com/brown/grey)
+
+
+P.S: The backend was designed in a way that requests had to be chained, hence the refresh after certain GET/POST requests
